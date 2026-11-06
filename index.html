@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's BODMAS Quiz 2</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #fff7e6; color: #333; margin: 0; padding: 20px; line-height: 1.5; }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  h1 { text-align: center; color: #b3541e; margin: 8px 0 4px; font-size: 30px; }
+  .sub { text-align: center; color: #777; margin: 0 0 20px; }
+  #progressWrap { position: sticky; top: 0; background: #fff7e6; padding: 10px 0 14px; z-index: 10; }
+  #progressText { text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 6px; }
+  #progressBar { height: 18px; background: #e0e0e0; border-radius: 10px; overflow: hidden; }
+  #progressFill { height: 100%; width: 0%; background: #2e9e5b; border-radius: 10px; transition: width 0.3s; }
+  .rule { background: #fff; border: 3px solid #f2b705; border-radius: 16px; padding: 16px 20px; margin-bottom: 24px; }
+  .rule h2 { margin: 0 0 8px; color: #b3541e; font-size: 20px; }
+  .rule ol { margin: 0; padding-left: 22px; font-size: 17px; }
+  .rule .big { background: #fff3cd; border-radius: 10px; padding: 10px 12px; margin-top: 12px; font-weight: bold; font-size: 17px; }
+  .q { background: #fff; border-radius: 16px; padding: 18px; margin-bottom: 18px; border: 2px solid #eee; }
+  .q.correct { border-color: #2e9e5b; background: #f0faf3; }
+  .q.wrong { border-color: #d64545; background: #fdf0f0; }
+  .q h3 { margin: 0 0 4px; font-size: 19px; }
+  .q .sum { font-size: 26px; font-weight: bold; text-align: center; background: #f7f7f7; border-radius: 12px; padding: 12px; margin: 10px 0 14px; }
+  .opts label { display: block; font-size: 20px; padding: 14px 16px; margin: 8px 0; border: 2px solid #ddd; border-radius: 12px; cursor: pointer; background: #fff; }
+  .opts label:has(input:checked) { border-color: #f2b705; background: #fff8e1; }
+  .opts input { transform: scale(1.4); margin-right: 12px; }
+  .why { display: none; margin-top: 14px; padding: 12px; background: #eef6ff; border-radius: 10px; font-size: 16px; }
+  .why.show { display: block; }
+  .why b { color: #1a5fb4; }
+  #submitBtn { display: block; width: 100%; font-size: 22px; font-weight: bold; padding: 16px; border: none; border-radius: 14px; background: #f2b705; color: #333; cursor: pointer; margin: 10px 0; }
+  #submitBtn:disabled { background: #ccc; color: #888; cursor: default; }
+  #warn { display: none; text-align: center; font-size: 18px; font-weight: bold; color: #b3541e; background: #fff3cd; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+  #score { display: none; text-align: center; font-size: 26px; font-weight: bold; background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 18px; border: 3px solid #f2b705; }
+  #score .big { font-size: 44px; display: block; margin: 6px 0; }
+  #shareBox { display: none; background: #e8f5e9; border: 3px solid #2e9e5b; border-radius: 16px; padding: 18px; margin-bottom: 18px; text-align: center; }
+  #shareBox h2 { margin: 0 0 8px; color: #2e7d32; }
+  #shareBox p { font-size: 17px; }
+  #shareText { background: #fff; border-radius: 10px; padding: 12px; font-size: 16px; text-align: left; white-space: pre-wrap; }
+  #copyBtn { font-size: 20px; font-weight: bold; padding: 14px 22px; border: none; border-radius: 12px; background: #2e9e5b; color: #fff; cursor: pointer; margin-top: 10px; }
+  #copyMsg { color: #2e7d32; font-weight: bold; min-height: 24px; }
+  .locked { text-align: center; background: #fff3cd; border-radius: 12px; padding: 12px; font-weight: bold; margin-bottom: 18px; }
+  .note { text-align: center; color: #888; font-size: 14px; margin-top: 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>⭐ Maya's BODMAS Quiz 2 ⭐</h1>
+  <p class="sub">8 new questions. Tap one answer for each, then press Submit. You can only submit once, so check your answers first.</p>
+
+  <div id="progressWrap">
+    <div id="progressText">Answered 0 of 8</div>
+    <div id="progressBar"><div id="progressFill"></div></div>
+  </div>
+
+  <div class="rule">
+    <h2>Remember BODMAS</h2>
+    <ol>
+      <li><b>B</b>rackets first</li>
+      <li><b>O</b>rders (powers)</li>
+      <li><b>D</b>ivision and <b>M</b>ultiplication, together</li>
+      <li><b>A</b>ddition and <b>S</b>ubtraction, together</li>
+    </ol>
+    <div class="big">The big rule: ÷ and × are equal. When they are in a row, work from left to right. Do not do the × first just because it comes later. Same for + and −.</div>
+  </div>
+
+  <div id="score"></div>
+
+  <div id="shareBox">
+    <h2>Share your result with Dad 📱</h2>
+    <p>FaceTime Dad and show him this screen, or tap the button to copy your result and send it to him.</p>
+    <div id="shareText"></div>
+    <button type="button" id="copyBtn">Copy my result</button>
+    <p id="copyMsg"></p>
+  </div>
+
+  <form id="quiz">
+    <div class="q" data-answer="12">
+      <h3>Question 1</h3>
+      <div class="sum">18 ÷ 3 × 2 = ?</div>
+      <div class="opts">
+        <label><input type="radio" name="q1" value="3"><span> 3</span></label>
+        <label><input type="radio" name="q1" value="12"><span> 12</span></label>
+        <label><input type="radio" name="q1" value="9"><span> 9</span></label>
+        <label><input type="radio" name="q1" value="36"><span> 36</span></label>
+      </div>
+      <div class="why"><b>Answer: 12.</b> Go left to right. First 18 ÷ 3 = 6, then 6 × 2 = 12. If you do the × first you get 18 ÷ 6 = 3, and that is the trap.</div>
+    </div>
+
+    <div class="q" data-answer="25">
+      <h3>Question 2</h3>
+      <div class="sum">20 ÷ 4 × 5 = ?</div>
+      <div class="opts">
+        <label><input type="radio" name="q2" value="1"><span> 1</span></label>
+        <label><input type="radio" name="q2" value="25"><span> 25</span></label>
+        <label><input type="radio" name="q2" value="20"><span> 20</span></label>
+        <label><input type="radio" name="q2" value="100"><span> 100</span></label>
+      </div>
+      <div class="why"><b>Answer: 25.</b> Left to right again. First 20 ÷ 4 = 5, then 5 × 5 = 25. Doing the × first gives 20 ÷ 20 = 1, which is wrong.</div>
+    </div>
+
+    <div class="q" data-answer="17">
+      <h3>Question 3</h3>
+      <div class="sum">5 + 6 × 2 = ?</div>
+      <div class="opts">
+        <label><input type="radio" name="q3" value="22"><span> 22</span></label>
+        <label><input type="radio" name="q3" value="17"><span> 17</span></label>
+        <label><input type="radio" name="q3" value="12"><span> 12</span></label>
+        <label><input type="radio" name="q3" value="11"><span> 11</span></label>
+      </div>
+      <div class="why"><b>Answer: 17.</b> × comes before +. First 6 × 2 = 12, then 5 + 12 = 17. Brackets would change it, but there are none here.</div>
+    </div>
+
+    <div class="q" data-answer="22">
+      <h3>Question 4</h3>
+      <div class="sum">(5 + 6) × 2 = ?</div>
+      <div class="opts">
+        <label><input type="radio" name="q4" value="17"><span> 17</span></label>
+        <label><input type="radio" name="q4" value="22"><span> 22</span></label>
+        <label><input type="radio" name="q4" value="12"><span> 12</span></label>
+        <label><input type="radio" name="q4" value="16"><span> 16</span></label>
+      </div>
+      <div class="why"><b>Answer: 22.</b> Brackets first. 5 + 6 = 11, then 11 × 2 = 22. See how the brackets change the answer from Question 3.</div>
+    </div>
+
+    <div class="q" data-answer="24">
+      <h3>Question 5</h3>
+      <div class="sum">30 − 18 ÷ 3 = ?</div>
+      <div class="opts">
+        <label><input type="radio" name="q5" value="4"><span> 4</span></label>
+        <label><input type="radio" name="q5" value="24"><span> 24</span></label>
+        <label><input type="radio" name="q5" value="12"><span> 12</span></label>
+        <label><input type="radio" name="q5" value="36"><span> 36</span></label>
+      </div>
+      <div class="why"><b>Answer: 24.</b> ÷ comes before −. First 18 ÷ 3 = 6, then 30 − 6 = 24.</div>
+    </div>
+
+    <div class="q" data-answer="10">
+      <h3>Question 6</h3>
+      <div class="sum">8 ÷ 0.4 × 0.5 = ?</div>
+      <div class="opts">
+        <label><input type="radio" name="q6" value="40"><span> 40</span></label>
+        <label><input type="radio" name="q6" value="10"><span> 10</span></label>
+        <label><input type="radio" name="q6" value="4"><span> 4</span></label>
+        <label><input type="radio" name="q6" value="1.6"><span> 1.6</span></label>
+      </div>
+      <div class="why"><b>Answer: 10.</b> This is the same shape as your Kumon question. Left to right: first 8 ÷ 0.4 = 20, then 20 × 0.5 = 10. If you multiply 0.4 × 0.5 first you get 8 ÷ 0.2 = 40, and that is the mistake to watch for.</div>
+    </div>
+
+    <div class="q" data-answer="11">
+      <h3>Question 7</h3>
+      <div class="sum">3 + 2 × 5 − 10 ÷ 5 = ?</div>
+      <div class="opts">
+        <label><input type="radio" name="q7" value="23"><span> 23</span></label>
+        <label><input type="radio" name="q7" value="11"><span> 11</span></label>
+        <label><input type="radio" name="q7" value="13"><span> 13</span></label>
+        <label><input type="radio" name="q7" value="8"><span> 8</span></label>
+      </div>
+      <div class="why"><b>Answer: 11.</b> Do × and ÷ first: 2 × 5 = 10 and 10 ÷ 5 = 2. Then it is 3 + 10 − 2. Work left to right: 3 + 10 = 13, 13 − 2 = 11.</div>
+    </div>
+
+    <div class="q" data-answer="10">
+      <h3>Question 8</h3>
+      <div class="sum">(7 − 4) ÷ 0.3 = ?</div>
+      <div class="opts">
+        <label><input type="radio" name="q8" value="1"><span> 1</span></label>
+        <label><input type="radio" name="q8" value="10"><span> 10</span></label>
+        <label><input type="radio" name="q8" value="9"><span> 9</span></label>
+        <label><input type="radio" name="q8" value="0.9"><span> 0.9</span></label>
+      </div>
+      <div class="why"><b>Answer: 10.</b> Brackets first: 7 − 4 = 3. Then 3 ÷ 0.3 = 10, because 0.3 goes into 3 ten times.</div>
+    </div>
+
+    <div id="warn"></div>
+    <button type="button" id="submitBtn">Submit my answers ✅</button>
+  </form>
+
+  <p class="note">Made for Maya. Good luck!</p>
+</div>
+
+<script>
+var total = 8;
+var KEY = 'maya-bodmas-quiz-v2';
+var submitArmed = false;
+
+function answeredCount() {
+  return document.querySelectorAll('input[type="radio"]:checked').length;
+}
+
+function updateProgress() {
+  var n = answeredCount();
+  document.getElementById('progressText').textContent = 'Answered ' + n + ' of ' + total;
+  document.getElementById('progressFill').style.width = (n / total * 100) + '%';
+}
+
+function grade() {
+  var score = 0, answered = 0, lines = [];
+  var boxes = document.querySelectorAll('.q');
+  boxes.forEach(function (box, i) {
+    var name = 'q' + (i + 1);
+    var picked = document.querySelector('input[name="' + name + '"]:checked');
+    var why = box.querySelector('.why');
+    why.classList.add('show');
+    if (picked) {
+      answered++;
+      if (picked.value === box.getAttribute('data-answer')) {
+        score++;
+        box.classList.add('correct'); box.classList.remove('wrong');
+        lines.push('Q' + (i + 1) + ': correct ✅');
+      } else {
+        box.classList.add('wrong'); box.classList.remove('correct');
+        lines.push('Q' + (i + 1) + ': wrong ❌ (I picked ' + picked.value + ', answer is ' + box.getAttribute('data-answer') + ')');
+      }
+    } else {
+      box.classList.add('wrong'); box.classList.remove('correct');
+      lines.push('Q' + (i + 1) + ': not answered ❌ (answer is ' + box.getAttribute('data-answer') + ')');
+    }
+  });
+  return { score: score, answered: answered, lines: lines };
+}
+
+function lockQuiz(result) {
+  document.querySelectorAll('input[type="radio"]').forEach(function (r) { r.disabled = true; });
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitted ✅';
+  document.getElementById('warn').style.display = 'none';
+  var el = document.getElementById('score');
+  el.style.display = 'block';
+  var msg = result.score === total ? 'Perfect! Amazing work, Maya! 🎉'
+    : result.score >= 6 ? 'Well done, Maya! Nearly there.'
+    : result.score >= 4 ? 'Good try, Maya. Read the green boxes and have a look at the ones you missed.'
+    : 'Good try, Maya. Read the green boxes slowly and talk them through with Dad.';
+  el.innerHTML = msg + '<span class="big">' + result.score + ' / ' + total + '</span>'
+    + (result.answered < total ? 'You left ' + (total - result.answered) + ' question' + (total - result.answered > 1 ? 's' : '') + ' unanswered.' : '')
+    + '<div class="locked">Quiz finished. Your answers are locked, you cannot change them or do the quiz again.</div>';
+  var text = "Hi Dad, this is Maya. I finished my BODMAS quiz 2!\nMy score: " + result.score + " out of " + total + "\n" + result.lines.join('\n');
+  document.getElementById('shareText').textContent = text;
+  document.getElementById('shareBox').style.display = 'block';
+  try { localStorage.setItem(KEY, JSON.stringify(result)); } catch (e) {}
+  el.scrollIntoView();
+}
+
+function doSubmit() {
+  var n = answeredCount();
+  var warn = document.getElementById('warn');
+  var btn = document.getElementById('submitBtn');
+  if (n < total && !submitArmed) {
+    var missing = [];
+    for (var i = 1; i <= total; i++) {
+      if (!document.querySelector('input[name="q' + i + '"]:checked')) missing.push(i);
+    }
+    warn.textContent = 'You still need to answer question ' + missing.join(', ') + '. Answer them, or tap Submit again to finish anyway.';
+    warn.style.display = 'block';
+    btn.textContent = 'Tap again to submit anyway';
+    submitArmed = true;
+    warn.scrollIntoView();
+    return;
+  }
+  warn.style.display = 'none';
+  lockQuiz(grade());
+}
+
+document.getElementById('submitBtn').addEventListener('click', doSubmit);
+document.querySelectorAll('input[type="radio"]').forEach(function (r) {
+  r.addEventListener('change', function () {
+    submitArmed = false;
+    document.getElementById('submitBtn').textContent = 'Submit my answers ✅';
+    document.getElementById('warn').style.display = 'none';
+    updateProgress();
+  });
+});
+updateProgress();
+
+document.getElementById('copyBtn').addEventListener('click', function () {
+  var text = document.getElementById('shareText').textContent;
+  var done = function () { document.getElementById('copyMsg').textContent = 'Copied! Now paste it in a message to Dad.'; };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done); });
+  } else {
+    fallbackCopy(text, done);
+  }
+  function fallbackCopy(t, ok) {
+    var ta = document.createElement('textarea');
+    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); ok(); } catch (e) { document.getElementById('copyMsg').textContent = 'Copy did not work. Please select the text above and copy it by hand.'; }
+    document.body.removeChild(ta);
+  }
+});
+
+try {
+  var saved = localStorage.getItem(KEY);
+  if (saved) {
+    var prev = JSON.parse(saved);
+    document.querySelectorAll('.q').forEach(function (box, i) {
+      var line = prev.lines[i] || '';
+      var m = line.match(/picked ([^,]+)/);
+      if (m) {
+        var input = document.querySelector('input[name="q' + (i + 1) + '"][value="' + m[1] + '"]');
+        if (input) input.checked = true;
+      }
+    });
+    updateProgress();
+    grade();
+    lockQuiz(prev);
+  }
+} catch (e) {}
+</script>
+</body>
+</html>
