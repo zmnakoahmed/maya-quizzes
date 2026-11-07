@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's Spanish Quiz 2 - Harder, with a timer!</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; margin-top: 28px; }
+  .intro { background: #fff3cd; border: 1px solid #e6c87a; border-radius: 10px; padding: 12px; }
+  .harry { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
+  .harry svg { flex: 0 0 72px; }
+  .harry p { margin: 0; font-size: 17px; }
+  #progressWrap { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; }
+  #progressBar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+  #progressFill { height: 100%; width: 0%; background: #4caf50; }
+  #progressText { font-weight: bold; margin-top: 4px; }
+  #timerWrap { display: none; margin-top: 8px; }
+  #timerText { font-weight: bold; font-size: 20px; }
+  #timerBar { height: 10px; background: #eee; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+  #timerFill { height: 100%; width: 100%; background: #ff9800; }
+  .q { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .q h3 { margin: 0 0 10px 0; }
+  .q p.stem { font-size: 20px; font-weight: bold; }
+  label.opt { display: block; padding: 10px; margin: 6px 0; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; font-size: 18px; }
+  label.opt:hover { background: #f5f5f5; }
+  input[type=radio] { margin-right: 8px; transform: scale(1.3); }
+  input[type=text] { width: 100%; box-sizing: border-box; padding: 12px; font-size: 19px; border: 2px solid #4caf50; border-radius: 8px; }
+  .explain { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #e8f5e9; }
+  .explain.wrong { background: #fdecea; }
+  #submitBtn { display: block; width: 100%; padding: 16px; font-size: 20px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; }
+  #submitBtn:disabled { background: #aaa; }
+  #warn { display: none; background: #fff3cd; border: 1px solid #e6c87a; border-radius: 8px; padding: 12px; margin: 12px 0; font-weight: bold; }
+  #result { display: none; margin: 20px 0; }
+  #score { font-size: 26px; font-weight: bold; }
+  #resultImg { display: none; max-width: 100%; border-radius: 12px; border: 1px solid #ddd; margin-top: 12px; }
+  #shareBox { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #f9f9f9; }
+  #shareBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #downloadLink { display: none; text-align: center; padding: 12px; font-size: 16px; font-weight: bold; color: #2196f3; }
+  #shareNote { color: #888; font-size: 14px; }
+  .footer { color: #888; margin-top: 24px; }
+  .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
+  .speak.big { font-size: 22px; padding: 10px 18px; }
+  .hear { margin-top: 8px; font-size: 15px; color: #555; }
+  #matchGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+  .card { background: #fff; border: 2px solid #4caf50; border-radius: 12px; padding: 14px 4px; text-align: center; font-size: 18px; font-weight: bold; cursor: pointer; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+  .card.picked { background: #bbdefb; border-color: #1976d2; }
+  .card.matched { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; }
+  #matchDone { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; margin: 12px 0; }
+  #startBox { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 16px; text-align: center; font-size: 18px; margin: 16px 0; }
+  #startBtn { display: block; width: 100%; margin-top: 12px; padding: 14px; font-size: 20px; font-weight: bold; background: #ff9800; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #quizForm { display: none; }
+</style>
+</head>
+<body>
+<h1>Maya's Spanish Quiz 2</h1>
+<p>Harder this time! Type some answers yourself, read whole sentences, and watch the clock. Harry is your assistant. Tap the speaker to hear each Spanish word.</p>
+
+<div class="harry">
+  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+    <circle cx="36" cy="42" r="19" fill="#F5CBA7"/>
+    <path d="M16 32 Q12 10 36 8 Q60 10 56 32 L50 24 L46 30 L40 22 L36 29 L30 22 L24 30 L20 24 Z" fill="#222222"/>
+    <path d="M33 30 L37 30 L34 35 L38 35 L31 42 L33.5 36 L30 36 Z" fill="#FFD93D"/>
+    <circle cx="28" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <circle cx="44" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <line x1="35" y1="42" x2="37" y2="42" stroke="#222222" stroke-width="2"/>
+    <line x1="21" y1="42" x2="17" y2="41" stroke="#222222" stroke-width="2"/>
+    <line x1="51" y1="42" x2="55" y2="41" stroke="#222222" stroke-width="2"/>
+    <circle cx="28" cy="42" r="2" fill="#6D4C41"/>
+    <circle cx="44" cy="42" r="2" fill="#6D4C41"/>
+    <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
+    <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. This one is harder, and there is a timer. Are you ready?</p>
+</div>
+
+<h2>Warm-up: match the pairs</h2>
+<p>Tap an English word, then tap its Spanish word. Match all eight pairs! This part has no timer.</p>
+<div id="matchGrid"></div>
+<div id="matchDone">Brilliant! You matched them all! Now for the quiz.</div>
+
+<div id="startBox">
+  <strong>Ready for a challenge?</strong><br>
+  You have <strong>6 minutes</strong> for all 12 questions. The timer starts when you tap Start. Good luck!
+  <button type="button" id="startBtn">Start the quiz!</button>
+</div>
+
+<div id="progressWrap">
+  <div id="progressBar"><div id="progressFill"></div></div>
+  <div id="progressText">Answered 0 of 12</div>
+  <div id="timerWrap">
+    <div id="timerText">&#9201; 6:00 left</div>
+    <div id="timerBar"><div id="timerFill"></div></div>
+  </div>
+</div>
+
+<form id="quizForm">
+  <div class="q typeq" data-q="1">
+    <h3>Question 1 - Type it!</h3>
+    <p class="stem">How do you say "skeleton" in Spanish? Type it.</p>
+    <input type="text" name="q1" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the Spanish word">
+    <div class="explain" id="ex1"><strong>The answer is esqueleto.</strong></div>
+  </div>
+
+  <div class="q" data-q="2">
+    <h3>Question 2 - Listen!</h3>
+    <p class="stem"><button type="button" class="speak big" data-say="monstruo">&#128266; Listen</button> What does it mean?</p>
+    <label class="opt"><input type="radio" name="q2" value="monster"> monster</label>
+    <label class="opt"><input type="radio" name="q2" value="skeleton"> skeleton</label>
+    <label class="opt"><input type="radio" name="q2" value="cat"> cat</label>
+    <label class="opt"><input type="radio" name="q2" value="baby"> baby</label>
+    <div class="explain" id="ex2"><strong>monstruo means monster.</strong></div>
+  </div>
+
+  <div class="q" data-q="3">
+    <h3>Question 3 - Sentence!</h3>
+    <p class="stem">How do you say "The cat is black" in Spanish?</p>
+    <label class="opt"><input type="radio" name="q3" value="El gato es blanco"> El gato es blanco</label>
+    <label class="opt"><input type="radio" name="q3" value="El gato es rojo"> El gato es rojo</label>
+    <label class="opt"><input type="radio" name="q3" value="El gato es negro"> El gato es negro</label>
+    <label class="opt"><input type="radio" name="q3" value="El gato es verde"> El gato es verde</label>
+    <div class="hear">Hear them: <button type="button" class="speak" data-say="El gato es blanco">&#128266; blanco</button> <button type="button" class="speak" data-say="El gato es rojo">&#128266; rojo</button> <button type="button" class="speak" data-say="El gato es negro">&#128266; negro</button> <button type="button" class="speak" data-say="El gato es verde">&#128266; verde</button></div>
+    <div class="explain" id="ex3"><strong>El gato es negro.</strong> gato is cat, negro is black.</div>
+  </div>
+
+  <div class="q" data-q="4">
+    <h3>Question 4 - Numbers!</h3>
+    <p class="stem">What is 3 + 4? Answer in Spanish.</p>
+    <label class="opt"><input type="radio" name="q4" value="seis"> seis</label>
+    <label class="opt"><input type="radio" name="q4" value="siete"> siete</label>
+    <label class="opt"><input type="radio" name="q4" value="ocho"> ocho</label>
+    <label class="opt"><input type="radio" name="q4" value="nueve"> nueve</label>
+    <div class="explain" id="ex4"><strong>3 + 4 = 7, and 7 in Spanish is siete.</strong></div>
+  </div>
+
+  <div class="q typeq" data-q="5">
+    <h3>Question 5 - Type it!</h3>
+    <p class="stem">How do you say "nose" in Spanish? Type it.</p>
+    <input type="text" name="q5" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the Spanish word">
+    <div class="explain" id="ex5"><strong>The answer is nariz.</strong></div>
+  </div>
+
+  <div class="q" data-q="6">
+    <h3>Question 6 - Listen! Careful, this one is tricky.</h3>
+    <p class="stem"><button type="button" class="speak big" data-say="abuelo">&#128266; Listen</button> What does it mean?</p>
+    <label class="opt"><input type="radio" name="q6" value="grandma"> grandma</label>
+    <label class="opt"><input type="radio" name="q6" value="grandad"> grandad</label>
+    <label class="opt"><input type="radio" name="q6" value="auntie"> auntie</label>
+    <label class="opt"><input type="radio" name="q6" value="uncle"> uncle</label>
+    <div class="explain" id="ex6"><strong>abuelo means grandad.</strong> abuela is grandma. Listen for the O at the end!</div>
+  </div>
+
+  <div class="q" data-q="7">
+    <h3>Question 7 - Colour mixing!</h3>
+    <p class="stem">Red + yellow makes which colour? Answer in Spanish.</p>
+    <label class="opt" style="color:#E91E63"><input type="radio" name="q7" value="rosa"> rosa</label>
+    <label class="opt" style="color:#EF6C00"><input type="radio" name="q7" value="naranja"> naranja</label>
+    <label class="opt" style="color:#7B1FA2"><input type="radio" name="q7" value="morado"> morado</label>
+    <label class="opt" style="color:#616161"><input type="radio" name="q7" value="gris"> gris</label>
+    <div class="explain" id="ex7"><strong>Red + yellow makes orange, and orange in Spanish is naranja.</strong></div>
+  </div>
+
+  <div class="q typeq" data-q="8">
+    <h3>Question 8 - Type it!</h3>
+    <p class="stem">How do you say "grey" in Spanish? Type it.</p>
+    <input type="text" name="q8" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the Spanish word">
+    <div class="explain" id="ex8"><strong>The answer is gris.</strong></div>
+  </div>
+
+  <div class="q" data-q="9">
+    <h3>Question 9 - Sentence!</h3>
+    <p class="stem">How do you say "My mum is ___" in Spanish? Pick the missing word.</p>
+    <label class="opt"><input type="radio" name="q9" value="Mi padre"> Mi padre</label>
+    <label class="opt"><input type="radio" name="q9" value="Mi madre"> Mi madre</label>
+    <label class="opt"><input type="radio" name="q9" value="Mi tía"> Mi tía</label>
+    <label class="opt"><input type="radio" name="q9" value="Mi abuela"> Mi abuela</label>
+    <div class="hear">Hear them: <button type="button" class="speak" data-say="Mi padre">&#128266; Mi padre</button> <button type="button" class="speak" data-say="Mi madre">&#128266; Mi madre</button> <button type="button" class="speak" data-say="Mi tía">&#128266; Mi tía</button> <button type="button" class="speak" data-say="Mi abuela">&#128266; Mi abuela</button></div>
+    <div class="explain" id="ex9"><strong>Mi madre means my mum.</strong> Mi padre is my dad.</div>
+  </div>
+
+  <div class="q" data-q="10">
+    <h3>Question 10 - Listen!</h3>
+    <p class="stem"><button type="button" class="speak big" data-say="arcoíris">&#128266; Listen</button> What does it mean?</p>
+    <label class="opt"><input type="radio" name="q10" value="rainbow"> rainbow</label>
+    <label class="opt"><input type="radio" name="q10" value="orange"> orange</label>
+    <label class="opt"><input type="radio" name="q10" value="purple"> purple</label>
+    <label class="opt"><input type="radio" name="q10" value="pink"> pink</label>
+    <div class="explain" id="ex10"><strong>arcoíris means rainbow.</strong></div>
+  </div>
+
+  <div class="q typeq" data-q="11">
+    <h3>Question 11 - Type it!</h3>
+    <p class="stem">How do you say "eight" in Spanish? Type it.</p>
+    <input type="text" name="q11" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the Spanish word">
+    <div class="explain" id="ex11"><strong>The answer is ocho.</strong></div>
+  </div>
+
+  <div class="q" data-q="12">
+    <h3>Question 12 - Careful!</h3>
+    <p class="stem">How do you say "my best friend" (a boy) in Spanish?</p>
+    <label class="opt"><input type="radio" name="q12" value="mi mejor amiga"> mi mejor amiga</label>
+    <label class="opt"><input type="radio" name="q12" value="mi mejor amigo"> mi mejor amigo</label>
+    <label class="opt"><input type="radio" name="q12" value="mi primo"> mi primo</label>
+    <label class="opt"><input type="radio" name="q12" value="mi tío"> mi tío</label>
+    <div class="hear">Hear them: <button type="button" class="speak" data-say="mi mejor amiga">&#128266; mi mejor amiga</button> <button type="button" class="speak" data-say="mi mejor amigo">&#128266; mi mejor amigo</button> <button type="button" class="speak" data-say="mi primo">&#128266; mi primo</button> <button type="button" class="speak" data-say="mi tío">&#128266; mi tío</button></div>
+    <div class="explain" id="ex12"><strong>mi mejor amigo means my best friend, for a boy.</strong> mi mejor amiga is for a girl.</div>
+  </div>
+
+  <div id="warn"></div>
+  <button type="button" id="submitBtn">Submit</button>
+</form>
+
+<div id="result">
+  <div id="score"></div>
+  <img id="resultImg" alt="Maya's quiz result">
+  <div id="shareBox">
+    <strong>Share your result with Daddy:</strong> Tap the button and pick Messages to send him the picture.
+    <button type="button" id="shareBtn">Share with Daddy</button>
+    <a id="downloadLink" href="#" download="maya-spanish-quiz-2.png">Save the picture</a>
+    <div id="shareNote"></div>
+  </div>
+</div>
+
+<p class="footer">Made for Maya. Good luck!</p>
+
+<script>
+var ANSWERS = { q1: "esqueleto", q2: "monster", q3: "El gato es negro", q4: "siete", q5: "nariz", q6: "grandad", q7: "naranja", q8: "gris", q9: "Mi madre", q10: "rainbow", q11: "ocho", q12: "mi mejor amigo" };
+var TYPE_QS = { q1: true, q5: true, q8: true, q11: true };
+var KEY = "maya-spanish-quiz-2";
+var submitted = false;
+try { submitted = localStorage.getItem(KEY) === "done"; } catch (e) {}
+var resultBlob = null;
+
+function harrySay(msg) {
+  document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + msg;
+}
+function norm(s) {
+  return (s || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function speak(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "es-ES"; u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+document.querySelectorAll(".speak").forEach(function (b) {
+  b.addEventListener("click", function () { speak(b.getAttribute("data-say")); });
+});
+
+var PAIRS = [["baby","bebé"],["face","cara"],["hair","pelo"],["eyes","ojos"],["pink","rosa"],["white","blanco"],["nine","nueve"],["ten","diez"]];
+var matchState = { first: null, lock: false, done: 0 };
+(function buildMatch() {
+  var cards = [];
+  PAIRS.forEach(function (p, i) {
+    cards.push({ pair: i, text: p[0] });
+    cards.push({ pair: i, text: p[1] });
+  });
+  for (var i = cards.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+  }
+  var grid = document.getElementById("matchGrid");
+  cards.forEach(function (c) {
+    var d = document.createElement("div");
+    d.className = "card";
+    d.textContent = c.text;
+    d.addEventListener("click", function () { pickCard(d, c.pair); });
+    grid.appendChild(d);
+  });
+})();
+function pickCard(el, pair) {
+  if (matchState.lock || el.classList.contains("matched") || el.classList.contains("picked")) return;
+  el.classList.add("picked");
+  if (matchState.first === null) { matchState.first = { el: el, pair: pair }; return; }
+  var f = matchState.first; matchState.first = null;
+  if (f.pair === pair) {
+    f.el.classList.remove("picked"); f.el.classList.add("matched");
+    el.classList.remove("picked"); el.classList.add("matched");
+    matchState.done++;
+    harrySay("Brilliant! That is a match!");
+    if (matchState.done === 8) {
+      harrySay("Brilliant! You matched them all! Now for the quiz!");
+      document.getElementById("matchDone").style.display = "block";
+    }
+  } else {
+    matchState.lock = true;
+    harrySay("Not quite, try again!");
+    setTimeout(function () {
+      f.el.classList.remove("picked"); el.classList.remove("picked");
+      matchState.lock = false;
+    }, 700);
+  }
+}
+
+var TOTAL = 360;
+var timeLeft = TOTAL, timerId = null, startTime = null, timerRunning = false;
+function fmt(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+function fmtElapsed(sec) { var m = Math.floor(sec / 60), s = sec % 60; return m + " min " + s + " s"; }
+function tick() {
+  timeLeft--;
+  document.getElementById("timerText").textContent = "⏱ " + fmt(timeLeft) + " left";
+  document.getElementById("timerFill").style.width = (timeLeft / TOTAL * 100) + "%";
+  if (timeLeft <= 60) document.getElementById("timerText").style.color = "#D32F2F";
+  if (timeLeft <= 0) { clearInterval(timerId); timerRunning = false; doSubmit(true); }
+}
+document.getElementById("startBtn").addEventListener("click", function () {
+  document.getElementById("startBox").style.display = "none";
+  document.getElementById("quizForm").style.display = "block";
+  document.getElementById("timerWrap").style.display = "block";
+  startTime = Date.now();
+  timerRunning = true;
+  timerId = setInterval(tick, 1000);
+  harrySay("Go, Maya! You have 6 minutes!");
+  document.getElementById("quizForm").scrollIntoView({ behavior: "smooth" });
+});
+
+function isTypeQ(j) { return !!TYPE_QS["q" + j]; }
+function getAnswer(j) {
+  if (isTypeQ(j)) {
+    return document.querySelector('input[name="q' + j + '"]').value;
+  }
+  var c = document.querySelector('input[name="q' + j + '"]:checked');
+  return c ? c.value : null;
+}
+function isAnswered(j) {
+  var a = getAnswer(j);
+  return a !== null && String(a).trim() !== "";
+}
+function answeredCount() {
+  var n = 0;
+  for (var i = 1; i <= 12; i++) if (isAnswered(i)) n++;
+  return n;
+}
+function updateProgress() {
+  var n = answeredCount();
+  document.getElementById("progressFill").style.width = (n / 12 * 100) + "%";
+  document.getElementById("progressText").textContent = "Answered " + n + " of 12";
+}
+var HARRY_CHEER = [
+  "Great thinking, Maya! You've got this!",
+  "Brilliant! Keep going, Maya!",
+  "Nice one, Maya! Harry is cheering for you!"
+];
+var cheerIdx = 0;
+document.querySelectorAll('input[type="radio"]').forEach(function (r) {
+  r.addEventListener("change", function () {
+    updateProgress();
+    harrySay(HARRY_CHEER[cheerIdx % HARRY_CHEER.length]);
+    cheerIdx++;
+  });
+});
+document.querySelectorAll('input[type="text"]').forEach(function (t) {
+  t.addEventListener("input", updateProgress);
+});
+
+function lockForm() {
+  document.querySelectorAll('input[type="radio"]').forEach(function (r) { r.disabled = true; });
+  document.querySelectorAll('input[type="text"]').forEach(function (t) { t.disabled = true; });
+  document.getElementById("submitBtn").disabled = true;
+}
+
+function confetti(x) {
+  var cols = ["#FF6B9D", "#FFD93D", "#6BCBFF", "#B388FF", "#FF8A65", "#81C784"];
+  var seed = 12345;
+  function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  for (var i = 0; i < 44; i++) {
+    var left = rnd() < 0.5;
+    var cx = left ? 30 + rnd() * 150 : 900 + rnd() * 150;
+    var cy = 320 + rnd() * 680;
+    var r = 6 + rnd() * 8;
+    x.fillStyle = cols[i % cols.length];
+    x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill();
+  }
+}
+
+function makeResultImage(score, wrong, timeText, done) {
+  var c = document.createElement("canvas");
+  c.width = 1080; c.height = 1080;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, 1080, 1080);
+  confetti(x);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 300);
+  x.fillStyle = "#ffffff"; x.textAlign = "center";
+  x.font = "bold 64px -apple-system, Arial, sans-serif";
+  x.fillText("Maya's Spanish Quiz 2", 540, 110);
+  x.font = "44px -apple-system, Arial, sans-serif";
+  x.fillText("Harder! With a timer", 540, 175);
+  x.font = "bold 44px -apple-system, Arial, sans-serif";
+  x.fillText("Well done, Maya!", 540, 245);
+  x.fillStyle = "#222222";
+  x.font = "bold 200px -apple-system, Arial, sans-serif";
+  x.fillText(score + " / 12", 540, 510);
+  x.fillStyle = "#4CAF50";
+  x.font = "bold 58px -apple-system, Arial, sans-serif";
+  x.fillText(score === 12 ? "All correct!" : "Nearly perfect!", 540, 600);
+  var stars = "";
+  for (var s = 0; s < 12; s++) stars += (s < score) ? "★" : "☆";
+  x.fillStyle = "#F9A825";
+  x.font = "56px -apple-system, Arial, sans-serif";
+  x.fillText(stars, 540, 720);
+  x.fillStyle = "#555555";
+  x.font = "46px -apple-system, Arial, sans-serif";
+  x.fillText(wrong.length === 0 ? "No questions missed" : "Missed question" + (wrong.length > 1 ? "s " : " ") + wrong.join(", "), 540, 815);
+  x.fillStyle = "#555555";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(timeText, 540, 875);
+  var d = new Date();
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  x.fillStyle = "#888888";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 925);
+  x.fillText("Made for Maya", 540, 975);
+  c.toBlob(function (b) { done(b); }, "image/png");
+}
+
+function doSubmit(auto) {
+  if (timerRunning) { clearInterval(timerId); timerRunning = false; }
+  var missing = [];
+  for (var i = 1; i <= 12; i++) if (!isAnswered(i)) missing.push(i);
+  var warn = document.getElementById("warn");
+  if (missing.length > 0 && !auto) {
+    warn.style.display = "block";
+    warn.textContent = "You still need to answer question" + (missing.length > 1 ? "s " : " ") + missing.join(", ") + ". Tap Submit again when they are all answered.";
+    return;
+  }
+  warn.style.display = "none";
+  var score = 0, wrong = [];
+  for (var j = 1; j <= 12; j++) {
+    var picked = getAnswer(j);
+    var ex = document.getElementById("ex" + j);
+    ex.style.display = "block";
+    var ok = isTypeQ(j) ? (norm(picked) === norm(ANSWERS["q" + j])) : (picked === ANSWERS["q" + j]);
+    if (ok) {
+      score++;
+    } else {
+      wrong.push(j);
+      ex.classList.add("wrong");
+    }
+  }
+  var elapsed = startTime ? Math.round((Date.now() - startTime) / 1000) : TOTAL;
+  var timeText = auto ? "Time ran out! Finished in 6 min 0 s" : "Finished in " + fmtElapsed(elapsed);
+  document.getElementById("score").textContent = "You scored " + score + " out of 12! " + (auto ? "Time ran out!" : "Finished in " + fmtElapsed(elapsed) + ".");
+  var harryEnd = score === 12 ? "Brilliant, Maya! Full marks, twelve out of twelve!"
+    : score >= 9 ? "Well done, Maya! Great work under pressure!"
+    : score >= 6 ? "Good effort, Maya! You are learning fast!"
+    : "Don't worry, Maya. Every wizard has tough days. Try again!";
+  harrySay(harryEnd);
+  document.getElementById("result").style.display = "block";
+  lockForm();
+  try { localStorage.setItem(KEY, "done"); } catch (e) {}
+  makeResultImage(score, wrong, timeText, function (blob) {
+    resultBlob = blob;
+    var url = URL.createObjectURL(blob);
+    var img = document.getElementById("resultImg");
+    img.src = url; img.style.display = "block";
+    document.getElementById("downloadLink").href = url;
+  });
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+}
+
+document.getElementById("submitBtn").addEventListener("click", function () { doSubmit(false); });
+
+document.getElementById("shareBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareNote");
+  if (!resultBlob) {
+    note.textContent = "The picture is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([resultBlob], "maya-spanish-quiz-2.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      document.getElementById("downloadLink").style.display = "block";
+      note.textContent = "Sharing did not open. Tap Save the picture instead.";
+    });
+  } else {
+    document.getElementById("downloadLink").style.display = "block";
+    note.textContent = "Sharing pictures is not available here. Tap Save the picture, then send it from Photos.";
+  }
+});
+
+updateProgress();
+if (submitted) {
+  lockForm();
+  document.getElementById("submitBtn").textContent = "Already submitted on this iPad";
+}
+
+</script>
+</body>
+</html>
