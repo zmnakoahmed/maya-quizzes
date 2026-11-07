@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's BODMAS Quiz 3 - Harder!</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
+  h1 { font-size: 26px; }
+  .intro { background: #fff3cd; border: 1px solid #e6c87a; border-radius: 10px; padding: 12px; }
+  #progressWrap { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; }
+  #progressBar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+  #progressFill { height: 100%; width: 0%; background: #4caf50; }
+  #progressText { font-weight: bold; margin-top: 4px; }
+  .q { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .q h3 { margin: 0 0 10px 0; }
+  .q p.stem { font-size: 20px; font-weight: bold; }
+  label.opt { display: block; padding: 10px; margin: 6px 0; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; font-size: 18px; }
+  label.opt:hover { background: #f5f5f5; }
+  input[type=radio] { margin-right: 8px; transform: scale(1.3); }
+  .explain { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #e8f5e9; }
+  .explain.wrong { background: #fdecea; }
+  #submitBtn { display: block; width: 100%; padding: 16px; font-size: 20px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; }
+  #submitBtn:disabled { background: #aaa; }
+  #warn { display: none; background: #fff3cd; border: 1px solid #e6c87a; border-radius: 8px; padding: 12px; margin: 12px 0; font-weight: bold; }
+  #result { display: none; margin: 20px 0; }
+  #score { font-size: 26px; font-weight: bold; }
+  #shareBox { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #f9f9f9; }
+  #shareText { width: 100%; height: 90px; font-size: 16px; padding: 8px; box-sizing: border-box; }
+  #copyBtn { margin-top: 8px; padding: 12px 20px; font-size: 16px; font-weight: bold; background: #2196f3; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+  #sentNote { display: none; margin-top: 10px; color: #2e7d32; font-weight: bold; }
+  .footer { color: #888; margin-top: 24px; }
+</style>
+</head>
+<body>
+<h1>Maya's BODMAS Quiz 3</h1>
+<p>Harder this time! You got 8 out of 8 last time, so this one has trickier numbers, a spot-the-mistake question and a word problem. Tap one answer for each, then press Submit. You can only submit once, so check your answers first.</p>
+
+<div class="intro">
+<strong>Remember BODMAS</strong><br>
+1. <strong>B</strong>rackets first<br>
+2. <strong>O</strong>rders (powers)<br>
+3. <strong>D</strong>ivision and <strong>M</strong>ultiplication, together<br>
+4. <strong>A</strong>ddition and <strong>S</strong>ubtraction, together<br>
+The big rule: ÷ and × are equal. When they are in a row, work from left to right. Do not do the × first just because it comes later. Same for + and −.
+</div>
+
+<div id="progressWrap">
+  <div id="progressBar"><div id="progressFill"></div></div>
+  <div id="progressText">Answered 0 of 8</div>
+</div>
+
+<form id="quizForm">
+  <div class="q" data-q="1">
+    <h3>Question 1</h3>
+    <p class="stem">12 + 8 ÷ 2 × 3 − 5 = ?</p>
+    <label class="opt"><input type="radio" name="q1" value="19"> 19</label>
+    <label class="opt"><input type="radio" name="q1" value="25"> 25</label>
+    <label class="opt"><input type="radio" name="q1" value="7"> 7</label>
+    <label class="opt"><input type="radio" name="q1" value="31"> 31</label>
+    <div class="explain" id="ex1"><strong>Answer: 19.</strong> Do ÷ and × first, left to right: 8 ÷ 2 = 4, then 4 × 3 = 12. Now it is 12 + 12 − 5 = 19. The trap is doing (12 + 8) ÷ 2 first, which gives 25.</div>
+  </div>
+
+  <div class="q" data-q="2">
+    <h3>Question 2</h3>
+    <p class="stem">20 − (6 + 2) × 2 = ?</p>
+    <label class="opt"><input type="radio" name="q2" value="4"> 4</label>
+    <label class="opt"><input type="radio" name="q2" value="24"> 24</label>
+    <label class="opt"><input type="radio" name="q2" value="16"> 16</label>
+    <label class="opt"><input type="radio" name="q2" value="8"> 8</label>
+    <div class="explain" id="ex2"><strong>Answer: 4.</strong> Brackets first: 6 + 2 = 8. Then 8 × 2 = 16. Then 20 − 16 = 4. The trap is doing (20 − 8) × 2 = 24.</div>
+  </div>
+
+  <div class="q" data-q="3">
+    <h3>Question 3</h3>
+    <p class="stem">7.5 ÷ 0.5 × 2 − 4 = ?</p>
+    <label class="opt"><input type="radio" name="q3" value="26"> 26</label>
+    <label class="opt"><input type="radio" name="q3" value="11"> 11</label>
+    <label class="opt"><input type="radio" name="q3" value="30"> 30</label>
+    <label class="opt"><input type="radio" name="q3" value="3.75"> 3.75</label>
+    <div class="explain" id="ex3"><strong>Answer: 26.</strong> Left to right: 7.5 ÷ 0.5 = 15, then 15 × 2 = 30, then 30 − 4 = 26. If you forget the × 2 you get 15 − 4 = 11.</div>
+  </div>
+
+  <div class="q" data-q="4">
+    <h3>Question 4</h3>
+    <p class="stem">(4 1/2 − 2 1/4) ÷ 0.5 × 2 = ?</p>
+    <label class="opt"><input type="radio" name="q4" value="9"> 9</label>
+    <label class="opt"><input type="radio" name="q4" value="4.5"> 4.5</label>
+    <label class="opt"><input type="radio" name="q4" value="18"> 18</label>
+    <label class="opt"><input type="radio" name="q4" value="2.25"> 2.25</label>
+    <div class="explain" id="ex4"><strong>Answer: 9.</strong> Brackets first: 4 1/2 − 2 1/4 = 2 1/4. Then left to right: 2.25 ÷ 0.5 = 4.5, then 4.5 × 2 = 9. This is the same shape as your Kumon question, with fractions and decimals together.</div>
+  </div>
+
+  <div class="q" data-q="5">
+    <h3>Question 5 - Spot the mistake!</h3>
+    <p class="stem">Sara worked out 18 − 6 ÷ 2 × 3 and got 18. What is the correct answer?</p>
+    <label class="opt"><input type="radio" name="q5" value="9"> 9</label>
+    <label class="opt"><input type="radio" name="q5" value="18"> 18</label>
+    <label class="opt"><input type="radio" name="q5" value="36"> 36</label>
+    <label class="opt"><input type="radio" name="q5" value="0"> 0</label>
+    <div class="explain" id="ex5"><strong>Answer: 9.</strong> Sara did 18 − 6 first, which is the mistake. ÷ and × come before −. First 6 ÷ 2 = 3, then 3 × 3 = 9, then 18 − 9 = 9. Her way, (18 − 6) ÷ 2 × 3, gives 18.</div>
+  </div>
+
+  <div class="q" data-q="6">
+    <h3>Question 6 - Word problem</h3>
+    <p class="stem">Maya buys 4 packs of pens at €2.50 each and a notebook for €3. She pays with €20. How much change does she get?</p>
+    <label class="opt"><input type="radio" name="q6" value="€7"> €7</label>
+    <label class="opt"><input type="radio" name="q6" value="€10"> €10</label>
+    <label class="opt"><input type="radio" name="q6" value="€3"> €3</label>
+    <label class="opt"><input type="radio" name="q6" value="€13"> €13</label>
+    <div class="explain" id="ex6"><strong>Answer: €7.</strong> First the pens: 4 × €2.50 = €10. Then add the notebook: €10 + €3 = €13. Then the change: €20 − €13 = €7. €13 is the total cost, not the change.</div>
+  </div>
+
+  <div class="q" data-q="7">
+    <h3>Question 7</h3>
+    <p class="stem">100 ÷ (5 × 2) + 3 × 4 − 6 = ?</p>
+    <label class="opt"><input type="radio" name="q7" value="16"> 16</label>
+    <label class="opt"><input type="radio" name="q7" value="22"> 22</label>
+    <label class="opt"><input type="radio" name="q7" value="10"> 10</label>
+    <label class="opt"><input type="radio" name="q7" value="40"> 40</label>
+    <div class="explain" id="ex7"><strong>Answer: 16.</strong> Brackets first: 5 × 2 = 10, so 100 ÷ 10 = 10. Then 3 × 4 = 12. Now it is 10 + 12 − 6 = 16. If you forget the − 6 at the end you get 22.</div>
+  </div>
+
+  <div class="q" data-q="8">
+    <h3>Question 8</h3>
+    <p class="stem">(2/3 + 1/6) × 12 − 8 = ?</p>
+    <label class="opt"><input type="radio" name="q8" value="2"> 2</label>
+    <label class="opt"><input type="radio" name="q8" value="10"> 10</label>
+    <label class="opt"><input type="radio" name="q8" value="8"> 8</label>
+    <label class="opt"><input type="radio" name="q8" value="12"> 12</label>
+    <div class="explain" id="ex8"><strong>Answer: 2.</strong> Brackets first: 2/3 + 1/6 = 4/6 + 1/6 = 5/6. Then 5/6 of 12 = 10. Then 10 − 8 = 2. If you forget the − 8 you get 10.</div>
+  </div>
+
+  <div id="warn"></div>
+  <button type="button" id="submitBtn">Submit</button>
+</form>
+
+<div id="result">
+  <div id="score"></div>
+  <div id="shareBox">
+    <strong>Show Dad:</strong>
+    <textarea id="shareText" readonly></textarea><br>
+    <button type="button" id="copyBtn">Copy result</button>
+    <div id="sentNote">Your answers were also sent to Dad automatically.</div>
+  </div>
+</div>
+
+<p class="footer">Made for Maya. Good luck!</p>
+
+<script>
+var ANSWERS = { q1: "19", q2: "4", q3: "26", q4: "9", q5: "9", q6: "€7", q7: "16", q8: "2" };
+var KEY = "maya-bodmas-quiz-v3";
+var submitted = false;
+try { submitted = localStorage.getItem(KEY) === "done"; } catch (e) {}
+
+function answeredCount() {
+  var n = 0;
+  for (var i = 1; i <= 8; i++) {
+    if (document.querySelector('input[name="q' + i + '"]:checked')) n++;
+  }
+  return n;
+}
+function updateProgress() {
+  var n = answeredCount();
+  document.getElementById("progressFill").style.width = (n / 8 * 100) + "%";
+  document.getElementById("progressText").textContent = "Answered " + n + " of 8";
+}
+document.querySelectorAll('input[type="radio"]').forEach(function (r) {
+  r.addEventListener("change", updateProgress);
+});
+
+function lockForm() {
+  document.querySelectorAll('input[type="radio"]').forEach(function (r) { r.disabled = true; });
+  document.getElementById("submitBtn").disabled = true;
+}
+
+document.getElementById("submitBtn").addEventListener("click", function () {
+  var missing = [];
+  for (var i = 1; i <= 8; i++) {
+    if (!document.querySelector('input[name="q' + i + '"]:checked')) missing.push(i);
+  }
+  var warn = document.getElementById("warn");
+  if (missing.length > 0) {
+    warn.style.display = "block";
+    warn.textContent = "You still need to answer question" + (missing.length > 1 ? "s " : " ") + missing.join(", ") + ". Tap Submit again when they are all answered.";
+    return;
+  }
+  warn.style.display = "none";
+  var score = 0, wrong = [], given = {};
+  for (var j = 1; j <= 8; j++) {
+    var picked = document.querySelector('input[name="q' + j + '"]:checked').value;
+    given["q" + j] = picked;
+    var ex = document.getElementById("ex" + j);
+    ex.style.display = "block";
+    if (picked === ANSWERS["q" + j]) {
+      score++;
+    } else {
+      wrong.push(j);
+      ex.classList.add("wrong");
+    }
+  }
+  document.getElementById("score").textContent = "You scored " + score + " out of 8!";
+  var share = "Maya's BODMAS Quiz 3: " + score + " out of 8! " + (wrong.length === 0 ? "All correct!" : "Missed question" + (wrong.length > 1 ? "s " : " ") + wrong.join(", ") + ".");
+  document.getElementById("shareText").value = share;
+  document.getElementById("result").style.display = "block";
+  lockForm();
+  try { localStorage.setItem(KEY, "done"); } catch (e) {}
+  sendToForm(score, wrong, given);
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+});
+
+function sendToForm(score, wrong, given) {
+  var fd = new FormData();
+  fd.append("entry.1763210918", "Quiz 3 - BODMAS harder");
+  fd.append("entry.1716591520", score + " out of 8");
+  fd.append("entry.1853979221", given.q1);
+  fd.append("entry.306038968", given.q2);
+  fd.append("entry.1507659235", given.q3);
+  fd.append("entry.227701974", given.q4);
+  fd.append("entry.236559369", given.q5);
+  fd.append("entry.1899816228", given.q6);
+  fd.append("entry.2146921047", given.q7);
+  fd.append("entry.1989541343", given.q8);
+  fd.append("entry.956906611", wrong.length === 0 ? "none, all correct" : "Questions " + wrong.join(", "));
+  fetch("https://docs.google.com/forms/d/e/1FAIpQLScTtbZ_8V1isncLFitKGzIZjv5kn8_iy-pQD3XF5q5QOBy9VA/formResponse", { method: "POST", body: fd, mode: "no-cors" })
+    .then(function () { document.getElementById("sentNote").style.display = "block"; })
+    .catch(function () {});
+}
+
+document.getElementById("copyBtn").addEventListener("click", function () {
+  var t = document.getElementById("shareText");
+  t.select();
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t.value);
+    } else {
+      document.execCommand("copy");
+    }
+    document.getElementById("copyBtn").textContent = "Copied!";
+  } catch (e) {
+    document.getElementById("copyBtn").textContent = "Copy it by hand";
+  }
+});
+
+updateProgress();
+if (submitted) {
+  lockForm();
+  document.getElementById("submitBtn").textContent = "Already submitted on this iPad";
+}
+</script>
+</body>
+</html>
