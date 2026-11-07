@@ -269,6 +269,7 @@ var KEY = "maya-spanish-quiz-2";
 var submitted = false;
 try { submitted = localStorage.getItem(KEY) === "done"; } catch (e) {}
 var resultBlob = null;
+var answerTimes = {};
 
 function harrySay(msg) {
   document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + msg;
@@ -387,13 +388,17 @@ var HARRY_CHEER = [
 var cheerIdx = 0;
 document.querySelectorAll('input[type="radio"]').forEach(function (r) {
   r.addEventListener("change", function () {
+    if (!answerTimes[r.name]) answerTimes[r.name] = Date.now();
     updateProgress();
     harrySay(HARRY_CHEER[cheerIdx % HARRY_CHEER.length]);
     cheerIdx++;
   });
 });
 document.querySelectorAll('input[type="text"]').forEach(function (t) {
-  t.addEventListener("input", updateProgress);
+  t.addEventListener("input", function () {
+    if (t.value.trim() !== "" && !answerTimes[t.name]) answerTimes[t.name] = Date.now();
+    updateProgress();
+  });
 });
 
 function lockForm() {
@@ -416,43 +421,53 @@ function confetti(x) {
   }
 }
 
-function makeResultImage(score, wrong, timeText, done) {
+function makeResultImage(score, fb, timeText, done) {
   var c = document.createElement("canvas");
   c.width = 1080; c.height = 1080;
   var x = c.getContext("2d");
   x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, 1080, 1080);
   confetti(x);
-  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 300);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 280);
   x.fillStyle = "#ffffff"; x.textAlign = "center";
   x.font = "bold 64px -apple-system, Arial, sans-serif";
-  x.fillText("Maya's Spanish Quiz 2", 540, 110);
+  x.fillText("Maya's Spanish Quiz 2", 540, 100);
   x.font = "44px -apple-system, Arial, sans-serif";
-  x.fillText("Harder! With a timer", 540, 175);
+  x.fillText("Harder! With a timer", 540, 160);
   x.font = "bold 44px -apple-system, Arial, sans-serif";
-  x.fillText("Well done, Maya!", 540, 245);
+  x.fillText("Well done, Maya!", 540, 225);
   x.fillStyle = "#222222";
-  x.font = "bold 200px -apple-system, Arial, sans-serif";
-  x.fillText(score + " / 14", 540, 510);
+  x.font = "bold 180px -apple-system, Arial, sans-serif";
+  x.fillText(score + " / 14", 540, 470);
   x.fillStyle = "#4CAF50";
   x.font = "bold 58px -apple-system, Arial, sans-serif";
-  x.fillText(score === 12 ? "All correct!" : "Nearly perfect!", 540, 600);
+  x.fillText(score === 14 ? "All correct!" : "Nearly perfect!", 540, 560);
   var stars = "";
   for (var s = 0; s < 14; s++) stars += (s < score) ? "★" : "☆";
   x.fillStyle = "#F9A825";
   x.font = "52px -apple-system, Arial, sans-serif";
-  x.fillText(stars, 540, 720);
-  x.fillStyle = "#555555";
-  x.font = "46px -apple-system, Arial, sans-serif";
-  x.fillText(wrong.length === 0 ? "No questions missed" : "Missed question" + (wrong.length > 1 ? "s " : " ") + wrong.join(", "), 540, 815);
+  x.fillText(stars, 540, 675);
+  x.fillStyle = "#222222";
+  x.font = "bold 40px -apple-system, Arial, sans-serif";
+  x.fillText("Feedback for Daddy:", 540, 755);
+  for (var i = 0; i < fb.length; i++) {
+    var size = 36;
+    x.font = size + "px -apple-system, Arial, sans-serif";
+    x.fillStyle = "#555555";
+    while (x.measureText(fb[i]).width > 980 && size > 24) {
+      size -= 2;
+      x.font = size + "px -apple-system, Arial, sans-serif";
+    }
+    x.fillText(fb[i], 540, 800 + i * 42);
+  }
   x.fillStyle = "#555555";
   x.font = "40px -apple-system, Arial, sans-serif";
-  x.fillText(timeText, 540, 875);
+  x.fillText(timeText, 540, 935);
   var d = new Date();
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   x.fillStyle = "#888888";
   x.font = "40px -apple-system, Arial, sans-serif";
-  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 925);
-  x.fillText("Made for Maya", 540, 975);
+  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 980);
+  x.fillText("Made for Maya", 540, 1025);
   c.toBlob(function (b) { done(b); }, "image/png");
 }
 
@@ -467,7 +482,7 @@ function doSubmit(auto) {
     return;
   }
   warn.style.display = "none";
-  var score = 0, wrong = [];
+  var score = 0, wrongDetails = [];
   for (var j = 1; j <= 14; j++) {
     var picked = getAnswer(j);
     var ex = document.getElementById("ex" + j);
@@ -476,10 +491,33 @@ function doSubmit(auto) {
     if (ok) {
       score++;
     } else {
-      wrong.push(j);
+      wrongDetails.push({ q: j, picked: (picked === null || String(picked).trim() === "") ? "(no answer)" : String(picked), correct: ANSWERS["q" + j] });
       ex.classList.add("wrong");
     }
   }
+  var slowestQ = null, slowestSecs = 0;
+  if (startTime) {
+    var prev = startTime;
+    for (var k = 1; k <= 14; k++) {
+      var t = answerTimes["q" + k];
+      if (!t) continue;
+      var gap = Math.round((t - prev) / 1000);
+      if (gap > slowestSecs) { slowestSecs = gap; slowestQ = k; }
+      prev = t;
+    }
+  }
+  var fb = [];
+  if (wrongDetails.length === 0) {
+    fb.push("No questions missed!");
+  } else {
+    wrongDetails.slice(0, 2).forEach(function (w) {
+      fb.push("Q" + w.q + ": you said " + w.picked + ", answer is " + w.correct);
+    });
+    if (wrongDetails.length > 2) fb.push("and " + (wrongDetails.length - 2) + " more missed");
+  }
+  if (timeLeft > 180) fb.push("Very fast: " + fmt(timeLeft) + " left. Next quiz harder!");
+  if (slowestQ && slowestSecs >= 10) fb.push("Slowest: Q" + slowestQ + " (" + slowestSecs + " s)");
+  fb = fb.slice(0, 3);
   var elapsed = startTime ? Math.round((Date.now() - startTime) / 1000) : TOTAL;
   var timeText = auto ? "Time ran out! Finished in 8 min 0 s" : "Finished in " + fmtElapsed(elapsed);
   document.getElementById("score").textContent = "You scored " + score + " out of 14! " + (auto ? "Time ran out!" : "Finished in " + fmtElapsed(elapsed) + ".");
@@ -491,7 +529,7 @@ function doSubmit(auto) {
   document.getElementById("result").style.display = "block";
   lockForm();
   try { localStorage.setItem(KEY, "done"); } catch (e) {}
-  makeResultImage(score, wrong, timeText, function (blob) {
+  makeResultImage(score, fb, timeText, function (blob) {
     resultBlob = blob;
     var url = URL.createObjectURL(blob);
     var img = document.getElementById("resultImg");
