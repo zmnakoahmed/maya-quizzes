@@ -172,6 +172,20 @@ function lockForm() {
   document.getElementById("submitBtn").disabled = true;
 }
 
+function sendResult(score, wrong, given) {
+  try {
+    var data = new URLSearchParams();
+    data.append("entry.1763210918", "Quiz 3 - BODMAS Harder");
+    data.append("entry.1716591520", score + " out of 8");
+    var entryIds = { q1: "1853979221", q2: "306038968", q3: "1507659235", q4: "227701974", q5: "236559369", q6: "1899816228", q7: "2146921047", q8: "1989541343" };
+    for (var k in entryIds) {
+      data.append("entry." + entryIds[k], given[k] === ANSWERS[k] ? "correct" : "wrong, picked " + given[k]);
+    }
+    data.append("entry.956906611", wrong.length === 0 ? "none" : "Question " + wrong.join(", Question "));
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLScTtbZ_8V1isncLFitKGzIZjv5kn8_iy-pQD3XF5q5QOBy9VA/formResponse", { method: "POST", mode: "no-cors", body: data });
+  } catch (e) {}
+}
+
 document.getElementById("submitBtn").addEventListener("click", function () {
   var missing = [];
   for (var i = 1; i <= 8; i++) {
@@ -203,6 +217,7 @@ document.getElementById("submitBtn").addEventListener("click", function () {
   document.getElementById("result").style.display = "block";
   lockForm();
   try { localStorage.setItem(KEY, "done"); } catch (e) {}
+  sendResult(score, wrong, given);
   document.getElementById("result").scrollIntoView({ behavior: "smooth" });
 });
 
@@ -226,6 +241,7 @@ if (submitted) {
   lockForm();
   document.getElementById("submitBtn").textContent = "Already submitted on this iPad";
 }
+
 </script>
 </body>
 </html>
