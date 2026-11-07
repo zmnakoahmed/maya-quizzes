@@ -436,19 +436,19 @@ function makeResultImage(score, fb, timeText, done) {
   x.font = "bold 44px -apple-system, Arial, sans-serif";
   x.fillText("Well done, Maya!", 540, 225);
   x.fillStyle = "#222222";
-  x.font = "bold 180px -apple-system, Arial, sans-serif";
-  x.fillText(score + " / 14", 540, 470);
+  x.font = "bold 170px -apple-system, Arial, sans-serif";
+  x.fillText(score + " / 14", 540, 455);
   x.fillStyle = "#4CAF50";
-  x.font = "bold 58px -apple-system, Arial, sans-serif";
-  x.fillText(score === 14 ? "All correct!" : "Nearly perfect!", 540, 560);
+  x.font = "bold 56px -apple-system, Arial, sans-serif";
+  x.fillText(score === 14 ? "All correct!" : "Nearly perfect!", 540, 585);
   var stars = "";
   for (var s = 0; s < 14; s++) stars += (s < score) ? "★" : "☆";
   x.fillStyle = "#F9A825";
   x.font = "52px -apple-system, Arial, sans-serif";
-  x.fillText(stars, 540, 675);
+  x.fillText(stars, 540, 680);
   x.fillStyle = "#222222";
   x.font = "bold 40px -apple-system, Arial, sans-serif";
-  x.fillText("Feedback for Daddy:", 540, 755);
+  x.fillText("Feedback for Daddy:", 540, 750);
   for (var i = 0; i < fb.length; i++) {
     var size = 36;
     x.font = size + "px -apple-system, Arial, sans-serif";
@@ -457,7 +457,7 @@ function makeResultImage(score, fb, timeText, done) {
       size -= 2;
       x.font = size + "px -apple-system, Arial, sans-serif";
     }
-    x.fillText(fb[i], 540, 800 + i * 42);
+    x.fillText(fb[i], 540, 795 + i * 42);
   }
   x.fillStyle = "#555555";
   x.font = "40px -apple-system, Arial, sans-serif";
@@ -466,8 +466,8 @@ function makeResultImage(score, fb, timeText, done) {
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   x.fillStyle = "#888888";
   x.font = "40px -apple-system, Arial, sans-serif";
-  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 980);
-  x.fillText("Made for Maya", 540, 1025);
+  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 985);
+  x.fillText("Made for Maya", 540, 1030);
   c.toBlob(function (b) { done(b); }, "image/png");
 }
 
