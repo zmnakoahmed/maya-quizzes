@@ -48,6 +48,10 @@
   .card.picked { background: #bbdefb; border-color: #1976d2; }
   .card.matched { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; }
   #matchDone { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; margin: 12px 0; }
+  #learnGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0; }
+  .learnCard { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 10px; }
+  .learnCard .es { font-size: 20px; font-weight: bold; }
+  .learnCard .en { font-size: 17px; color: #555; }
   #startBox { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 16px; text-align: center; font-size: 18px; margin: 16px 0; }
   #startBtn { display: block; width: 100%; margin-top: 12px; padding: 14px; font-size: 20px; font-weight: bold; background: #ff9800; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
   #quizForm { display: none; }
@@ -55,7 +59,7 @@
 </head>
 <body>
 <h1>Maya's Spanish Quiz 2</h1>
-<p>Harder this time! Type some answers yourself, read whole sentences, and watch the clock. Harry is your assistant. Tap the speaker to hear each Spanish word.</p>
+<p>Harder this time! Type some answers yourself, read whole sentences, learn new words, and watch the clock. Harry is your assistant. Tap the speaker to hear each Spanish word.</p>
 
 <div class="harry">
   <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
@@ -80,17 +84,30 @@
 <div id="matchGrid"></div>
 <div id="matchDone">Brilliant! You matched them all! Now for the quiz.</div>
 
+<h2>Learn new words first</h2>
+<p>Harry will teach you some new words. Tap the speaker to hear each one. You will see them in the quiz, so no surprises!</p>
+<div id="learnGrid">
+  <div class="learnCard"><div class="es">perro</div><div class="en">dog</div><button type="button" class="speak" data-say="perro">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">casa</div><div class="en">house</div><button type="button" class="speak" data-say="casa">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">libro</div><div class="en">book</div><button type="button" class="speak" data-say="libro">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">agua</div><div class="en">water</div><button type="button" class="speak" data-say="agua">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">sol</div><div class="en">sun</div><button type="button" class="speak" data-say="sol">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">luna</div><div class="en">moon</div><button type="button" class="speak" data-say="luna">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">hermano</div><div class="en">brother</div><button type="button" class="speak" data-say="hermano">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">hermana</div><div class="en">sister</div><button type="button" class="speak" data-say="hermana">&#128266; Hear it</button></div>
+</div>
+
 <div id="startBox">
   <strong>Ready for a challenge?</strong><br>
-  You have <strong>6 minutes</strong> for all 12 questions. The timer starts when you tap Start. Good luck!
+  You have <strong>8 minutes</strong> for all 14 questions. The timer starts when you tap Start. Good luck!
   <button type="button" id="startBtn">Start the quiz!</button>
 </div>
 
 <div id="progressWrap">
   <div id="progressBar"><div id="progressFill"></div></div>
-  <div id="progressText">Answered 0 of 12</div>
+  <div id="progressText">Answered 0 of 14</div>
   <div id="timerWrap">
-    <div id="timerText">&#9201; 6:00 left</div>
+    <div id="timerText">&#9201; 8:00 left</div>
     <div id="timerBar"><div id="timerFill"></div></div>
   </div>
 </div>
@@ -207,6 +224,27 @@
     <div class="explain" id="ex12"><strong>mi mejor amigo means my best friend, for a boy.</strong> mi mejor amiga is for a girl.</div>
   </div>
 
+  <div class="q" data-q="13">
+    <h3>Question 13 - New word! Listen!</h3>
+    <p class="stem"><button type="button" class="speak big" data-say="hermano">&#128266; Listen</button> What does it mean? You learned this word above!</p>
+    <label class="opt"><input type="radio" name="q13" value="brother"> brother</label>
+    <label class="opt"><input type="radio" name="q13" value="sister"> sister</label>
+    <label class="opt"><input type="radio" name="q13" value="grandad"> grandad</label>
+    <label class="opt"><input type="radio" name="q13" value="uncle"> uncle</label>
+    <div class="explain" id="ex13"><strong>hermano means brother.</strong> hermana is sister.</div>
+  </div>
+
+  <div class="q" data-q="14">
+    <h3>Question 14 - New word!</h3>
+    <p class="stem">Which word means "dog"? You learned this word above!</p>
+    <label class="opt"><input type="radio" name="q14" value="perro"> perro</label>
+    <label class="opt"><input type="radio" name="q14" value="gato"> gato</label>
+    <label class="opt"><input type="radio" name="q14" value="libro"> libro</label>
+    <label class="opt"><input type="radio" name="q14" value="casa"> casa</label>
+    <div class="hear">Hear them: <button type="button" class="speak" data-say="perro">&#128266; perro</button> <button type="button" class="speak" data-say="gato">&#128266; gato</button> <button type="button" class="speak" data-say="libro">&#128266; libro</button> <button type="button" class="speak" data-say="casa">&#128266; casa</button></div>
+    <div class="explain" id="ex14"><strong>perro means dog.</strong> gato is cat, libro is book, casa is house.</div>
+  </div>
+
   <div id="warn"></div>
   <button type="button" id="submitBtn">Submit</button>
 </form>
@@ -225,7 +263,7 @@
 <p class="footer">Made for Maya. Good luck!</p>
 
 <script>
-var ANSWERS = { q1: "esqueleto", q2: "monster", q3: "El gato es negro", q4: "siete", q5: "nariz", q6: "grandad", q7: "naranja", q8: "gris", q9: "Mi madre", q10: "rainbow", q11: "ocho", q12: "mi mejor amigo" };
+var ANSWERS = { q1: "esqueleto", q2: "monster", q3: "El gato es negro", q4: "siete", q5: "nariz", q6: "grandad", q7: "naranja", q8: "gris", q9: "Mi madre", q10: "rainbow", q11: "ocho", q12: "mi mejor amigo", q13: "brother", q14: "perro" };
 var TYPE_QS = { q1: true, q5: true, q8: true, q11: true };
 var KEY = "maya-spanish-quiz-2";
 var submitted = false;
@@ -297,7 +335,7 @@ function pickCard(el, pair) {
   }
 }
 
-var TOTAL = 360;
+var TOTAL = 480;
 var timeLeft = TOTAL, timerId = null, startTime = null, timerRunning = false;
 function fmt(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
 function fmtElapsed(sec) { var m = Math.floor(sec / 60), s = sec % 60; return m + " min " + s + " s"; }
@@ -315,7 +353,7 @@ document.getElementById("startBtn").addEventListener("click", function () {
   startTime = Date.now();
   timerRunning = true;
   timerId = setInterval(tick, 1000);
-  harrySay("Go, Maya! You have 6 minutes!");
+  harrySay("Go, Maya! You have 8 minutes!");
   document.getElementById("quizForm").scrollIntoView({ behavior: "smooth" });
 });
 
@@ -333,13 +371,13 @@ function isAnswered(j) {
 }
 function answeredCount() {
   var n = 0;
-  for (var i = 1; i <= 12; i++) if (isAnswered(i)) n++;
+  for (var i = 1; i <= 14; i++) if (isAnswered(i)) n++;
   return n;
 }
 function updateProgress() {
   var n = answeredCount();
-  document.getElementById("progressFill").style.width = (n / 12 * 100) + "%";
-  document.getElementById("progressText").textContent = "Answered " + n + " of 12";
+  document.getElementById("progressFill").style.width = (n / 14 * 100) + "%";
+  document.getElementById("progressText").textContent = "Answered " + n + " of 14";
 }
 var HARRY_CHEER = [
   "Great thinking, Maya! You've got this!",
@@ -394,14 +432,14 @@ function makeResultImage(score, wrong, timeText, done) {
   x.fillText("Well done, Maya!", 540, 245);
   x.fillStyle = "#222222";
   x.font = "bold 200px -apple-system, Arial, sans-serif";
-  x.fillText(score + " / 12", 540, 510);
+  x.fillText(score + " / 14", 540, 510);
   x.fillStyle = "#4CAF50";
   x.font = "bold 58px -apple-system, Arial, sans-serif";
   x.fillText(score === 12 ? "All correct!" : "Nearly perfect!", 540, 600);
   var stars = "";
-  for (var s = 0; s < 12; s++) stars += (s < score) ? "★" : "☆";
+  for (var s = 0; s < 14; s++) stars += (s < score) ? "★" : "☆";
   x.fillStyle = "#F9A825";
-  x.font = "56px -apple-system, Arial, sans-serif";
+  x.font = "52px -apple-system, Arial, sans-serif";
   x.fillText(stars, 540, 720);
   x.fillStyle = "#555555";
   x.font = "46px -apple-system, Arial, sans-serif";
@@ -421,7 +459,7 @@ function makeResultImage(score, wrong, timeText, done) {
 function doSubmit(auto) {
   if (timerRunning) { clearInterval(timerId); timerRunning = false; }
   var missing = [];
-  for (var i = 1; i <= 12; i++) if (!isAnswered(i)) missing.push(i);
+  for (var i = 1; i <= 14; i++) if (!isAnswered(i)) missing.push(i);
   var warn = document.getElementById("warn");
   if (missing.length > 0 && !auto) {
     warn.style.display = "block";
@@ -430,7 +468,7 @@ function doSubmit(auto) {
   }
   warn.style.display = "none";
   var score = 0, wrong = [];
-  for (var j = 1; j <= 12; j++) {
+  for (var j = 1; j <= 14; j++) {
     var picked = getAnswer(j);
     var ex = document.getElementById("ex" + j);
     ex.style.display = "block";
@@ -443,11 +481,11 @@ function doSubmit(auto) {
     }
   }
   var elapsed = startTime ? Math.round((Date.now() - startTime) / 1000) : TOTAL;
-  var timeText = auto ? "Time ran out! Finished in 6 min 0 s" : "Finished in " + fmtElapsed(elapsed);
-  document.getElementById("score").textContent = "You scored " + score + " out of 12! " + (auto ? "Time ran out!" : "Finished in " + fmtElapsed(elapsed) + ".");
-  var harryEnd = score === 12 ? "Brilliant, Maya! Full marks, twelve out of twelve!"
-    : score >= 9 ? "Well done, Maya! Great work under pressure!"
-    : score >= 6 ? "Good effort, Maya! You are learning fast!"
+  var timeText = auto ? "Time ran out! Finished in 8 min 0 s" : "Finished in " + fmtElapsed(elapsed);
+  document.getElementById("score").textContent = "You scored " + score + " out of 14! " + (auto ? "Time ran out!" : "Finished in " + fmtElapsed(elapsed) + ".");
+  var harryEnd = score === 14 ? "Brilliant, Maya! Full marks, fourteen out of fourteen!"
+    : score >= 11 ? "Well done, Maya! Great work under pressure!"
+    : score >= 8 ? "Good effort, Maya! You are learning fast!"
     : "Don't worry, Maya. Every wizard has tough days. Try again!";
   harrySay(harryEnd);
   document.getElementById("result").style.display = "block";
