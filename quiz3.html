@@ -140,8 +140,8 @@ The big rule: ÷ and × are equal. When they are in a row, work from left to rig
   <div id="score"></div>
   <img id="resultImg" alt="Maya's quiz result">
   <div id="shareBox">
-    <strong>Share your result with Dad:</strong> Tap the button and pick Messages to send him the picture.
-    <button type="button" id="shareBtn">Share my result</button>
+    <strong>Share your result with Daddy:</strong> Tap the button and pick Messages to send him the picture.
+    <button type="button" id="shareBtn">Share with Daddy</button>
     <a id="downloadLink" href="#" download="maya-bodmas-quiz-3.png">Save the picture</a>
     <div id="shareNote"></div>
   </div>
@@ -177,17 +177,34 @@ function lockForm() {
   document.getElementById("submitBtn").disabled = true;
 }
 
+function confetti(x) {
+  var cols = ["#FF6B9D", "#FFD93D", "#6BCBFF", "#B388FF", "#FF8A65", "#81C784"];
+  var seed = 12345;
+  function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  for (var i = 0; i < 44; i++) {
+    var left = rnd() < 0.5;
+    var cx = left ? 30 + rnd() * 150 : 900 + rnd() * 150;
+    var cy = 320 + rnd() * 680;
+    var r = 6 + rnd() * 8;
+    x.fillStyle = cols[i % cols.length];
+    x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill();
+  }
+}
+
 function makeResultImage(score, wrong, done) {
   var c = document.createElement("canvas");
   c.width = 1080; c.height = 1080;
   var x = c.getContext("2d");
   x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, 1080, 1080);
-  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 260);
+  confetti(x);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 300);
   x.fillStyle = "#ffffff"; x.textAlign = "center";
   x.font = "bold 64px -apple-system, Arial, sans-serif";
-  x.fillText("Maya's BODMAS Quiz 3", 540, 115);
+  x.fillText("Maya's BODMAS Quiz 3", 540, 110);
   x.font = "44px -apple-system, Arial, sans-serif";
-  x.fillText("Harder BODMAS", 540, 185);
+  x.fillText("Harder BODMAS", 540, 175);
+  x.font = "bold 44px -apple-system, Arial, sans-serif";
+  x.fillText("Well done, Maya!", 540, 245);
   x.fillStyle = "#222222";
   x.font = "bold 210px -apple-system, Arial, sans-serif";
   x.fillText(score + " / 8", 540, 510);
