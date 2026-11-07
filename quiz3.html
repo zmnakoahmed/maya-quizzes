@@ -25,9 +25,11 @@
   #warn { display: none; background: #fff3cd; border: 1px solid #e6c87a; border-radius: 8px; padding: 12px; margin: 12px 0; font-weight: bold; }
   #result { display: none; margin: 20px 0; }
   #score { font-size: 26px; font-weight: bold; }
+  #resultImg { display: none; max-width: 100%; border-radius: 12px; border: 1px solid #ddd; margin-top: 12px; }
   #shareBox { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #f9f9f9; }
-  #shareText { width: 100%; height: 90px; font-size: 16px; padding: 8px; box-sizing: border-box; }
-  #copyBtn { margin-top: 8px; padding: 12px 20px; font-size: 16px; font-weight: bold; background: #2196f3; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+  #shareBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #downloadLink { display: none; text-align: center; padding: 12px; font-size: 16px; font-weight: bold; color: #2196f3; }
+  #shareNote { color: #888; font-size: 14px; }
   .footer { color: #888; margin-top: 24px; }
 </style>
 </head>
@@ -136,12 +138,12 @@ The big rule: ÷ and × are equal. When they are in a row, work from left to rig
 
 <div id="result">
   <div id="score"></div>
+  <img id="resultImg" alt="Maya's quiz result">
   <div id="shareBox">
-    <strong>Send your result to Dad:</strong> Tap the green button, then press Submit on the form that opens. Your answers are already filled in.
-    <a id="sendBtn" href="#" target="_blank" style="display:block; text-align:center; padding:14px; margin:10px 0; font-size:18px; font-weight:bold; background:#4caf50; color:#fff; border-radius:10px; text-decoration:none;">Send my result to Dad</a>
-    <strong>Or copy it:</strong>
-    <textarea id="shareText" readonly></textarea><br>
-    <button type="button" id="copyBtn">Copy result</button>
+    <strong>Share your result with Dad:</strong> Tap the button and pick Messages to send him the picture.
+    <button type="button" id="shareBtn">Share my result</button>
+    <a id="downloadLink" href="#" download="maya-bodmas-quiz-3.png">Save the picture</a>
+    <div id="shareNote"></div>
   </div>
 </div>
 
@@ -152,6 +154,7 @@ var ANSWERS = { q1: "19", q2: "4", q3: "26", q4: "9", q5: "9", q6: "€7", q7: "
 var KEY = "maya-bodmas-quiz-v3";
 var submitted = false;
 try { submitted = localStorage.getItem(KEY) === "done"; } catch (e) {}
+var resultBlob = null;
 
 function answeredCount() {
   var n = 0;
@@ -174,17 +177,38 @@ function lockForm() {
   document.getElementById("submitBtn").disabled = true;
 }
 
-function buildPrefillUrl(score, wrong, given) {
-  var params = new URLSearchParams();
-  params.append("usp", "pp_url");
-  params.append("entry.1763210918", "Quiz 3 - BODMAS Harder");
-  params.append("entry.1716591520", score + " out of 8");
-  var entryIds = { q1: "1853979221", q2: "306038968", q3: "1507659235", q4: "227701974", q5: "236559369", q6: "1899816228", q7: "2146921047", q8: "1989541343" };
-  for (var k in entryIds) {
-    params.append("entry." + entryIds[k], given[k] === ANSWERS[k] ? "correct" : "wrong, picked " + given[k]);
-  }
-  params.append("entry.956906611", wrong.length === 0 ? "none" : "Question " + wrong.join(", Question "));
-  return "https://docs.google.com/forms/d/e/1FAIpQLScTtbZ_8V1isncLFitKGzIZjv5kn8_iy-pQD3XF5q5QOBy9VA/viewform?" + params.toString();
+function makeResultImage(score, wrong, done) {
+  var c = document.createElement("canvas");
+  c.width = 1080; c.height = 1080;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, 1080, 1080);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 260);
+  x.fillStyle = "#ffffff"; x.textAlign = "center";
+  x.font = "bold 64px -apple-system, Arial, sans-serif";
+  x.fillText("Maya's BODMAS Quiz 3", 540, 115);
+  x.font = "44px -apple-system, Arial, sans-serif";
+  x.fillText("Harder BODMAS", 540, 185);
+  x.fillStyle = "#222222";
+  x.font = "bold 210px -apple-system, Arial, sans-serif";
+  x.fillText(score + " / 8", 540, 510);
+  x.fillStyle = "#4CAF50";
+  x.font = "bold 58px -apple-system, Arial, sans-serif";
+  x.fillText(score === 8 ? "All correct!" : "Nearly perfect!", 540, 600);
+  var stars = "";
+  for (var s = 0; s < 8; s++) stars += (s < score) ? "★" : "☆";
+  x.fillStyle = "#F9A825";
+  x.font = "92px -apple-system, Arial, sans-serif";
+  x.fillText(stars, 540, 720);
+  x.fillStyle = "#555555";
+  x.font = "46px -apple-system, Arial, sans-serif";
+  x.fillText(wrong.length === 0 ? "No questions missed" : "Missed question" + (wrong.length > 1 ? "s " : " ") + wrong.join(", "), 540, 820);
+  var d = new Date();
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  x.fillStyle = "#888888";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 910);
+  x.fillText("Made for Maya", 540, 970);
+  c.toBlob(function (b) { done(b); }, "image/png");
 }
 
 document.getElementById("submitBtn").addEventListener("click", function () {
@@ -213,27 +237,34 @@ document.getElementById("submitBtn").addEventListener("click", function () {
     }
   }
   document.getElementById("score").textContent = "You scored " + score + " out of 8!";
-  var share = "Maya's BODMAS Quiz 3: " + score + " out of 8! " + (wrong.length === 0 ? "All correct!" : "Missed question" + (wrong.length > 1 ? "s " : " ") + wrong.join(", ") + ".");
-  document.getElementById("shareText").value = share;
   document.getElementById("result").style.display = "block";
   lockForm();
   try { localStorage.setItem(KEY, "done"); } catch (e) {}
-  document.getElementById("sendBtn").href = buildPrefillUrl(score, wrong, given);
+  makeResultImage(score, wrong, function (blob) {
+    resultBlob = blob;
+    var url = URL.createObjectURL(blob);
+    var img = document.getElementById("resultImg");
+    img.src = url; img.style.display = "block";
+    document.getElementById("downloadLink").href = url;
+  });
   document.getElementById("result").scrollIntoView({ behavior: "smooth" });
 });
 
-document.getElementById("copyBtn").addEventListener("click", function () {
-  var t = document.getElementById("shareText");
-  t.select();
-  try {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(t.value);
-    } else {
-      document.execCommand("copy");
-    }
-    document.getElementById("copyBtn").textContent = "Copied!";
-  } catch (e) {
-    document.getElementById("copyBtn").textContent = "Copy it by hand";
+document.getElementById("shareBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareNote");
+  if (!resultBlob) {
+    note.textContent = "The picture is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([resultBlob], "maya-bodmas-quiz-3.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      document.getElementById("downloadLink").style.display = "block";
+      note.textContent = "Sharing did not open. Tap Save the picture instead.";
+    });
+  } else {
+    document.getElementById("downloadLink").style.display = "block";
+    note.textContent = "Sharing pictures is not available here. Tap Save the picture, then send it from Photos.";
   }
 });
 
