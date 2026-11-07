@@ -8,9 +8,9 @@
   body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
   h1 { font-size: 26px; }
   .intro { background: #fff3cd; border: 1px solid #e6c87a; border-radius: 10px; padding: 12px; }
-  .dobby { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
-  .dobby svg { flex: 0 0 72px; }
-  .dobby p { margin: 0; font-size: 17px; }
+  .harry { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
+  .harry svg { flex: 0 0 72px; }
+  .harry p { margin: 0; font-size: 17px; }
   #progressWrap { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; }
   #progressBar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
   #progressFill { height: 100%; width: 0%; background: #4caf50; }
@@ -49,17 +49,22 @@
 The big rule: ÷ and × are equal. When they are in a row, work from left to right. Do not do the × first just because it comes later. Same for + and −.
 </div>
 
-<div class="dobby">
+<div class="harry">
   <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
-    <ellipse cx="10" cy="34" rx="11" ry="6" fill="#F5CBA7" stroke="#D9A066" stroke-width="1.5" transform="rotate(-28 10 34)"/>
-    <ellipse cx="62" cy="34" rx="11" ry="6" fill="#F5CBA7" stroke="#D9A066" stroke-width="1.5" transform="rotate(28 62 34)"/>
-    <circle cx="36" cy="38" r="20" fill="#F5CBA7"/>
-    <circle cx="28" cy="34" r="6" fill="#ffffff"/><circle cx="28" cy="34" r="3" fill="#2E7D32"/>
-    <circle cx="44" cy="34" r="6" fill="#ffffff"/><circle cx="44" cy="34" r="3" fill="#2E7D32"/>
-    <ellipse cx="36" cy="44" rx="2.5" ry="3.5" fill="#D9A066"/>
-    <path d="M28 50 Q36 56 44 50" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="36" cy="42" r="19" fill="#F5CBA7"/>
+    <path d="M16 32 Q12 10 36 8 Q60 10 56 32 L50 24 L46 30 L40 22 L36 29 L30 22 L24 30 L20 24 Z" fill="#222222"/>
+    <path d="M33 30 L37 30 L34 35 L38 35 L31 42 L33.5 36 L30 36 Z" fill="#FFD93D"/>
+    <circle cx="28" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <circle cx="44" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <line x1="35" y1="42" x2="37" y2="42" stroke="#222222" stroke-width="2"/>
+    <line x1="21" y1="42" x2="17" y2="41" stroke="#222222" stroke-width="2"/>
+    <line x1="51" y1="42" x2="55" y2="41" stroke="#222222" stroke-width="2"/>
+    <circle cx="28" cy="42" r="2" fill="#6D4C41"/>
+    <circle cx="44" cy="42" r="2" fill="#6D4C41"/>
+    <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
+    <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
   </svg>
-  <p id="dobbyMsg"><strong>Dobby:</strong> Hello, Miss Maya! Dobby is here to help you. You can do it!</p>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. Let's do this quiz together!</p>
 </div>
 
 <div id="progressWrap">
@@ -184,16 +189,16 @@ function updateProgress() {
   document.getElementById("progressFill").style.width = (n / 8 * 100) + "%";
   document.getElementById("progressText").textContent = "Answered " + n + " of 8";
 }
-var DOBBY_CHEER = [
-  "Good thinking, Miss Maya! Dobby is cheering for you!",
-  "Dobby likes that one! Keep going, Miss Maya!",
-  "Brave choice, Miss Maya! Dobby is right here with you!"
+var HARRY_CHEER = [
+  "Great thinking, Maya! You've got this!",
+  "Brilliant! Keep going, Maya!",
+  "Nice one, Maya! Harry is cheering for you!"
 ];
 var cheerIdx = 0;
 document.querySelectorAll('input[type="radio"]').forEach(function (r) {
   r.addEventListener("change", function () {
     updateProgress();
-    document.getElementById("dobbyMsg").innerHTML = "<strong>Dobby:</strong> " + DOBBY_CHEER[cheerIdx % DOBBY_CHEER.length];
+    document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + HARRY_CHEER[cheerIdx % HARRY_CHEER.length];
     cheerIdx++;
   });
 });
@@ -280,11 +285,11 @@ document.getElementById("submitBtn").addEventListener("click", function () {
     }
   }
   document.getElementById("score").textContent = "You scored " + score + " out of 8!";
-  var dobbyEnd = score === 8 ? "Dobby is so proud of you! All correct, Miss Maya!"
-    : score >= 6 ? "Well done, Miss Maya! Dobby knew you could do it!"
-    : score >= 4 ? "Good work, Miss Maya! Dobby knows you will get even more next time!"
-    : "Do not worry, Miss Maya. Dobby believes in you. Try again and you will shine!";
-  document.getElementById("dobbyMsg").innerHTML = "<strong>Dobby:</strong> " + dobbyEnd;
+  var harryEnd = score === 8 ? "Brilliant, Maya! Full marks!"
+    : score >= 6 ? "Well done, Maya! Great work!"
+    : score >= 4 ? "Good effort, Maya! You will get even more next time!"
+    : "Don't worry, Maya. Every wizard has tough days. Try again!";
+  document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + harryEnd;
   document.getElementById("result").style.display = "block";
   lockForm();
   try { localStorage.setItem(KEY, "done"); } catch (e) {}
