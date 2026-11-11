@@ -376,6 +376,7 @@
     <a id="downloadWork1" href="#" download="maya-maths-quiz-6-working-1.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 1 (questions 1 to 7)</a>
     <a id="downloadWork2" href="#" download="maya-maths-quiz-6-working-2.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 2 (questions 8 to 14)</a>
     <div id="shareWorkNote"></div>
+    <div id="workSaveNote" style="font-size:15px;color:#555;margin-top:6px;"></div>
   </div>
   <div id="shareBox">
     <strong>Share your answers with Daddy:</strong> Tap the button to send him a list of all your answers, so he can see every sum and help you with the ones to practise.
@@ -904,24 +905,41 @@ function doSubmit(auto) {
     }).catch(function () {});
   } catch (e) {}
   // Auto-save her working pictures too (fire-and-forget, never blocks the quiz).
+  // One POST per picture, one retry each, and a status line so we know it worked.
   try {
-    var workSheets = [];
-    [0, 1].forEach(function (sIdx) {
+    var workNote = document.getElementById("workSaveNote");
+    var workDone = 0, workSaved = 0;
+    function workStatus() {
+      if (!workNote) return;
+      if (workDone < 2) return;
+      workNote.textContent = workSaved === 2 ? "Working pictures saved."
+        : workSaved === 1 ? "One working picture saved, one did not. Tap Share your working below to send the other."
+        : "Working pictures did not save. Tap Share your working below to send them.";
+    }
+    function sendSheet(sIdx, attempt) {
       makeWorkingSheet(sIdx * 7, sIdx * 7 + 7, function (b) {
+        if (!b) { workDone++; workStatus(); return; }
         var r = new FileReader();
         r.onload = function () {
-          workSheets.push({ name: "working-" + (sIdx + 1), data: String(r.result).split(",")[1] });
-          if (workSheets.length === 2) {
-            fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ quiz: "maths6", stamp: submitStamp, working: workSheets })
-            }).catch(function () {});
-          }
+          var data = String(r.result).split(",")[1];
+          fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ quiz: "maths6", stamp: submitStamp, working: [{ name: "working-" + (sIdx + 1), data: data }] })
+          }).then(function (res) {
+            if (res.ok) { workDone++; workSaved++; workStatus(); }
+            else if (attempt === 1) { setTimeout(function () { sendSheet(sIdx, 2); }, 2000); }
+            else { workDone++; workStatus(); }
+          }).catch(function () {
+            if (attempt === 1) { setTimeout(function () { sendSheet(sIdx, 2); }, 2000); }
+            else { workDone++; workStatus(); }
+          });
         };
+        r.onerror = function () { workDone++; workStatus(); };
         r.readAsDataURL(b);
       });
-    });
+    }
+    sendSheet(0, 1); sendSheet(1, 1);
   } catch (e) {}
   document.getElementById("answersList").innerHTML = answersLines.slice(4).map(function (l) {
     return l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "<br>";
