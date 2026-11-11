@@ -1,0 +1,106 @@
+{
+  "quiz": "maths6",
+  "date": "2026-11-11T15:40:00.000Z",
+  "score": 0,
+  "time": "test",
+  "answers": [
+    {
+      "q": 1,
+      "sum": "25 × 46",
+      "correct": "1150",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 2,
+      "sum": "4.28 × 0.7",
+      "correct": "2.996",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 3,
+      "sum": "38 × 27",
+      "correct": "1026",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 4,
+      "sum": "2.45 × 0.04",
+      "correct": "0.098",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 5,
+      "sum": "46 × 35",
+      "correct": "1610",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 6,
+      "sum": "0.63 × 0.03",
+      "correct": "0.0189",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 7,
+      "sum": "17 × 28",
+      "correct": "476",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 8,
+      "sum": "1.65 × 0.03",
+      "correct": "0.0495",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 9,
+      "sum": "23.4 × 0.6",
+      "correct": "14.04",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 10,
+      "sum": "0.34 × 3.6",
+      "correct": "1.224",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 11,
+      "sum": "0.28 × 0.9",
+      "correct": "0.252",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 12,
+      "sum": "0.46 × 2.5",
+      "correct": "1.15",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 13,
+      "sum": "0.62 × 0.38",
+      "correct": "0.2356",
+      "said": "TEST",
+      "working": false
+    },
+    {
+      "q": 14,
+      "sum": "0.47 × 0.26",
+      "correct": "0.1222",
+      "said": "TEST",
+      "working": false
+    }
+  ]
+}
