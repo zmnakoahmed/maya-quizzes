@@ -60,7 +60,7 @@
   .bigans { font-size: 34px; font-weight: bold; color: #2e7d32; text-align: center; margin: 8px 0; }
   .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
   .worklabel { font-size: 15px; color: #555; margin-top: 10px; }
-  .workpad { display: block; width: 100%; height: 150px; background: #fff; border: 2px solid #90caf9; border-radius: 8px; margin-top: 6px; touch-action: none; }
+  .workpad { display: block; width: 100%; height: 150px; background: #fff; border: 2px solid #90caf9; border-radius: 8px; margin-top: 6px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
   .rubout { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #e3f2fd; cursor: pointer; margin-top: 6px; }
   .rubout:disabled { background: #eee; color: #aaa; border-color: #ddd; }
   #shareWorkingBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
@@ -428,7 +428,7 @@ document.getElementById("startBtn").addEventListener("click", function () {
   timerRunning = true;
   timerId = setInterval(tick, 1000);
   harrySay("Go, Maya! You have 20 minutes!");
-  document.getElementById("quizForm").scrollIntoView({ behavior: "smooth" });
+  document.getElementById("quizForm").scrollIntoView();
 });
 
 function isTypeQ(j) { return !!TYPE_QS["q" + j]; }
@@ -468,23 +468,45 @@ document.querySelectorAll(".workpad").forEach(function (cv) {
     var r = cv.getBoundingClientRect();
     return { x: (e.clientX - r.left) * (cv.width / r.width), y: (e.clientY - r.top) * (cv.height / r.height) };
   }
+  function touchPos(t) {
+    var r = cv.getBoundingClientRect();
+    return { x: (t.clientX - r.left) * (cv.width / r.width), y: (t.clientY - r.top) * (cv.height / r.height) };
+  }
+  function startAt(p) { drawing = true; last = p; }
+  function moveTo(p) {
+    ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+    last = p;
+    padDrawn[cv.id] = true;
+  }
+  // Pointer events: mouse and pen on desktop.
   cv.addEventListener("pointerdown", function (e) {
     if (padsLocked) return;
     e.preventDefault();
-    drawing = true; last = pos(e);
+    startAt(pos(e));
     try { cv.setPointerCapture(e.pointerId); } catch (err) {}
   });
   cv.addEventListener("pointermove", function (e) {
     if (!drawing) return;
     e.preventDefault();
-    var p = pos(e);
-    ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
-    last = p;
-    padDrawn[cv.id] = true;
+    moveTo(pos(e));
   });
   function endDraw(e) { drawing = false; }
   cv.addEventListener("pointerup", endDraw);
   cv.addEventListener("pointercancel", endDraw);
+  // Touch events: the reliable path on iPad, where pointer events alone
+  // can swallow the first touch until a text field has been used.
+  cv.addEventListener("touchstart", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(touchPos(e.touches[0]));
+  }, { passive: false });
+  cv.addEventListener("touchmove", function (e) {
+    e.preventDefault();
+    if (!drawing) { startAt(touchPos(e.touches[0])); return; }
+    moveTo(touchPos(e.touches[0]));
+  }, { passive: false });
+  cv.addEventListener("touchend", endDraw);
+  cv.addEventListener("touchcancel", endDraw);
 });
 document.querySelectorAll(".rubout").forEach(function (b) {
   b.addEventListener("click", function () {
