@@ -440,7 +440,7 @@ function makeResultImage(score, fb, timeText, done) {
   x.fillText(score + " / 14", 540, 455);
   x.fillStyle = "#4CAF50";
   x.font = "bold 56px -apple-system, Arial, sans-serif";
-  x.fillText(score === 14 ? "All correct!" : "Nearly perfect!", 540, 585);
+  x.fillText(score === 14 ? "All correct!" : score >= 11 ? "Nearly perfect!" : score >= 8 ? "Good effort!" : "Keep going, Maya!", 540, 585);
   var stars = "";
   for (var s = 0; s < 14; s++) stars += (s < score) ? "★" : "☆";
   x.fillStyle = "#F9A825";
