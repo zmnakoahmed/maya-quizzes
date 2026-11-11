@@ -60,9 +60,13 @@
   .bigans { font-size: 34px; font-weight: bold; color: #2e7d32; text-align: center; margin: 8px 0; }
   .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
   .worklabel { font-size: 15px; color: #555; margin-top: 10px; }
-  .workpad { display: block; width: 100%; height: 150px; background: #fff; border: 2px solid #90caf9; border-radius: 8px; margin-top: 6px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
-  .rubout { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #e3f2fd; cursor: pointer; margin-top: 6px; }
+  .workpad { display: block; width: 100%; height: 220px; background: #fff; border: 2px solid #90caf9; border-radius: 8px; margin-top: 6px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
+  .rubout { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #e3f2fd; cursor: pointer; }
   .rubout:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  .padtools { display: flex; gap: 8px; margin-top: 6px; }
+  .padtool { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #fff; cursor: pointer; }
+  .padtool.on { background: #4caf50; color: #fff; border-color: #4caf50; }
+  .padtool:disabled { background: #eee; color: #aaa; border-color: #ddd; }
   #shareWorkingBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
   #shareWorkNote { color: #888; font-size: 14px; }
 </style>
@@ -161,8 +165,12 @@
     <p class="stem">25 × 46 = ?</p>
     <input type="text" name="q1" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad1" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad1">Rub out</button>
+    <canvas class="workpad" id="pad1" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad1" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad1" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad1">Clear all</button>
+    </div>
     <div class="explain" id="ex1"><strong>1150.</strong> 25 × 6 = 150, 25 × 40 = 1000. Add them: 150 + 1000 = 1150.</div>
   </div>
 
@@ -171,8 +179,12 @@
     <p class="stem">4.28 × 0.7 = ?</p>
     <input type="text" name="q2" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad2" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad2">Rub out</button>
+    <canvas class="workpad" id="pad2" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad2" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad2" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad2">Clear all</button>
+    </div>
     <div class="explain" id="ex2"><strong>2.996.</strong> Digits: 428 × 7 = 2996. Decimal places: 2 + 1 = 3, so the answer is 2.996.</div>
   </div>
 
@@ -181,8 +193,12 @@
     <p class="stem">38 × 27 = ?</p>
     <input type="text" name="q3" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad3" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad3">Rub out</button>
+    <canvas class="workpad" id="pad3" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad3" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad3" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad3">Clear all</button>
+    </div>
     <div class="explain" id="ex3"><strong>1026.</strong> 38 × 7 = 266, 38 × 20 = 760. Add them: 266 + 760 = 1026.</div>
   </div>
 
@@ -191,8 +207,12 @@
     <p class="stem">2.45 × 0.04 = ?</p>
     <input type="text" name="q4" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad4" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad4">Rub out</button>
+    <canvas class="workpad" id="pad4" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad4" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad4" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad4">Clear all</button>
+    </div>
     <div class="explain" id="ex4"><strong>0.098.</strong> Digits: 245 × 4 = 980. Decimal places: 2 + 2 = 4, so add a zero at the front: 0.0980, which is 0.098.</div>
   </div>
 
@@ -201,8 +221,12 @@
     <p class="stem">46 × 35 = ?</p>
     <input type="text" name="q5" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad5" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad5">Rub out</button>
+    <canvas class="workpad" id="pad5" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad5" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad5" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad5">Clear all</button>
+    </div>
     <div class="explain" id="ex5"><strong>1610.</strong> 46 × 5 = 230, 46 × 30 = 1380. Add them: 230 + 1380 = 1610.</div>
   </div>
 
@@ -211,8 +235,12 @@
     <p class="stem">0.63 × 0.03 = ?</p>
     <input type="text" name="q6" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad6" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad6">Rub out</button>
+    <canvas class="workpad" id="pad6" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad6" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad6" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad6">Clear all</button>
+    </div>
     <div class="explain" id="ex6"><strong>0.0189.</strong> Digits: 63 × 3 = 189. Decimal places: 2 + 2 = 4, so add a zero at the front: 0.0189.</div>
   </div>
 
@@ -221,8 +249,12 @@
     <p class="stem">17 × 28 = ?</p>
     <input type="text" name="q7" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad7" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad7">Rub out</button>
+    <canvas class="workpad" id="pad7" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad7" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad7" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad7">Clear all</button>
+    </div>
     <div class="explain" id="ex7"><strong>476.</strong> 17 × 8 = 136, 17 × 20 = 340. Add them: 136 + 340 = 476.</div>
   </div>
 
@@ -231,8 +263,12 @@
     <p class="stem">1.65 × 0.03 = ?</p>
     <input type="text" name="q8" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad8" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad8">Rub out</button>
+    <canvas class="workpad" id="pad8" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad8" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad8" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad8">Clear all</button>
+    </div>
     <div class="explain" id="ex8"><strong>0.0495.</strong> Digits: 165 × 3 = 495. Decimal places: 2 + 2 = 4, so add a zero at the front: 0.0495.</div>
   </div>
 
@@ -241,8 +277,12 @@
     <p class="stem">23.4 × 0.6 = ?</p>
     <input type="text" name="q9" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad9" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad9">Rub out</button>
+    <canvas class="workpad" id="pad9" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad9" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad9" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad9">Clear all</button>
+    </div>
     <div class="explain" id="ex9"><strong>14.04.</strong> Digits: 234 × 6 = 1404. Decimal places: 1 + 1 = 2, so the answer is 14.04.</div>
   </div>
 
@@ -251,8 +291,12 @@
     <p class="stem">0.34 × 3.6 = ?</p>
     <input type="text" name="q10" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad10" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad10">Rub out</button>
+    <canvas class="workpad" id="pad10" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad10" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad10" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad10">Clear all</button>
+    </div>
     <div class="explain" id="ex10"><strong>1.224.</strong> 0.34 × 3 = 1.02 and 0.34 × 0.6 = 0.204. Add them: 1.02 + 0.204 = 1.224.</div>
   </div>
 
@@ -261,8 +305,12 @@
     <p class="stem">0.28 × 0.9 = ?</p>
     <input type="text" name="q11" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad11" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad11">Rub out</button>
+    <canvas class="workpad" id="pad11" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad11" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad11" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad11">Clear all</button>
+    </div>
     <div class="explain" id="ex11"><strong>0.252.</strong> Digits: 28 × 9 = 252. Decimal places: 2 + 1 = 3, so the answer is 0.252.</div>
   </div>
 
@@ -271,8 +319,12 @@
     <p class="stem">0.46 × 2.5 = ?</p>
     <input type="text" name="q12" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad12" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad12">Rub out</button>
+    <canvas class="workpad" id="pad12" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad12" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad12" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad12">Clear all</button>
+    </div>
     <div class="explain" id="ex12"><strong>1.15.</strong> 0.46 × 2 = 0.92 and 0.46 × 0.5 = 0.23. Add them: 0.92 + 0.23 = 1.15.</div>
   </div>
 
@@ -281,8 +333,12 @@
     <p class="stem">0.62 × 0.38 = ?</p>
     <input type="text" name="q13" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad13" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad13">Rub out</button>
+    <canvas class="workpad" id="pad13" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad13" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad13" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad13">Clear all</button>
+    </div>
     <div class="explain" id="ex13"><strong>0.2356.</strong> Digits: 62 × 38 = 2356. Decimal places: 2 + 2 = 4, so the answer is 0.2356.</div>
   </div>
 
@@ -291,8 +347,12 @@
     <p class="stem">0.47 × 0.26 = ?</p>
     <input type="text" name="q14" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
     <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
-    <canvas class="workpad" id="pad14" width="1000" height="200"></canvas>
-    <button type="button" class="rubout" data-pad="pad14">Rub out</button>
+    <canvas class="workpad" id="pad14" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad14" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad14" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad14">Clear all</button>
+    </div>
     <div class="explain" id="ex14"><strong>0.1222.</strong> Digits: 47 × 26 = 1222. Decimal places: 2 + 2 = 4, so the answer is 0.1222.</div>
   </div>
 
@@ -471,7 +531,7 @@ document.querySelectorAll('input[type="text"]').forEach(function (t) {
 document.querySelectorAll(".workpad").forEach(function (cv) {
   var ctx = cv.getContext("2d");
   ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#222222";
-  var drawing = false, last = null;
+  var drawing = false, last = null, tool = "pen";
   function pos(e) {
     var r = cv.getBoundingClientRect();
     return { x: (e.clientX - r.left) * (cv.width / r.width), y: (e.clientY - r.top) * (cv.height / r.height) };
@@ -480,8 +540,25 @@ document.querySelectorAll(".workpad").forEach(function (cv) {
     var r = cv.getBoundingClientRect();
     return { x: (t.clientX - r.left) * (cv.width / r.width), y: (t.clientY - r.top) * (cv.height / r.height) };
   }
-  function startAt(p) { drawing = true; last = p; }
+  function applyTool() {
+    if (tool === "rubber") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 14;
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "#222222";
+      ctx.fillStyle = "#222222";
+      ctx.lineWidth = 4;
+    }
+  }
+  function startAt(p) {
+    drawing = true; last = p;
+    applyTool();
+    ctx.beginPath(); ctx.arc(p.x, p.y, tool === "rubber" ? 7 : 3, 0, Math.PI * 2); ctx.fill();
+    padDrawn[cv.id] = true;
+  }
   function moveTo(p) {
+    applyTool();
     ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
     last = p;
     padDrawn[cv.id] = true;
@@ -536,9 +613,20 @@ document.querySelectorAll(".workpad").forEach(function (cv) {
   }, { passive: false });
   cv.addEventListener("touchend", endDraw);
   cv.addEventListener("touchcancel", endDraw);
+  // Pen / rubber switch for this box.
+  document.querySelectorAll('.padtool[data-pad="' + cv.id + '"]').forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      if (padsLocked) return;
+      tool = btn.getAttribute("data-tool");
+      document.querySelectorAll('.padtool[data-pad="' + cv.id + '"]').forEach(function (b) {
+        b.classList.toggle("on", b === btn);
+      });
+    });
+  });
 });
 document.querySelectorAll(".rubout").forEach(function (b) {
   b.addEventListener("click", function () {
+    if (padsLocked) return;
     var cv = document.getElementById(b.getAttribute("data-pad"));
     cv.getContext("2d").clearRect(0, 0, cv.width, cv.height);
     padDrawn[cv.id] = false;
@@ -549,7 +637,7 @@ document.querySelectorAll(".rubout").forEach(function (b) {
 var workingBlobs = [null, null];
 function makeWorkingSheet(from, to, done) {
   var c = document.createElement("canvas");
-  c.width = 1080; c.height = 170 + (to - from) * 300;
+  c.width = 1080; c.height = 170 + (to - from) * 400;
   var x = c.getContext("2d");
   x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, c.width, c.height);
   x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 120);
@@ -569,15 +657,15 @@ function makeWorkingSheet(from, to, done) {
     x.fillText("You said: " + (said === null || String(said).trim() === "" ? "(no answer)" : String(said)), 40, y + 40);
     y += 60;
     x.strokeStyle = "#90CAF9"; x.lineWidth = 2;
-    x.strokeRect(40, y, 1000, 200);
+    x.strokeRect(40, y, 1000, 300);
     if (padDrawn["pad" + n]) {
-      x.drawImage(document.getElementById("pad" + n), 40, y, 1000, 200);
+      x.drawImage(document.getElementById("pad" + n), 40, y, 1000, 300);
     } else {
       x.fillStyle = "#999999";
       x.font = "28px -apple-system, Arial, sans-serif";
-      x.fillText("No working written", 60, y + 105);
+      x.fillText("No working written", 60, y + 150);
     }
-    y += 240;
+    y += 340;
   }
   c.toBlob(function (b) { done(b); }, "image/png");
 }
@@ -621,6 +709,7 @@ function lockForm() {
   document.getElementById("submitBtn").disabled = true;
   padsLocked = true;
   document.querySelectorAll(".rubout").forEach(function (b) { b.disabled = true; });
+  document.querySelectorAll(".padtool").forEach(function (b) { b.disabled = true; });
 }
 
 function confetti(x) {
