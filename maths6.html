@@ -459,6 +459,14 @@ document.querySelectorAll('input[type="text"]').forEach(function (t) {
   t.addEventListener("input", function () {
     if (t.value.trim() !== "" && !answerTimes[t.name]) answerTimes[t.name] = Date.now();
     
+    updateProgress();
+    if (t.value.trim() !== "") {
+      harrySay(HARRY_CHEER[cheerIdx % HARRY_CHEER.length]);
+      cheerIdx++;
+    }
+  });
+});
+
 // ---- working pads: draw with pen or finger ----
 document.querySelectorAll(".workpad").forEach(function (cv) {
   var ctx = cv.getContext("2d");
@@ -607,13 +615,6 @@ document.getElementById("shareWorkingBtn").addEventListener("click", function ()
   });
 });
 
-updateProgress();
-    if (t.value.trim() !== "") {
-      harrySay(HARRY_CHEER[cheerIdx % HARRY_CHEER.length]);
-      cheerIdx++;
-    }
-  });
-});
 
 function lockForm() {
   document.querySelectorAll('input[type="text"]').forEach(function (t) { t.disabled = true; });
