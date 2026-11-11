@@ -1,0 +1,92 @@
+{
+  "quiz": "spanish4",
+  "date": "2026-11-11T16:50:13.675Z",
+  "score": 14,
+  "time": "Finished in 3 min 10 s",
+  "answers": [
+    {
+      "q": 1,
+      "sum": "\"mother\" in Spanish",
+      "correct": "madre",
+      "said": "madre"
+    },
+    {
+      "q": 2,
+      "sum": "\"abuelo\" means?",
+      "correct": "grandfather",
+      "said": "grandfather"
+    },
+    {
+      "q": 3,
+      "sum": "\"My grandad has a dog\" in Spanish",
+      "correct": "Mi abuelo tiene un perro",
+      "said": "Mi abuelo tiene un perro"
+    },
+    {
+      "q": 4,
+      "sum": "\"aunt\" in Spanish",
+      "correct": "tía",
+      "said": "tia"
+    },
+    {
+      "q": 5,
+      "sum": "\"prima\" means?",
+      "correct": "cousin (girl)",
+      "said": "cousin (girl)"
+    },
+    {
+      "q": 6,
+      "sum": "\"I like the apple\" in Spanish",
+      "correct": "Me gusta la manzana",
+      "said": "Me gusta la manzana"
+    },
+    {
+      "q": 7,
+      "sum": "7 + 5 in Spanish",
+      "correct": "doce",
+      "said": "doce"
+    },
+    {
+      "q": 8,
+      "sum": "\"father\" in Spanish",
+      "correct": "padre",
+      "said": "padre"
+    },
+    {
+      "q": 9,
+      "sum": "\"My mum and my dad\" in Spanish",
+      "correct": "Mi madre y mi padre",
+      "said": "Mi madre y mi padre"
+    },
+    {
+      "q": 10,
+      "sum": "\"tío\" means?",
+      "correct": "uncle",
+      "said": "uncle"
+    },
+    {
+      "q": 11,
+      "sum": "\"cousin (boy)\" in Spanish",
+      "correct": "primo",
+      "said": "primo"
+    },
+    {
+      "q": 12,
+      "sum": "\"two grandmothers\" in Spanish",
+      "correct": "dos abuelas",
+      "said": "dos abuelas"
+    },
+    {
+      "q": 13,
+      "sum": "\"madre\" means?",
+      "correct": "mother",
+      "said": "mother"
+    },
+    {
+      "q": 14,
+      "sum": "\"I like milk and bread\" in Spanish",
+      "correct": "Me gusta la leche y el pan",
+      "said": "Me gusta la leche y el pan"
+    }
+  ]
+}
