@@ -920,41 +920,66 @@ function doSubmit(auto) {
     }).catch(function () {});
   } catch (e) {}
   // Auto-save her working pictures too (fire-and-forget, never blocks the quiz).
-  // One POST per picture, one retry each, and a status line so we know it worked.
+  // One picture at a time, one retry each, and a status line that says what happened.
   try {
     var workNote = document.getElementById("workSaveNote");
-    var workDone = 0, workSaved = 0;
+    var workResults = {};
     function workStatus() {
       if (!workNote) return;
-      if (workDone < 2) return;
-      workNote.textContent = workSaved === 2 ? "Working pictures saved."
-        : workSaved === 1 ? "One working picture saved, one did not. Tap Share your working below to send the other."
-        : "Working pictures did not save. Tap Share your working below to send them.";
-    }
-    function sendSheet(sIdx, attempt) {
-      makeWorkingSheet(sIdx * 7, sIdx * 7 + 7, function (b) {
-        if (!b) { workDone++; workStatus(); return; }
-        var r = new FileReader();
-        r.onload = function () {
-          var data = String(r.result).split(",")[1];
-          fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ quiz: "maths7", stamp: submitStamp, working: [{ name: "working-" + (sIdx + 1), data: data }] })
-          }).then(function (res) {
-            if (res.ok) { workDone++; workSaved++; workStatus(); }
-            else if (attempt === 1) { setTimeout(function () { sendSheet(sIdx, 2); }, 2000); }
-            else { workDone++; workStatus(); }
-          }).catch(function () {
-            if (attempt === 1) { setTimeout(function () { sendSheet(sIdx, 2); }, 2000); }
-            else { workDone++; workStatus(); }
-          });
-        };
-        r.onerror = function () { workDone++; workStatus(); };
-        r.readAsDataURL(b);
+      var done = 0, saved = 0, reasons = [];
+      ["working-1", "working-2"].forEach(function (nm) {
+        if (workResults[nm]) {
+          done++;
+          if (workResults[nm] === "saved") saved++;
+          else reasons.push(nm + ": " + workResults[nm]);
+        }
       });
+      if (done < 2) return;
+      workNote.textContent = saved === 2 ? "Working pictures saved."
+        : saved === 1 ? "One working picture saved, one did not (" + reasons.join(", ") + "). Tap Share your working below to send the other."
+        : "Working pictures did not save (" + reasons.join(", ") + "). Tap Share your working below to send them.";
     }
-    sendSheet(0, 1); sendSheet(1, 1);
+    function postSheet(sIdx, attempt, done) {
+      var nm = "working-" + (sIdx + 1);
+      var fail = function (reason) {
+        if (attempt === 1) {
+          setTimeout(function () { postSheet(sIdx, 2, done); }, 2000);
+        } else {
+          workResults[nm] = reason;
+          workStatus();
+          done();
+        }
+      };
+      var ok = function () {
+        workResults[nm] = "saved";
+        workStatus();
+        done();
+      };
+      try {
+        makeWorkingSheet(sIdx * 7, sIdx * 7 + 7, function (b) {
+          if (!b) { fail("no picture made"); return; }
+          var r = new FileReader();
+          r.onload = function () {
+            var data = String(r.result).split(",")[1];
+            if (!data) { fail("no picture data"); return; }
+            fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ quiz: "maths7", stamp: submitStamp, working: [{ name: nm, data: data }] })
+            }).then(function (res) {
+              if (res.ok) ok();
+              else fail("server " + res.status);
+            }).catch(function () { fail("no connection"); });
+          };
+          r.onerror = function () { fail("could not read picture"); };
+          r.readAsDataURL(b);
+        });
+      } catch (err) {
+        fail("error: " + (err && err.message ? err.message : "unknown"));
+      }
+    }
+    // One picture at a time, so the two sends never race each other.
+    postSheet(0, 1, function () { postSheet(1, 1, function () {}); });
   } catch (e) {}
   document.getElementById("answersList").innerHTML = answersLines.slice(4).map(function (l) {
     return l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "<br>";
