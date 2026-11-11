@@ -543,7 +543,7 @@ document.querySelectorAll(".workpad").forEach(function (cv) {
   function applyTool() {
     if (tool === "rubber") {
       ctx.globalCompositeOperation = "destination-out";
-      ctx.lineWidth = 14;
+      ctx.lineWidth = 40;
     } else {
       ctx.globalCompositeOperation = "source-over";
       ctx.strokeStyle = "#222222";
@@ -554,7 +554,7 @@ document.querySelectorAll(".workpad").forEach(function (cv) {
   function startAt(p) {
     drawing = true; last = p;
     applyTool();
-    ctx.beginPath(); ctx.arc(p.x, p.y, tool === "rubber" ? 7 : 3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(p.x, p.y, tool === "rubber" ? 20 : 3, 0, Math.PI * 2); ctx.fill();
     padDrawn[cv.id] = true;
   }
   function moveTo(p) {
