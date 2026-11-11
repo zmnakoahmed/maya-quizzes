@@ -68,6 +68,7 @@
   .padtool.on { background: #4caf50; color: #fff; border-color: #4caf50; }
   .padtool:disabled { background: #eee; color: #aaa; border-color: #ddd; }
   #shareWorkingBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareAnswersBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
   #shareWorkNote { color: #888; font-size: 14px; }
 </style>
 </head>
@@ -376,6 +377,13 @@
     <a id="downloadWork2" href="#" download="maya-maths-quiz-6-working-2.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 2 (questions 8 to 14)</a>
     <div id="shareWorkNote"></div>
   </div>
+  <div id="shareBox">
+    <strong>Share your answers with Daddy:</strong> Tap the button to send him a list of all your answers, so he can see every sum and help you with the ones to practise.
+    <button type="button" id="shareAnswersBtn">Share your answers</button>
+    <a id="downloadAnswers" href="#" download="maya-maths-quiz-6-answers.txt" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save the answers list</a>
+    <div id="shareAnswersNote"></div>
+    <div id="answersList" style="text-align:left;font-size:16px;line-height:1.6;margin-top:10px;"></div>
+  </div>
 </div>
 
 <p class="footer">Made for Maya. Good luck!</p>
@@ -635,6 +643,7 @@ document.querySelectorAll(".rubout").forEach(function (b) {
 
 // ---- working sheets: two pictures, questions 1-7 and 8-14 ----
 var workingBlobs = [null, null];
+var answersText = "";
 function makeWorkingSheet(from, to, done) {
   var c = document.createElement("canvas");
   c.width = 1080; c.height = 170 + (to - from) * 400;
@@ -702,6 +711,28 @@ document.getElementById("shareWorkingBtn").addEventListener("click", function ()
     });
   });
 });
+document.getElementById("shareAnswersBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareAnswersNote");
+  if (!answersText) {
+    note.textContent = "The answers list is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([answersText], "maya-maths-quiz-6-answers.txt", { type: "text/plain" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      showAnswersDownload();
+      note.textContent = "Sharing did not open. Tap Save the answers list instead.";
+    });
+  } else {
+    showAnswersDownload();
+    note.textContent = "Sharing is not available here. Tap Save the answers list, then send it from Files.";
+  }
+});
+function showAnswersDownload() {
+  var l = document.getElementById("downloadAnswers");
+  l.href = URL.createObjectURL(new Blob([answersText], { type: "text/plain" }));
+  l.style.display = "block";
+}
 
 
 function lockForm() {
@@ -835,6 +866,26 @@ function doSubmit(auto) {
   for (var p = 1; p <= 14; p++) if (!padDrawn["pad" + p]) blankPads++;
   if (blankPads >= 7) harryEnd += " Next time, write your working in the boxes, so Daddy can see how you did each sum!";
   harrySay(harryEnd);
+  // Full answers record, for Daddy's follow-up teaching.
+  var answersLines = [];
+  answersLines.push("Maya's Maths Quiz 6 - all answers");
+  answersLines.push("Date: " + new Date().toLocaleDateString("en-IE"));
+  answersLines.push("Score: " + score + " out of 14. " + timeText);
+  answersLines.push("");
+  for (var a = 1; a <= 14; a++) {
+    var ans = getAnswer(a);
+    var ansText = (ans === null || String(ans).trim() === "") ? "(no answer)" : String(ans);
+    var av2 = parseFloat(ANSWERS["q" + a]);
+    var pv2 = parseFloat(ans);
+    var ok2 = !isNaN(pv2) && !isNaN(av2) && Math.abs(pv2 - av2) < 0.0000001;
+    var at = answerTimes["q" + a];
+    var when = (at && startTime) ? "answered at " + fmtElapsed(Math.round((at - startTime) / 1000)) : "no time recorded";
+    answersLines.push("Q" + a + ": " + STEMS["q" + a] + " = " + ANSWERS["q" + a] + ". You said: " + ansText + ". " + (ok2 ? "Correct." : "Wrong.") + " (" + when + ")");
+  }
+  answersText = answersLines.join("\n");
+  document.getElementById("answersList").innerHTML = answersLines.slice(4).map(function (l) {
+    return l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "<br>";
+  }).join("");
   document.getElementById("result").style.display = "block";
   lockForm();
   try { localStorage.setItem(KEY, "done"); } catch (e) {}
