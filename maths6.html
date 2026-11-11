@@ -884,8 +884,9 @@ function doSubmit(auto) {
   }
   answersText = answersLines.join("\n");
   // Auto-save her answers to Daddy's record (fire-and-forget, never blocks the quiz).
+  var submitStamp = new Date().toISOString().replace(/[:.]/g, "-");
   try {
-    var payload = { quiz: "maths6", date: new Date().toISOString(), score: score, time: timeText, answers: [] };
+    var payload = { quiz: "maths6", stamp: submitStamp, date: new Date().toISOString(), score: score, time: timeText, answers: [] };
     for (var a = 1; a <= 14; a++) {
       var ans = getAnswer(a);
       payload.answers.push({
@@ -901,6 +902,26 @@ function doSubmit(auto) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     }).catch(function () {});
+  } catch (e) {}
+  // Auto-save her working pictures too (fire-and-forget, never blocks the quiz).
+  try {
+    var workSheets = [];
+    [0, 1].forEach(function (sIdx) {
+      makeWorkingSheet(sIdx * 7, sIdx * 7 + 7, function (b) {
+        var r = new FileReader();
+        r.onload = function () {
+          workSheets.push({ name: "working-" + (sIdx + 1), data: String(r.result).split(",")[1] });
+          if (workSheets.length === 2) {
+            fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ quiz: "maths6", stamp: submitStamp, working: workSheets })
+            }).catch(function () {});
+          }
+        };
+        r.readAsDataURL(b);
+      });
+    });
   } catch (e) {}
   document.getElementById("answersList").innerHTML = answersLines.slice(4).map(function (l) {
     return l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "<br>";
