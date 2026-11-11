@@ -478,7 +478,8 @@ document.querySelectorAll(".workpad").forEach(function (cv) {
     last = p;
     padDrawn[cv.id] = true;
   }
-  // Pointer events: mouse and pen on desktop.
+  function endDraw() { drawing = false; }
+  // Pointer events: mouse and pen.
   cv.addEventListener("pointerdown", function (e) {
     if (padsLocked) return;
     e.preventDefault();
@@ -486,13 +487,33 @@ document.querySelectorAll(".workpad").forEach(function (cv) {
     try { cv.setPointerCapture(e.pointerId); } catch (err) {}
   });
   cv.addEventListener("pointermove", function (e) {
-    if (!drawing) return;
+    if (padsLocked) return;
+    // Recover if the pointerdown was missed: draw whenever the button is held.
+    if (!drawing) {
+      if (e.buttons & 1) startAt(pos(e));
+      return;
+    }
     e.preventDefault();
     moveTo(pos(e));
   });
-  function endDraw(e) { drawing = false; }
   cv.addEventListener("pointerup", endDraw);
   cv.addEventListener("pointercancel", endDraw);
+  // Mouse events: a second, independent path for desktop dragging.
+  cv.addEventListener("mousedown", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(pos(e));
+  });
+  cv.addEventListener("mousemove", function (e) {
+    if (padsLocked) return;
+    if (!drawing) {
+      if (e.buttons & 1) startAt(pos(e));
+      return;
+    }
+    moveTo(pos(e));
+  });
+  cv.addEventListener("mouseup", endDraw);
+  cv.addEventListener("mouseleave", endDraw);
   // Touch events: the reliable path on iPad, where pointer events alone
   // can swallow the first touch until a text field has been used.
   cv.addEventListener("touchstart", function (e) {
