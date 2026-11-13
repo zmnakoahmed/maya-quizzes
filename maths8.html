@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's Maths Quiz 8 - Decimal multiplication, show your working</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; margin-top: 28px; }
+  .intro { background: #fff3cd; border: 1px solid #e6c87a; border-radius: 10px; padding: 12px; }
+  .harry { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
+  .harry svg { flex: 0 0 72px; }
+  .harry p { margin: 0; font-size: 17px; }
+  #progressWrap { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; }
+  #progressBar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+  #progressFill { height: 100%; width: 0%; background: #4caf50; }
+  #progressText { font-weight: bold; margin-top: 4px; }
+  #timerWrap { display: none; margin-top: 8px; }
+  #timerText { font-weight: bold; font-size: 20px; }
+  #timerBar { height: 10px; background: #eee; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+  #timerFill { height: 100%; width: 100%; background: #ff9800; }
+  .q { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .q h3 { margin: 0 0 10px 0; }
+  .q p.stem { font-size: 22px; font-weight: bold; }
+  input[type=text] { width: 100%; box-sizing: border-box; padding: 12px; font-size: 19px; border: 2px solid #4caf50; border-radius: 8px; }
+  .explain { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #e8f5e9; }
+  .explain.wrong { background: #fdecea; }
+  #submitBtn { display: block; width: 100%; padding: 16px; font-size: 20px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; }
+  #submitBtn:disabled { background: #aaa; }
+  #warn { display: none; background: #fff3cd; border: 1px solid #e6c87a; border-radius: 8px; padding: 12px; margin: 12px 0; font-weight: bold; }
+  #result { display: none; margin: 20px 0; }
+  #score { font-size: 26px; font-weight: bold; }
+  #resultImg { display: none; max-width: 100%; border-radius: 12px; border: 1px solid #ddd; margin-top: 12px; }
+  #shareBox { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #f9f9f9; }
+  #shareBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #downloadLink { display: none; text-align: center; padding: 12px; font-size: 16px; font-weight: bold; color: #2196f3; }
+  #shareNote { color: #888; font-size: 14px; }
+  .footer { color: #888; margin-top: 24px; }
+  #matchGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+  .card { background: #fff; border: 2px solid #4caf50; border-radius: 12px; padding: 14px 4px; text-align: center; font-size: 17px; font-weight: bold; cursor: pointer; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+  .card.picked { background: #bbdefb; border-color: #1976d2; }
+  .card.matched { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; }
+  #matchDone { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; margin: 12px 0; }
+  #startBox { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 16px; text-align: center; font-size: 18px; margin: 16px 0; }
+  #startBtn { display: block; width: 100%; margin-top: 12px; padding: 14px; font-size: 20px; font-weight: bold; background: #ff9800; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #quizForm { display: none; }
+  .step { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .step b { color: #0d47a1; }
+  .example { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .tip { background: #e8f5e9; border: 2px solid #4caf50; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .visual { background: #fff; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .strip { display: flex; gap: 3px; margin: 8px 0; }
+  .box { width: 26px; height: 26px; border: 2px solid #1976d2; border-radius: 4px; box-sizing: border-box; }
+  .box.on { background: #4caf50; border-color: #2e7d32; }
+  .grid100 { display: grid; grid-template-columns: repeat(10, 18px); gap: 2px; margin: 8px 0; }
+  .cell { width: 18px; height: 18px; border: 1px solid #90caf9; border-radius: 2px; box-sizing: border-box; }
+  .cell.on { background: #4caf50; border-color: #2e7d32; }
+  .bar { height: 26px; border-radius: 6px; margin: 6px 0; }
+  .bigans { font-size: 34px; font-weight: bold; color: #2e7d32; text-align: center; margin: 8px 0; }
+  .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
+  .worklabel { font-size: 15px; color: #555; margin-top: 10px; }
+  .workpad { display: block; width: 100%; height: 220px; background: #fff; border: 2px solid #90caf9; border-radius: 8px; margin-top: 6px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
+  .rubout { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #e3f2fd; cursor: pointer; }
+  .rubout:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  .padtools { display: flex; gap: 8px; margin-top: 6px; }
+  .padtool { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #fff; cursor: pointer; }
+  .padtool.on { background: #4caf50; color: #fff; border-color: #4caf50; }
+  .padtool:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  #shareWorkingBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareAnswersBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareWorkNote { color: #888; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>Maya's Maths Quiz 8</h1>
+<p>Decimal multiplication again. 20 minutes. This time it is all decimals, and the same two steps matter: adding the carry, and the zero that goes with the tens. Write your working in the box under each question with your pen, so Daddy can see how you did it.</p>
+
+<div class="harry">
+  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+    <circle cx="36" cy="42" r="19" fill="#F5CBA7"/>
+    <path d="M16 32 Q12 10 36 8 Q60 10 56 32 L50 24 L46 30 L40 22 L36 29 L30 22 L24 30 L20 24 Z" fill="#222222"/>
+    <path d="M33 30 L37 30 L34 35 L38 35 L31 42 L33.5 36 L30 36 Z" fill="#FFD93D"/>
+    <circle cx="28" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <circle cx="44" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <line x1="35" y1="42" x2="37" y2="42" stroke="#222222" stroke-width="2"/>
+    <line x1="21" y1="42" x2="17" y2="41" stroke="#222222" stroke-width="2"/>
+    <line x1="51" y1="42" x2="55" y2="41" stroke="#222222" stroke-width="2"/>
+    <circle cx="28" cy="42" r="2" fill="#6D4C41"/>
+    <circle cx="44" cy="42" r="2" fill="#6D4C41"/>
+    <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
+    <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. Decimal multiplication again, and your decimal point is spot on now! This time, keep saying the carry out loud when you add it, and keep putting the zero on the RIGHT when you multiply by tens. You have 20 minutes. You can do it!</p>
+</div>
+
+<h2>Learn how to do it first</h2>
+<p>Take your time with this part. Read it slowly. There is no timer here.</p>
+
+<div class="example"><b>Watch out 1: adding the carry.</b><br>
+  Last time, 28 × 9 went wrong in the last step. Here it is, slowly:<br><br>
+  9 × 8 = <b>72</b>. Write the 2, carry the <b>7</b>.<br>
+  9 × 2 = <b>18</b>. Now ADD the carry: 18 + 7 = <b>25</b>.<br>
+  So the answer is <b>252</b>. Say the carry out loud when you add it: "eighteen plus seven is twenty-five."<br>
+  If you forget the carry, or add it to the wrong digit, the answer comes out wrong even though the times tables were right.</div>
+
+<div class="example"><b>Watch out 2: the zero goes on the RIGHT.</b><br>
+  Last time, 47 × 26 went wrong in the middle step. Here it is, slowly:<br><br>
+  47 × 6 = <b>282</b>.<br>
+  47 × 20 = <b>940</b>. It is 47 × 2 = 94, and then a zero on the <b>right</b>, because it is twenties, not twos.<br>
+  940, NOT 094! The zero on the left means 94, which is ten times too small.<br>
+  Add them: 282 + 940 = <b>1222</b>.<br>
+  Every time you multiply by tens, put a zero at the end of that line first.</div>
+
+<div class="example"><b>First, the multiplying itself.</b><br>
+  Get the digits right first, then put the point in.<br><br>
+  <b>How to multiply two big numbers: 25 × 46</b><br>
+  Step 1: 25 × 6 = <b>150</b>.<br>
+  Step 2: 25 × 40 = <b>1000</b>. (46 is 40 and 6.)<br>
+  Step 3: add them: 150 + 1000 = <b>1150</b>.<br>
+  Always do it in small pieces, and add the pieces at the end.</div>
+
+<div class="visual">
+  <b>What is 0.7?</b><br>
+  Imagine a chocolate bar with 10 pieces. 0.7 means 7 of those 10 pieces.
+  <div class="strip" id="tenthsStrip"></div>
+  7 green pieces out of 10. That is 7 tenths, we write it 0.7.<br><br>
+  And 0.07 means 7 hundredths. Imagine a big square with 100 tiny pieces. Only 7 are green.
+  <div class="grid100" id="hundredthsGrid"></div>
+  7 green pieces out of 100. That is much smaller than 0.7!
+</div>
+
+<div class="step"><b>Step 1.</b> Hide the decimal points. Multiply the numbers like whole numbers.<br>Example: 54.6 × 0.7 becomes 546 × 7 = <b>3822</b>.</div>
+<div class="step"><b>Step 2.</b> Count the digits after the decimal point in BOTH numbers, and add them up.<br>54.6 has 1 digit after the point, 0.7 has 1. Together that is <b>2</b>.</div>
+<div class="step"><b>Step 3.</b> Put the decimal point in your answer so it has that many digits after it.<br>3822 with 2 digits after the point is <b>38.22</b>. Done!</div>
+
+<p><button type="button" class="speak" data-say="Step 1. Hide the decimal points. Multiply the numbers like whole numbers. Step 2. Count the digits after the decimal point in both numbers, and add them up. Step 3. Put the decimal point in your answer so it has that many digits after it.">&#128266; Hear the 3 steps</button></p>
+
+<div class="example"><b>When you run out of digits:</b> 1.65 × 0.03<br>
+  Digits: 165 × 3 = 495. Decimal places: 2 + 2 = 4.<br>
+  But 495 only has 3 digits! Add a zero at the front:
+  <div class="bigans">0.0495</div>
+  The zero in front is the trick. It makes the number small, as it should be.</div>
+
+<div class="example"><b>The bigger ones:</b> 0.34 × 3.6<br>
+  Split 3.6 into 3 and 0.6.<br>
+  0.34 × 3 = 1.02<br>
+  0.34 × 0.6 = 0.204, NOT 2.04! Remember, 0.6 means 6 tenths, so the answer is 10 times smaller than 0.34 × 6.<br>
+  Add them: 1.02 + 0.204 = <b>1.224</b>.</div>
+
+<div class="tip"><b>Show your working!</b><br>
+  Under each question there is a white box. Write your working in it with your pen or your finger, just like on paper. Harry and Daddy want to see how you did each sum, so we can help with the exact step that went wrong.</div>
+
+<div class="tip"><b>Quick check before you finish: estimate!</b><br>
+  Round the numbers first. 23.4 × 0.6 is about 23 × 0.6, which is about 14.<br>
+  So 14.04 makes sense. If your answer is much bigger than your estimate, check the decimal point.</div>
+
+<h2>Warm-up: match the pairs</h2>
+<p>Tap a sum, then tap its answer. Match all eight pairs! This part has no timer.</p>
+<div id="matchGrid"></div>
+<div id="matchDone">Brilliant! You matched them all! Now for the quiz.</div>
+
+<div id="startBox">
+  <strong>Ready?</strong><br>
+  You have <strong>20 minutes</strong> for all 14 questions. Take your time, write your working in the boxes, and remember the 3 steps!
+  <button type="button" id="startBtn">Start the quiz!</button>
+</div>
+
+<div id="progressWrap">
+  <div id="progressBar"><div id="progressFill"></div></div>
+  <div id="progressText">Answered 0 of 14</div>
+  <div id="timerWrap">
+    <div id="timerText">&#9201; 20:00 left</div>
+    <div id="timerBar"><div id="timerFill"></div></div>
+  </div>
+</div>
+
+<form id="quizForm">
+  <div class="q typeq" data-q="1">
+    <h3>Question 1</h3>
+    <p class="stem">0.36 × 7 = ?</p>
+    <input type="text" name="q1" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad1" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad1" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad1" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad1">Clear all</button>
+    </div>
+    <div class="explain" id="ex1"><strong>2.52.</strong> Digits: 36 × 7 = 252. Say the carry: 6 × 7 = 42, carry 4. 3 × 7 = 21, 21 + 4 = 25. Decimal places: 2, so the answer is 2.52.</div>
+  </div>
+
+  <div class="q typeq" data-q="2">
+    <h3>Question 2</h3>
+    <p class="stem">0.47 × 0.8 = ?</p>
+    <input type="text" name="q2" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad2" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad2" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad2" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad2">Clear all</button>
+    </div>
+    <div class="explain" id="ex2"><strong>0.376.</strong> Digits: 47 × 8 = 376. Say the carry: 7 × 8 = 56, carry 5. 4 × 8 = 32, 32 + 5 = 37. Decimal places: 2 + 1 = 3, so the answer is 0.376.</div>
+  </div>
+
+  <div class="q typeq" data-q="3">
+    <h3>Question 3</h3>
+    <p class="stem">0.53 × 0.6 = ?</p>
+    <input type="text" name="q3" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad3" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad3" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad3" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad3">Clear all</button>
+    </div>
+    <div class="explain" id="ex3"><strong>0.318.</strong> Digits: 53 × 6 = 318. Say the carry: 3 × 6 = 18, carry 1. 5 × 6 = 30, 30 + 1 = 31. Decimal places: 2 + 1 = 3, so the answer is 0.318.</div>
+  </div>
+
+  <div class="q typeq" data-q="4">
+    <h3>Question 4</h3>
+    <p class="stem">0.68 × 0.4 = ?</p>
+    <input type="text" name="q4" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad4" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad4" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad4" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad4">Clear all</button>
+    </div>
+    <div class="explain" id="ex4"><strong>0.272.</strong> Digits: 68 × 4 = 272. Say the carry: 8 × 4 = 32, carry 3. 6 × 4 = 24, 24 + 3 = 27. Decimal places: 2 + 1 = 3, so the answer is 0.272.</div>
+  </div>
+
+  <div class="q typeq" data-q="5">
+    <h3>Question 5</h3>
+    <p class="stem">0.72 × 0.9 = ?</p>
+    <input type="text" name="q5" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad5" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad5" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad5" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad5">Clear all</button>
+    </div>
+    <div class="explain" id="ex5"><strong>0.648.</strong> Digits: 72 × 9 = 648. Say the carry: 2 × 9 = 18, carry 1. 7 × 9 = 63, 63 + 1 = 64. Decimal places: 2 + 1 = 3, so the answer is 0.648.</div>
+  </div>
+
+  <div class="q typeq" data-q="6">
+    <h3>Question 6 - Careful, add a zero at the front!</h3>
+    <p class="stem">0.29 × 0.3 = ?</p>
+    <input type="text" name="q6" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad6" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad6" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad6" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad6">Clear all</button>
+    </div>
+    <div class="explain" id="ex6"><strong>0.087.</strong> Digits: 29 × 3 = 87. Decimal places: 2 + 1 = 3, so add a zero at the front: 0.087.</div>
+  </div>
+
+  <div class="q typeq" data-q="7">
+    <h3>Question 7 - The answer ends in a zero!</h3>
+    <p class="stem">0.84 × 0.5 = ?</p>
+    <input type="text" name="q7" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad7" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad7" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad7" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad7">Clear all</button>
+    </div>
+    <div class="explain" id="ex7"><strong>0.42.</strong> Digits: 84 × 5 = 420. Say the carry: 4 × 5 = 20, carry 2. 8 × 5 = 40, 40 + 2 = 42. Decimal places: 2 + 1 = 3, so the answer is 0.420, which is 0.42.</div>
+  </div>
+
+  <div class="q typeq" data-q="8">
+    <h3>Question 8</h3>
+    <p class="stem">0.35 × 0.27 = ?</p>
+    <input type="text" name="q8" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad8" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad8" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad8" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad8">Clear all</button>
+    </div>
+    <div class="explain" id="ex8"><strong>0.0945.</strong> 35 × 7 = 245, 35 × 20 = 700, zero on the right. Add them: 245 + 700 = 945. Decimal places: 2 + 2 = 4, so the answer is 0.0945.</div>
+  </div>
+
+  <div class="q typeq" data-q="9">
+    <h3>Question 9</h3>
+    <p class="stem">0.46 × 0.38 = ?</p>
+    <input type="text" name="q9" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad9" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad9" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad9" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad9">Clear all</button>
+    </div>
+    <div class="explain" id="ex9"><strong>0.1748.</strong> 46 × 8 = 368, 46 × 30 = 1380, zero on the right. Add them: 368 + 1380 = 1748. Decimal places: 2 + 2 = 4, so the answer is 0.1748.</div>
+  </div>
+
+  <div class="q typeq" data-q="10">
+    <h3>Question 10</h3>
+    <p class="stem">0.57 × 0.24 = ?</p>
+    <input type="text" name="q10" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad10" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad10" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad10" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad10">Clear all</button>
+    </div>
+    <div class="explain" id="ex10"><strong>0.1368.</strong> 57 × 4 = 228, 57 × 20 = 1140, zero on the right. Add them: 228 + 1140 = 1368. Decimal places: 2 + 2 = 4, so the answer is 0.1368.</div>
+  </div>
+
+  <div class="q typeq" data-q="11">
+    <h3>Question 11</h3>
+    <p class="stem">0.63 × 0.35 = ?</p>
+    <input type="text" name="q11" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad11" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad11" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad11" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad11">Clear all</button>
+    </div>
+    <div class="explain" id="ex11"><strong>0.2205.</strong> 63 × 5 = 315, 63 × 30 = 1890, zero on the right. Add them: 315 + 1890 = 2205. Decimal places: 2 + 2 = 4, so the answer is 0.2205.</div>
+  </div>
+
+  <div class="q typeq" data-q="12">
+    <h3>Question 12</h3>
+    <p class="stem">0.74 × 0.26 = ?</p>
+    <input type="text" name="q12" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad12" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad12" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad12" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad12">Clear all</button>
+    </div>
+    <div class="explain" id="ex12"><strong>0.1924.</strong> 74 × 6 = 444, 74 × 20 = 1480, zero on the right. Add them: 444 + 1480 = 1924. Decimal places: 2 + 2 = 4, so the answer is 0.1924.</div>
+  </div>
+
+  <div class="q typeq" data-q="13">
+    <h3>Question 13</h3>
+    <p class="stem">0.81 × 0.19 = ?</p>
+    <input type="text" name="q13" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad13" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad13" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad13" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad13">Clear all</button>
+    </div>
+    <div class="explain" id="ex13"><strong>0.1539.</strong> 81 × 9 = 729, 81 × 10 = 810, zero on the right. Add them: 729 + 810 = 1539. Decimal places: 2 + 2 = 4, so the answer is 0.1539.</div>
+  </div>
+
+  <div class="q typeq" data-q="14">
+    <h3>Question 14</h3>
+    <p class="stem">0.92 × 0.43 = ?</p>
+    <input type="text" name="q14" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad14" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad14" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad14" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad14">Clear all</button>
+    </div>
+    <div class="explain" id="ex14"><strong>0.3956.</strong> 92 × 3 = 276, 92 × 40 = 3680, zero on the right. Add them: 276 + 3680 = 3956. Decimal places: 2 + 2 = 4, so the answer is 0.3956.</div>
+  </div>
+
+  <div id="warn"></div>
+  <button type="button" id="submitBtn">Submit</button>
+</form>
+
+<div id="result">
+  <div id="score"></div>
+  <img id="resultImg" alt="Maya's quiz result">
+  <div id="shareBox">
+    <strong>Share your result with Daddy:</strong> Tap the button and pick Messages to send him the picture.
+    <button type="button" id="shareBtn">Share with Daddy</button>
+    <a id="downloadLink" href="#" download="maya-maths-quiz-8.png">Save the picture</a>
+    <div id="shareNote"></div>
+  </div>
+  <div id="shareBox">
+    <strong>Share your working with Daddy:</strong> Tap the button to send him the two pictures of your working, so he can see how you did each sum.
+    <button type="button" id="shareWorkingBtn">Share your working</button>
+    <a id="downloadWork1" href="#" download="maya-maths-quiz-8-working-1.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 1 (questions 1 to 7)</a>
+    <a id="downloadWork2" href="#" download="maya-maths-quiz-8-working-2.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 2 (questions 8 to 14)</a>
+    <div id="shareWorkNote"></div>
+    <div id="workSaveNote" style="font-size:15px;color:#555;margin-top:6px;"></div>
+  </div>
+  <div id="shareBox">
+    <strong>Share your answers with Daddy:</strong> Tap the button to send him a list of all your answers, so he can see every sum and help you with the ones to practise.
+    <button type="button" id="shareAnswersBtn">Share your answers</button>
+    <a id="downloadAnswers" href="#" download="maya-maths-quiz-8-answers.txt" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save the answers list</a>
+    <div id="shareAnswersNote"></div>
+    <div id="answersList" style="text-align:left;font-size:16px;line-height:1.6;margin-top:10px;"></div>
+  </div>
+</div>
+
+<p class="footer">Made for Maya. Good luck!</p>
+
+<script>
+var ANSWERS = { q1: "2.52", q2: "0.376", q3: "0.318", q4: "0.272", q5: "0.648", q6: "0.087", q7: "0.42", q8: "0.0945", q9: "0.1748", q10: "0.1368", q11: "0.2205", q12: "0.1924", q13: "0.1539", q14: "0.3956" };
+var TYPE_QS = { q1: true, q2: true, q3: true, q4: true, q5: true, q6: true, q7: true, q8: true, q9: true, q10: true, q11: true, q12: true, q13: true, q14: true };
+var KEY = "maya-maths-quiz-8";
+var submitted = false;
+try { submitted = localStorage.getItem(KEY) === "done"; } catch (e) {}
+var resultBlob = null;
+var STEMS = { q1: "0.36 × 7", q2: "0.47 × 0.8", q3: "0.53 × 0.6", q4: "0.68 × 0.4", q5: "0.72 × 0.9", q6: "0.29 × 0.3", q7: "0.84 × 0.5", q8: "0.35 × 0.27", q9: "0.46 × 0.38", q10: "0.57 × 0.24", q11: "0.63 × 0.35", q12: "0.74 × 0.26", q13: "0.81 × 0.19", q14: "0.92 × 0.43" };
+var padDrawn = {};
+var padsLocked = false;
+var answerTimes = {};
+
+function harrySay(msg) {
+  document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + msg;
+}
+
+function speak(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-GB"; u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+document.querySelectorAll(".speak").forEach(function (b) {
+  b.addEventListener("click", function () { speak(b.getAttribute("data-say")); });
+});
+
+(function buildVisuals() {
+  var strip = document.getElementById("tenthsStrip");
+  for (var i = 0; i < 10; i++) {
+    var b = document.createElement("div");
+    b.className = "box" + (i < 7 ? " on" : "");
+    strip.appendChild(b);
+  }
+  var grid = document.getElementById("hundredthsGrid");
+  for (var j = 0; j < 100; j++) {
+    var c = document.createElement("div");
+    c.className = "cell" + (j < 7 ? " on" : "");
+    grid.appendChild(c);
+  }
+})();
+
+var PAIRS = [["0.36 × 7", "2.52"], ["0.47 × 0.8", "0.376"], ["0.53 × 0.6", "0.318"], ["0.68 × 0.4", "0.272"], ["0.72 × 0.9", "0.648"], ["0.29 × 0.3", "0.087"], ["0.84 × 0.5", "0.42"], ["0.35 × 0.27", "0.0945"]];
+var matchState = { first: null, lock: false, done: 0 };
+(function buildMatch() {
+  var cards = [];
+  PAIRS.forEach(function (p, i) {
+    cards.push({ pair: i, text: p[0] });
+    cards.push({ pair: i, text: p[1] });
+  });
+  for (var i = cards.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+  }
+  var grid = document.getElementById("matchGrid");
+  cards.forEach(function (c) {
+    var d = document.createElement("div");
+    d.className = "card";
+    d.textContent = c.text;
+    d.addEventListener("click", function () { pickCard(d, c.pair); });
+    grid.appendChild(d);
+  });
+})();
+function pickCard(el, pair) {
+  if (matchState.lock || el.classList.contains("matched") || el.classList.contains("picked")) return;
+  el.classList.add("picked");
+  if (matchState.first === null) { matchState.first = { el: el, pair: pair }; return; }
+  var f = matchState.first; matchState.first = null;
+  if (f.pair === pair) {
+    f.el.classList.remove("picked"); f.el.classList.add("matched");
+    el.classList.remove("picked"); el.classList.add("matched");
+    matchState.done++;
+    harrySay("Brilliant! That is a match!");
+    if (matchState.done === 8) {
+      harrySay("Brilliant! You matched them all! Now for the quiz!");
+      document.getElementById("matchDone").style.display = "block";
+    }
+  } else {
+    matchState.lock = true;
+    harrySay("Not quite, try again!");
+    setTimeout(function () {
+      f.el.classList.remove("picked"); el.classList.remove("picked");
+      matchState.lock = false;
+    }, 700);
+  }
+}
+
+var TOTAL = 1200;
+var timeLeft = TOTAL, timerId = null, startTime = null, timerRunning = false;
+function fmt(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+function fmtElapsed(sec) { var m = Math.floor(sec / 60), s = sec % 60; return m + " min " + s + " s"; }
+function tick() {
+  timeLeft--;
+  document.getElementById("timerText").textContent = "⏱ " + fmt(timeLeft) + " left";
+  document.getElementById("timerFill").style.width = (timeLeft / TOTAL * 100) + "%";
+  if (timeLeft <= 60) document.getElementById("timerText").style.color = "#D32F2F";
+  if (timeLeft <= 0) { clearInterval(timerId); timerRunning = false; doSubmit(true); }
+}
+document.getElementById("startBtn").addEventListener("click", function () {
+  document.getElementById("startBox").style.display = "none";
+  document.getElementById("quizForm").style.display = "block";
+  document.getElementById("timerWrap").style.display = "block";
+  startTime = Date.now();
+  timerRunning = true;
+  timerId = setInterval(tick, 1000);
+  harrySay("Go, Maya! You have 20 minutes!");
+  document.getElementById("quizForm").scrollIntoView();
+});
+
+function isTypeQ(j) { return !!TYPE_QS["q" + j]; }
+function getAnswer(j) {
+  return document.querySelector('input[name="q' + j + '"]').value;
+}
+function isAnswered(j) {
+  var a = getAnswer(j);
+  return a !== null && String(a).trim() !== "";
+}
+function answeredCount() {
+  var n = 0;
+  for (var i = 1; i <= 14; i++) if (isAnswered(i)) n++;
+  return n;
+}
+function updateProgress() {
+  var n = answeredCount();
+  document.getElementById("progressFill").style.width = (n / 14 * 100) + "%";
+  document.getElementById("progressText").textContent = "Answered " + n + " of 14";
+}
+var HARRY_CHEER = [
+  "Great thinking, Maya! You've got this!",
+  "Brilliant! Keep going, Maya!",
+  "Nice one, Maya! Harry is cheering for you!"
+];
+var cheerIdx = 0;
+document.querySelectorAll('input[type="text"]').forEach(function (t) {
+  t.addEventListener("input", function () {
+    if (t.value.trim() !== "" && !answerTimes[t.name]) answerTimes[t.name] = Date.now();
+    
+    updateProgress();
+    if (t.value.trim() !== "") {
+      harrySay(HARRY_CHEER[cheerIdx % HARRY_CHEER.length]);
+      cheerIdx++;
+    }
+  });
+});
+
+// ---- working pads: draw with pen or finger ----
+document.querySelectorAll(".workpad").forEach(function (cv) {
+  var ctx = cv.getContext("2d");
+  ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#222222";
+  var drawing = false, last = null, tool = "pen";
+  function pos(e) {
+    var r = cv.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (cv.width / r.width), y: (e.clientY - r.top) * (cv.height / r.height) };
+  }
+  function touchPos(t) {
+    var r = cv.getBoundingClientRect();
+    return { x: (t.clientX - r.left) * (cv.width / r.width), y: (t.clientY - r.top) * (cv.height / r.height) };
+  }
+  function applyTool() {
+    if (tool === "rubber") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 40;
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "#222222";
+      ctx.fillStyle = "#222222";
+      ctx.lineWidth = 4;
+    }
+  }
+  function startAt(p) {
+    drawing = true; last = p;
+    applyTool();
+    ctx.beginPath(); ctx.arc(p.x, p.y, tool === "rubber" ? 20 : 3, 0, Math.PI * 2); ctx.fill();
+    padDrawn[cv.id] = true;
+  }
+  function moveTo(p) {
+    applyTool();
+    ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+    last = p;
+    padDrawn[cv.id] = true;
+  }
+  function endDraw() { drawing = false; }
+  // Pointer events: mouse and pen.
+  cv.addEventListener("pointerdown", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(pos(e));
+    try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  cv.addEventListener("pointermove", function (e) {
+    if (padsLocked) return;
+    // Recover if the pointerdown was missed: draw whenever the button is held.
+    if (!drawing) {
+      if (e.buttons & 1) startAt(pos(e));
+      return;
+    }
+    e.preventDefault();
+    moveTo(pos(e));
+  });
+  cv.addEventListener("pointerup", endDraw);
+  cv.addEventListener("pointercancel", endDraw);
+  // Mouse events: a second, independent path for desktop dragging.
+  cv.addEventListener("mousedown", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(pos(e));
+  });
+  cv.addEventListener("mousemove", function (e) {
+    if (padsLocked) return;
+    if (!drawing) {
+      if (e.buttons & 1) startAt(pos(e));
+      return;
+    }
+    moveTo(pos(e));
+  });
+  cv.addEventListener("mouseup", endDraw);
+  cv.addEventListener("mouseleave", endDraw);
+  // Touch events: the reliable path on iPad, where pointer events alone
+  // can swallow the first touch until a text field has been used.
+  cv.addEventListener("touchstart", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(touchPos(e.touches[0]));
+  }, { passive: false });
+  cv.addEventListener("touchmove", function (e) {
+    e.preventDefault();
+    if (!drawing) { startAt(touchPos(e.touches[0])); return; }
+    moveTo(touchPos(e.touches[0]));
+  }, { passive: false });
+  cv.addEventListener("touchend", endDraw);
+  cv.addEventListener("touchcancel", endDraw);
+  // Pen / rubber switch for this box.
+  document.querySelectorAll('.padtool[data-pad="' + cv.id + '"]').forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      if (padsLocked) return;
+      tool = btn.getAttribute("data-tool");
+      document.querySelectorAll('.padtool[data-pad="' + cv.id + '"]').forEach(function (b) {
+        b.classList.toggle("on", b === btn);
+      });
+    });
+  });
+});
+document.querySelectorAll(".rubout").forEach(function (b) {
+  b.addEventListener("click", function () {
+    if (padsLocked) return;
+    var cv = document.getElementById(b.getAttribute("data-pad"));
+    cv.getContext("2d").clearRect(0, 0, cv.width, cv.height);
+    padDrawn[cv.id] = false;
+  });
+});
+
+// ---- working sheets: two pictures, questions 1-7 and 8-14 ----
+var workingBlobs = [null, null];
+var answersText = "";
+function makeWorkingSheet(from, to, done) {
+  var c = document.createElement("canvas");
+  c.width = 1080; c.height = 170 + (to - from) * 400;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, c.width, c.height);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 120);
+  x.fillStyle = "#ffffff"; x.textAlign = "center";
+  x.font = "bold 48px -apple-system, Arial, sans-serif";
+  x.fillText("Maya's working - Maths Quiz 8", 540, 78);
+  x.textAlign = "left";
+  var y = 150;
+  for (var i = from; i < to; i++) {
+    var n = i + 1;
+    x.fillStyle = "#222222";
+    x.font = "bold 34px -apple-system, Arial, sans-serif";
+    x.fillText("Q" + n + ": " + STEMS["q" + n] + " = " + ANSWERS["q" + n], 40, y);
+    var said = getAnswer(n);
+    x.font = "28px -apple-system, Arial, sans-serif";
+    x.fillStyle = "#555555";
+    x.fillText("You said: " + (said === null || String(said).trim() === "" ? "(no answer)" : String(said)), 40, y + 40);
+    y += 60;
+    x.strokeStyle = "#90CAF9"; x.lineWidth = 2;
+    x.strokeRect(40, y, 1000, 300);
+    if (padDrawn["pad" + n]) {
+      x.drawImage(document.getElementById("pad" + n), 40, y, 1000, 300);
+    } else {
+      x.fillStyle = "#999999";
+      x.font = "28px -apple-system, Arial, sans-serif";
+      x.fillText("No working written", 60, y + 150);
+    }
+    y += 340;
+  }
+  c.toBlob(function (b) { done(b); }, "image/png");
+}
+function showWorkDownloads() {
+  var l1 = document.getElementById("downloadWork1");
+  var l2 = document.getElementById("downloadWork2");
+  l1.href = URL.createObjectURL(workingBlobs[0]);
+  l2.href = URL.createObjectURL(workingBlobs[1]);
+  l1.style.display = "block"; l2.style.display = "block";
+}
+document.getElementById("shareWorkingBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareWorkNote");
+  note.textContent = "Making your working pictures...";
+  var count = 0;
+  [0, 1].forEach(function (sIdx) {
+    makeWorkingSheet(sIdx * 7, sIdx * 7 + 7, function (b) {
+      workingBlobs[sIdx] = b;
+      count++;
+      if (count === 2) {
+        var files = [
+          new File([workingBlobs[0]], "maya-maths-quiz-8-working-1.png", { type: "image/png" }),
+          new File([workingBlobs[1]], "maya-maths-quiz-8-working-2.png", { type: "image/png" })
+        ];
+        if (navigator.canShare && navigator.canShare({ files: files })) {
+          navigator.share({ files: files }).catch(function (e) {
+            showWorkDownloads();
+            note.textContent = "Sharing did not open. Tap Save below instead.";
+          });
+        } else {
+          showWorkDownloads();
+          note.textContent = "Sharing pictures is not available here. Tap Save below, then send them from Photos.";
+        }
+      }
+    });
+  });
+});
+document.getElementById("shareAnswersBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareAnswersNote");
+  if (!answersText) {
+    note.textContent = "The answers list is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([answersText], "maya-maths-quiz-8-answers.txt", { type: "text/plain" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      showAnswersDownload();
+      note.textContent = "Sharing did not open. Tap Save the answers list instead.";
+    });
+  } else {
+    showAnswersDownload();
+    note.textContent = "Sharing is not available here. Tap Save the answers list, then send it from Files.";
+  }
+});
+function showAnswersDownload() {
+  var l = document.getElementById("downloadAnswers");
+  l.href = URL.createObjectURL(new Blob([answersText], { type: "text/plain" }));
+  l.style.display = "block";
+}
+
+
+function lockForm() {
+  document.querySelectorAll('input[type="text"]').forEach(function (t) { t.disabled = true; });
+  document.getElementById("submitBtn").disabled = true;
+  padsLocked = true;
+  document.querySelectorAll(".rubout").forEach(function (b) { b.disabled = true; });
+  document.querySelectorAll(".padtool").forEach(function (b) { b.disabled = true; });
+}
+
+function confetti(x) {
+  var cols = ["#FF6B9D", "#FFD93D", "#6BCBFF", "#B388FF", "#FF8A65", "#81C784"];
+  var seed = 12345;
+  function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  for (var i = 0; i < 44; i++) {
+    var left = rnd() < 0.5;
+    var cx = left ? 30 + rnd() * 150 : 900 + rnd() * 150;
+    var cy = 320 + rnd() * 680;
+    var r = 6 + rnd() * 8;
+    x.fillStyle = cols[i % cols.length];
+    x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill();
+  }
+}
+
+function makeResultImage(score, fb, timeText, done) {
+  var c = document.createElement("canvas");
+  c.width = 1080; c.height = 1080;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, 1080, 1080);
+  confetti(x);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 280);
+  x.fillStyle = "#ffffff"; x.textAlign = "center";
+  x.font = "bold 64px -apple-system, Arial, sans-serif";
+  x.fillText("Maya's Maths Quiz 8", 540, 100);
+  x.font = "44px -apple-system, Arial, sans-serif";
+  x.fillText("Decimal multiplication, 20 minutes", 540, 160);
+  x.font = "bold 44px -apple-system, Arial, sans-serif";
+  x.fillText("Well done, Maya!", 540, 225);
+  x.fillStyle = "#222222";
+  x.font = "bold 170px -apple-system, Arial, sans-serif";
+  x.fillText(score + " / 14", 540, 455);
+  x.fillStyle = "#4CAF50";
+  x.font = "bold 56px -apple-system, Arial, sans-serif";
+  x.fillText(score === 14 ? "All correct!" : score >= 11 ? "Nearly perfect!" : score >= 8 ? "Good effort!" : "Keep going, Maya!", 540, 585);
+  var stars = "";
+  for (var s = 0; s < 14; s++) stars += (s < score) ? "★" : "☆";
+  x.fillStyle = "#F9A825";
+  x.font = "52px -apple-system, Arial, sans-serif";
+  x.fillText(stars, 540, 680);
+  x.fillStyle = "#222222";
+  x.font = "bold 40px -apple-system, Arial, sans-serif";
+  x.fillText("Feedback for Daddy:", 540, 750);
+  for (var i = 0; i < fb.length; i++) {
+    var size = 36;
+    x.font = size + "px -apple-system, Arial, sans-serif";
+    x.fillStyle = "#555555";
+    while (x.measureText(fb[i]).width > 980 && size > 24) {
+      size -= 2;
+      x.font = size + "px -apple-system, Arial, sans-serif";
+    }
+    x.fillText(fb[i], 540, 795 + i * 42);
+  }
+  x.fillStyle = "#555555";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(timeText, 540, 935);
+  var d = new Date();
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  x.fillStyle = "#888888";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 985);
+  x.fillText("Made for Maya", 540, 1030);
+  c.toBlob(function (b) { done(b); }, "image/png");
+}
+
+function doSubmit(auto) {
+  if (timerRunning) { clearInterval(timerId); timerRunning = false; }
+  var missing = [];
+  for (var i = 1; i <= 14; i++) if (!isAnswered(i)) missing.push(i);
+  var warn = document.getElementById("warn");
+  if (missing.length > 0 && !auto) {
+    warn.style.display = "block";
+    warn.textContent = "You still need to answer question" + (missing.length > 1 ? "s " : " ") + missing.join(", ") + ". Tap Submit again when they are all answered.";
+    return;
+  }
+  warn.style.display = "none";
+  var score = 0, wrongDetails = [];
+  for (var j = 1; j <= 14; j++) {
+    var picked = getAnswer(j);
+    var ex = document.getElementById("ex" + j);
+    ex.style.display = "block";
+    var pv = parseFloat(picked), av = parseFloat(ANSWERS["q" + j]);
+    var ok = !isNaN(pv) && !isNaN(av) && Math.abs(pv - av) < 0.0000001;
+    if (ok) {
+      score++;
+    } else {
+      wrongDetails.push({ q: j, picked: (picked === null || String(picked).trim() === "") ? "(no answer)" : String(picked), correct: ANSWERS["q" + j] });
+      ex.classList.add("wrong");
+    }
+  }
+  var slowestQ = null, slowestSecs = 0;
+  if (startTime) {
+    var prev = startTime;
+    for (var k = 1; k <= 14; k++) {
+      var t = answerTimes["q" + k];
+      if (!t) continue;
+      var gap = Math.round((t - prev) / 1000);
+      if (gap > slowestSecs) { slowestSecs = gap; slowestQ = k; }
+      prev = t;
+    }
+  }
+  var fb = [];
+  if (wrongDetails.length === 0) {
+    fb.push("No questions missed!");
+  } else {
+    wrongDetails.slice(0, 2).forEach(function (w) {
+      fb.push("Q" + w.q + ": you said " + w.picked + ", answer is " + w.correct);
+    });
+    if (wrongDetails.length > 2) fb.push("and " + (wrongDetails.length - 2) + " more missed");
+  }
+  if (timeLeft > 600) fb.push("Very fast: " + fmt(timeLeft) + " left. Next quiz harder!");
+  if (slowestQ && slowestSecs >= 10) fb.push("Slowest: Q" + slowestQ + " (" + slowestSecs + " s)");
+  fb = fb.slice(0, 3);
+  var elapsed = startTime ? Math.round((Date.now() - startTime) / 1000) : TOTAL;
+  var timeText = auto ? "Time ran out! Finished in 20 min 0 s" : "Finished in " + fmtElapsed(elapsed);
+  document.getElementById("score").textContent = "You scored " + score + " out of 14! " + (auto ? "Time ran out!" : "Finished in " + fmtElapsed(elapsed) + ".");
+  var harryEnd = score === 14 ? "Brilliant, Maya! Full marks, fourteen out of fourteen!"
+    : score >= 11 ? "Well done, Maya! Great work under pressure!"
+    : score >= 8 ? "Good effort, Maya! You are learning fast!"
+    : "Don't worry, Maya. Every wizard has tough days. Try again!";
+  var blankPads = 0;
+  for (var p = 1; p <= 14; p++) if (!padDrawn["pad" + p]) blankPads++;
+  if (blankPads >= 7) harryEnd += " Next time, write your working in the boxes, so Daddy can see how you did each sum!";
+  harrySay(harryEnd);
+  // Full answers record, for Daddy's follow-up teaching.
+  var answersLines = [];
+  answersLines.push("Maya's Maths Quiz 8 - all answers");
+  answersLines.push("Date: " + new Date().toLocaleDateString("en-IE"));
+  answersLines.push("Score: " + score + " out of 14. " + timeText);
+  answersLines.push("");
+  for (var a = 1; a <= 14; a++) {
+    var ans = getAnswer(a);
+    var ansText = (ans === null || String(ans).trim() === "") ? "(no answer)" : String(ans);
+    var av2 = parseFloat(ANSWERS["q" + a]);
+    var pv2 = parseFloat(ans);
+    var ok2 = !isNaN(pv2) && !isNaN(av2) && Math.abs(pv2 - av2) < 0.0000001;
+    var at = answerTimes["q" + a];
+    var when = (at && startTime) ? "answered at " + fmtElapsed(Math.round((at - startTime) / 1000)) : "no time recorded";
+    answersLines.push("Q" + a + ": " + STEMS["q" + a] + " = " + ANSWERS["q" + a] + ". You said: " + ansText + ". " + (ok2 ? "Correct." : "Wrong.") + " (" + when + ")");
+  }
+  answersText = answersLines.join("\n");
+  // Auto-save her answers to Daddy's record (fire-and-forget, never blocks the quiz).
+  var submitStamp = new Date().toISOString().replace(/[:.]/g, "-");
+  try {
+    var payload = { quiz: "maths8", stamp: submitStamp, date: new Date().toISOString(), score: score, time: timeText, answers: [] };
+    for (var a = 1; a <= 14; a++) {
+      var ans = getAnswer(a);
+      payload.answers.push({
+        q: a,
+        sum: STEMS["q" + a],
+        correct: ANSWERS["q" + a],
+        said: (ans === null || String(ans).trim() === "") ? "" : String(ans),
+        working: !!padDrawn["pad" + a]
+      });
+    }
+    fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    }).catch(function () {});
+  } catch (e) {}
+  // Auto-save her working pictures too (fire-and-forget, never blocks the quiz).
+  // One picture at a time, one retry each, and a status line that says what happened.
+  try {
+    var workNote = document.getElementById("workSaveNote");
+    var workResults = {};
+    function workStatus() {
+      if (!workNote) return;
+      var done = 0, saved = 0, reasons = [];
+      ["working-1", "working-2"].forEach(function (nm) {
+        if (workResults[nm]) {
+          done++;
+          if (workResults[nm] === "saved") saved++;
+          else reasons.push(nm + ": " + workResults[nm]);
+        }
+      });
+      if (done < 2) return;
+      workNote.textContent = saved === 2 ? "Working pictures saved."
+        : saved === 1 ? "One working picture saved, one did not (" + reasons.join(", ") + "). Tap Share your working below to send the other."
+        : "Working pictures did not save (" + reasons.join(", ") + "). Tap Share your working below to send them.";
+    }
+    function postSheet(sIdx, attempt, done) {
+      var nm = "working-" + (sIdx + 1);
+      var fail = function (reason) {
+        if (attempt === 1) {
+          setTimeout(function () { postSheet(sIdx, 2, done); }, 2000);
+        } else {
+          workResults[nm] = reason;
+          workStatus();
+          done();
+        }
+      };
+      var ok = function () {
+        workResults[nm] = "saved";
+        workStatus();
+        done();
+      };
+      try {
+        makeWorkingSheet(sIdx * 7, sIdx * 7 + 7, function (b) {
+          if (!b) { fail("no picture made"); return; }
+          var r = new FileReader();
+          r.onload = function () {
+            var data = String(r.result).split(",")[1];
+            if (!data) { fail("no picture data"); return; }
+            fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ quiz: "maths8", stamp: submitStamp, working: [{ name: nm, data: data }] })
+            }).then(function (res) {
+              if (res.ok) ok();
+              else fail("server " + res.status);
+            }).catch(function () { fail("no connection"); });
+          };
+          r.onerror = function () { fail("could not read picture"); };
+          r.readAsDataURL(b);
+        });
+      } catch (err) {
+        fail("error: " + (err && err.message ? err.message : "unknown"));
+      }
+    }
+    // One picture at a time, so the two sends never race each other.
+    postSheet(0, 1, function () { postSheet(1, 1, function () {}); });
+  } catch (e) {}
+  document.getElementById("answersList").innerHTML = answersLines.slice(4).map(function (l) {
+    return l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "<br>";
+  }).join("");
+  document.getElementById("result").style.display = "block";
+  lockForm();
+  try { localStorage.setItem(KEY, "done"); } catch (e) {}
+  makeResultImage(score, fb, timeText, function (blob) {
+    resultBlob = blob;
+    var url = URL.createObjectURL(blob);
+    var img = document.getElementById("resultImg");
+    img.src = url; img.style.display = "block";
+    document.getElementById("downloadLink").href = url;
+  });
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+}
+
+document.getElementById("submitBtn").addEventListener("click", function () { doSubmit(false); });
+
+document.getElementById("shareBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareNote");
+  if (!resultBlob) {
+    note.textContent = "The picture is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([resultBlob], "maya-maths-quiz-8.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      document.getElementById("downloadLink").style.display = "block";
+      note.textContent = "Sharing did not open. Tap Save the picture instead.";
+    });
+  } else {
+    document.getElementById("downloadLink").style.display = "block";
+    note.textContent = "Sharing pictures is not available here. Tap Save the picture, then send it from Photos.";
+  }
+});
+
+updateProgress();
+if (submitted) {
+  lockForm();
+  document.getElementById("submitBtn").textContent = "Already submitted on this iPad";
+}
+
+</script>
+</body>
+</html>
