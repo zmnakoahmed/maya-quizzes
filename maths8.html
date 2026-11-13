@@ -913,11 +913,19 @@ function doSubmit(auto) {
         working: !!padDrawn["pad" + a]
       });
     }
-    fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    }).catch(function () {});
+    var answersBody = JSON.stringify(payload);
+    function postAnswers(attempt) {
+      fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: answersBody
+      }).then(function (res) {
+        if (!res.ok && attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      }).catch(function () {
+        if (attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      });
+    }
+    postAnswers(1);
   } catch (e) {}
   // Auto-save her working pictures too (fire-and-forget, never blocks the quiz).
   // One picture at a time, one retry each, and a status line that says what happened.
