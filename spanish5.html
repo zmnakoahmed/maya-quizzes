@@ -567,11 +567,19 @@ function doSubmit(auto) {
         said: (ans === null || String(ans).trim() === "") ? "" : String(ans)
       });
     }
-    fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    }).catch(function () {});
+    var answersBody = JSON.stringify(payload);
+    function postAnswers(attempt) {
+      fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: answersBody
+      }).then(function (res) {
+        if (!res.ok && attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      }).catch(function () {
+        if (attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      });
+    }
+    postAnswers(1);
   } catch (e) {}
   document.getElementById("answersList").innerHTML = answersLines.slice(4).map(function (l) {
     return l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "<br>";
