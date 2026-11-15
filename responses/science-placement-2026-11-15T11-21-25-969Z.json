@@ -1,0 +1,308 @@
+{
+  "quiz": "science-placement",
+  "date": "2026-11-15T11:21:25.969Z",
+  "score": 50,
+  "time": "Finished in 1 min 16 s",
+  "answers": [
+    {
+      "q": 1,
+      "sum": "How many bones does an adult have?",
+      "correct": "206",
+      "said": "206"
+    },
+    {
+      "q": 2,
+      "sum": "Which organ pumps blood around your body?",
+      "correct": "heart",
+      "said": "heart"
+    },
+    {
+      "q": 3,
+      "sum": "What do your lungs do?",
+      "correct": "help you breathe",
+      "said": "help you breathe"
+    },
+    {
+      "q": 4,
+      "sum": "Which part of your body controls everything you do?",
+      "correct": "brain",
+      "said": "brain"
+    },
+    {
+      "q": 5,
+      "sum": "What protects your brain?",
+      "correct": "skull",
+      "said": "skull"
+    },
+    {
+      "q": 6,
+      "sum": "What do red blood cells carry around your body? Type it.",
+      "correct": "oxygen",
+      "said": "oxygen"
+    },
+    {
+      "q": 7,
+      "sum": "Which organ cleans your blood?",
+      "correct": "kidney",
+      "said": "kidney"
+    },
+    {
+      "q": 8,
+      "sum": "What is the tube that carries food from your mouth to your stomach?",
+      "correct": "oesophagus",
+      "said": "oesophagus"
+    },
+    {
+      "q": 9,
+      "sum": "How do doctors test your reflexes?",
+      "correct": "by tapping your knee",
+      "said": "by tapping your knee"
+    },
+    {
+      "q": 10,
+      "sum": "What is the coloured part of your eye called?",
+      "correct": "iris",
+      "said": "iris"
+    },
+    {
+      "q": 11,
+      "sum": "Which part of a plant takes in water from the soil?",
+      "correct": "roots",
+      "said": "roots"
+    },
+    {
+      "q": 12,
+      "sum": "Which part of a plant makes food using sunlight?",
+      "correct": "leaves",
+      "said": "leaves"
+    },
+    {
+      "q": 13,
+      "sum": "What is the green substance in leaves that traps sunlight?",
+      "correct": "chlorophyll",
+      "said": "chlorophyll"
+    },
+    {
+      "q": 14,
+      "sum": "What is the process called when a plant makes its own food?",
+      "correct": "photosynthesis",
+      "said": "photosynthesis"
+    },
+    {
+      "q": 15,
+      "sum": "Which gas do plants take in from the air?",
+      "correct": "carbon dioxide",
+      "said": "carbon dioxide"
+    },
+    {
+      "q": 16,
+      "sum": "What do bees carry from flower to flower? Type it.",
+      "correct": "pollen",
+      "said": "pollen"
+    },
+    {
+      "q": 17,
+      "sum": "What grows from a seed?",
+      "correct": "a new plant",
+      "said": "a new plant"
+    },
+    {
+      "q": 18,
+      "sum": "What does a plant need to grow?",
+      "correct": "sunlight, water and air",
+      "said": "sunlight, water and air"
+    },
+    {
+      "q": 19,
+      "sum": "What do we call animals that eat only plants?",
+      "correct": "herbivores",
+      "said": "herbivores"
+    },
+    {
+      "q": 20,
+      "sum": "What do we call animals that eat only meat?",
+      "correct": "carnivores",
+      "said": "carnivores"
+    },
+    {
+      "q": 21,
+      "sum": "Which group of animals has feathers and lays eggs?",
+      "correct": "birds",
+      "said": "birds"
+    },
+    {
+      "q": 22,
+      "sum": "What is a baby frog called? Type it.",
+      "correct": "tadpole",
+      "said": "tadpole"
+    },
+    {
+      "q": 23,
+      "sum": "What do caterpillars turn into?",
+      "correct": "butterflies",
+      "said": "butterflies"
+    },
+    {
+      "q": 24,
+      "sum": "How do fish breathe under water?",
+      "correct": "with gills",
+      "said": "with gills"
+    },
+    {
+      "q": 25,
+      "sum": "What do we call animals that are active at night?",
+      "correct": "nocturnal",
+      "said": "nocturnal"
+    },
+    {
+      "q": 26,
+      "sum": "Which of these is a mammal?",
+      "correct": "whale",
+      "said": "whale"
+    },
+    {
+      "q": 27,
+      "sum": "Which of these is a liquid?",
+      "correct": "water",
+      "said": "water"
+    },
+    {
+      "q": 28,
+      "sum": "What happens to water when it is heated to 100 degrees?",
+      "correct": "it turns to steam",
+      "said": "it turns to steam"
+    },
+    {
+      "q": 29,
+      "sum": "What happens to water when it freezes?",
+      "correct": "it turns to ice",
+      "said": "it turns to ice"
+    },
+    {
+      "q": 30,
+      "sum": "Which material is pulled towards a magnet?",
+      "correct": "iron",
+      "said": "iron"
+    },
+    {
+      "q": 31,
+      "sum": "What do we call it when a solid disappears into a liquid, like sugar in tea?",
+      "correct": "dissolving",
+      "said": "dissolving"
+    },
+    {
+      "q": 32,
+      "sum": "Which of these floats on water?",
+      "correct": "wood",
+      "said": "wood"
+    },
+    {
+      "q": 33,
+      "sum": "Which material lets light through so you can see through it?",
+      "correct": "glass",
+      "said": "glass"
+    },
+    {
+      "q": 34,
+      "sum": "What is the main gas in the air around us?",
+      "correct": "nitrogen",
+      "said": "nitrogen"
+    },
+    {
+      "q": 35,
+      "sum": "What force pulls things down towards the Earth? Type it.",
+      "correct": "gravity",
+      "said": "gravity"
+    },
+    {
+      "q": 36,
+      "sum": "What do we call the force that slows things down when they rub together? Type it.",
+      "correct": "friction",
+      "said": "friction"
+    },
+    {
+      "q": 37,
+      "sum": "Which of these is a source of light?",
+      "correct": "the sun",
+      "said": "the sun"
+    },
+    {
+      "q": 38,
+      "sum": "What happens when light hits a mirror?",
+      "correct": "it bounces back",
+      "said": "it bounces back"
+    },
+    {
+      "q": 39,
+      "sum": "What makes a sound?",
+      "correct": "something vibrating",
+      "said": "something vibrating"
+    },
+    {
+      "q": 40,
+      "sum": "Which of these uses electricity to work?",
+      "correct": "a lamp",
+      "said": "a lamp"
+    },
+    {
+      "q": 41,
+      "sum": "What do we call energy from the sun?",
+      "correct": "solar energy",
+      "said": "solar energy"
+    },
+    {
+      "q": 42,
+      "sum": "Which simple machine helps you lift something heavy?",
+      "correct": "a lever",
+      "said": "a lever"
+    },
+    {
+      "q": 43,
+      "sum": "What is the closest star to Earth?",
+      "correct": "the sun",
+      "said": "the sun"
+    },
+    {
+      "q": 44,
+      "sum": "How long does the Earth take to go once around the sun?",
+      "correct": "one year",
+      "said": "one year"
+    },
+    {
+      "q": 45,
+      "sum": "What causes day and night?",
+      "correct": "the Earth spinning",
+      "said": "the Earth spinning"
+    },
+    {
+      "q": 46,
+      "sum": "What is the moon?",
+      "correct": "a natural satellite of Earth",
+      "said": "a natural satellite of Earth"
+    },
+    {
+      "q": 47,
+      "sum": "Which planet is known as the Red Planet?",
+      "correct": "Mars",
+      "said": "Mars"
+    },
+    {
+      "q": 48,
+      "sum": "What causes the seasons?",
+      "correct": "the tilt of the Earth",
+      "said": "the tilt of the Earth"
+    },
+    {
+      "q": 49,
+      "sum": "What is the name of the galaxy we live in?",
+      "correct": "the Milky Way",
+      "said": "the Milky Way"
+    },
+    {
+      "q": 50,
+      "sum": "What are the four seasons?",
+      "correct": "spring, summer, autumn, winter",
+      "said": "spring, summer, autumn, winter"
+    }
+  ]
+}
