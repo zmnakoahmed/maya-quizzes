@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's Science Course - Lesson 1: Mixed-Up Body Pairs</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; margin-top: 28px; }
+  .intro { background: #fff3cd; border: 1px solid #e6c87a; border-radius: 10px; padding: 12px; }
+  .harry { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
+  .harry svg { flex: 0 0 72px; }
+  .harry p { margin: 0; font-size: 17px; }
+  #progressWrap { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; }
+  #progressBar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+  #progressFill { height: 100%; width: 0%; background: #4caf50; }
+  #progressText { font-weight: bold; margin-top: 4px; }
+  #timerWrap { display: none; margin-top: 8px; }
+  #timerText { font-weight: bold; font-size: 20px; }
+  #timerBar { height: 10px; background: #eee; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+  #timerFill { height: 100%; width: 100%; background: #ff9800; }
+  .q { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .q h3 { margin: 0 0 10px 0; }
+  .q p.stem { font-size: 20px; font-weight: bold; }
+  label.opt { display: block; padding: 10px; margin: 6px 0; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; font-size: 18px; }
+  label.opt:hover { background: #f5f5f5; }
+  input[type=radio] { margin-right: 8px; transform: scale(1.3); }
+  input[type=text] { width: 100%; box-sizing: border-box; padding: 12px; font-size: 19px; border: 2px solid #4caf50; border-radius: 8px; }
+  .explain { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #e8f5e9; }
+  .explain.wrong { background: #fdecea; }
+  #submitBtn { display: block; width: 100%; padding: 16px; font-size: 20px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; }
+  #submitBtn:disabled { background: #aaa; }
+  #warn { display: none; background: #fff3cd; border: 1px solid #e6c87a; border-radius: 8px; padding: 12px; margin: 12px 0; font-weight: bold; }
+  #result { display: none; margin: 20px 0; }
+  #score { font-size: 26px; font-weight: bold; }
+  #resultImg { display: none; max-width: 100%; border-radius: 12px; border: 1px solid #ddd; margin-top: 12px; }
+  #shareBox { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #f9f9f9; }
+  #shareBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #downloadLink { display: none; text-align: center; padding: 12px; font-size: 16px; font-weight: bold; color: #2196f3; }
+  #shareNote { color: #888; font-size: 14px; }
+  .footer { color: #888; margin-top: 24px; }
+  .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
+  .speak.big { font-size: 22px; padding: 10px 18px; }
+  .hear { margin-top: 8px; font-size: 15px; color: #555; }
+  #matchGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+  .card { background: #fff; border: 2px solid #4caf50; border-radius: 12px; padding: 14px 4px; text-align: center; font-size: 16px; font-weight: bold; cursor: pointer; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+  .card.picked { background: #bbdefb; border-color: #1976d2; }
+  .card.matched { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; }
+  #matchDone { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; margin: 12px 0; }
+  #learnGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0; }
+  .learnCard { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 10px; }
+  .learnCard .es { font-size: 20px; font-weight: bold; }
+  .learnCard .en { font-size: 15px; color: #555; }
+  #startBox { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 16px; text-align: center; font-size: 18px; margin: 16px 0; }
+  #startBtn { display: block; width: 100%; margin-top: 12px; padding: 14px; font-size: 20px; font-weight: bold; background: #ff9800; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #quizForm { display: none; }
+</style>
+</head>
+<body>
+<h1>Maya's Science Course - Lesson 1</h1>
+<p>This lesson fixes the three pairs you mixed up in your placement quiz: lungs and kidneys, skull and ribs, and the food tube and the windpipe. Learn them first, then quiz yourself. Harry is your assistant. Tap the speaker to hear each word.</p>
+
+<div class="harry">
+  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+    <circle cx="36" cy="42" r="19" fill="#F5CBA7"/>
+    <path d="M16 32 Q12 10 36 8 Q60 10 56 32 L50 24 L46 30 L40 22 L36 29 L30 22 L24 30 L20 24 Z" fill="#222222"/>
+    <path d="M33 30 L37 30 L34 35 L38 35 L31 42 L33.5 36 L30 36 Z" fill="#FFD93D"/>
+    <circle cx="28" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <circle cx="44" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <line x1="35" y1="42" x2="37" y2="42" stroke="#222222" stroke-width="2"/>
+    <line x1="21" y1="42" x2="17" y2="41" stroke="#222222" stroke-width="2"/>
+    <line x1="51" y1="42" x2="55" y2="41" stroke="#222222" stroke-width="2"/>
+    <circle cx="28" cy="42" r="2" fill="#6D4C41"/>
+    <circle cx="44" cy="42" r="2" fill="#6D4C41"/>
+    <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
+    <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. In your placement quiz you knew the words, you just paired them with the wrong job. Today we fix that. Ready?</p>
+</div>
+
+<h2>Warm-up: match the pairs</h2>
+<p>Tap a word, then tap what it does. Match all eight pairs! This part has no timer.</p>
+<div id="matchGrid"></div>
+<div id="matchDone">Brilliant! You matched them all! Now for the quiz.</div>
+
+<h2>Learn the key words first</h2>
+<p>Harry will teach you the key words. Tap the speaker to hear each one. You will see them in the quiz, so no surprises!</p>
+<div id="learnGrid">
+  <div class="learnCard"><div class="es">lungs</div><div class="en">take in air when you breathe</div><button type="button" class="speak" data-say="lungs">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">kidney</div><div class="en">cleans your blood</div><button type="button" class="speak" data-say="kidney">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">skull</div><div class="en">the strong bone case that protects your brain</div><button type="button" class="speak" data-say="skull">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">ribs</div><div class="en">the bones that protect your heart and lungs</div><button type="button" class="speak" data-say="ribs">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">oesophagus</div><div class="en">the tube that carries food to your stomach</div><button type="button" class="speak" data-say="oesophagus">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">windpipe</div><div class="en">the tube that carries air to your lungs</div><button type="button" class="speak" data-say="windpipe">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">heart</div><div class="en">pumps blood all around your body</div><button type="button" class="speak" data-say="heart">&#128266; Hear it</button></div>
+  <div class="learnCard"><div class="es">brain</div><div class="en">controls everything you do</div><button type="button" class="speak" data-say="brain">&#128266; Hear it</button></div>
+</div>
+
+<div id="startBox">
+  <strong>Ready for a challenge?</strong><br>
+  You have <strong>6 minutes</strong> for all 12 questions. The timer starts when you tap Start. Good luck!
+  <button type="button" id="startBtn">Start the quiz!</button>
+</div>
+
+<div id="progressWrap">
+  <div id="progressBar"><div id="progressFill"></div></div>
+  <div id="progressText">Answered 0 of 12</div>
+  <div id="timerWrap">
+    <div id="timerText">&#9201; 6:00 left</div>
+    <div id="timerBar"><div id="timerFill"></div></div>
+  </div>
+</div>
+
+<form id="quizForm">
+  <div class="q" data-q="1">
+    <h3>Question 1</h3>
+    <p class="stem">Which organ helps you breathe in air?</p>
+    <label class="opt"><input type="radio" name="q1" value="lungs"> lungs</label>
+    <label class="opt"><input type="radio" name="q1" value="kidney"> kidney</label>
+    <label class="opt"><input type="radio" name="q1" value="heart"> heart</label>
+    <label class="opt"><input type="radio" name="q1" value="liver"> liver</label>
+    <div class="explain" id="ex1"><strong>Your lungs take in air when you breathe, and pass oxygen into your blood.</strong></div>
+  </div>
+
+  <div class="q" data-q="2">
+    <h3>Question 2</h3>
+    <p class="stem">Which organ cleans your blood?</p>
+    <label class="opt"><input type="radio" name="q2" value="kidney"> kidney</label>
+    <label class="opt"><input type="radio" name="q2" value="lung"> lung</label>
+    <label class="opt"><input type="radio" name="q2" value="heart"> heart</label>
+    <label class="opt"><input type="radio" name="q2" value="stomach"> stomach</label>
+    <div class="explain" id="ex2"><strong>Your kidneys clean your blood. Each one has a million tiny filters.</strong></div>
+  </div>
+
+  <div class="q" data-q="3">
+    <h3>Question 3</h3>
+    <p class="stem">What protects your brain?</p>
+    <label class="opt"><input type="radio" name="q3" value="skull"> skull</label>
+    <label class="opt"><input type="radio" name="q3" value="ribs"> ribs</label>
+    <label class="opt"><input type="radio" name="q3" value="spine"> spine</label>
+    <label class="opt"><input type="radio" name="q3" value="skin"> skin</label>
+    <div class="explain" id="ex3"><strong>Your skull is a strong bone case that protects your brain.</strong></div>
+  </div>
+
+  <div class="q" data-q="4">
+    <h3>Question 4</h3>
+    <p class="stem">What protects your heart and lungs?</p>
+    <label class="opt"><input type="radio" name="q4" value="ribs"> ribs</label>
+    <label class="opt"><input type="radio" name="q4" value="skull"> skull</label>
+    <label class="opt"><input type="radio" name="q4" value="spine"> spine</label>
+    <label class="opt"><input type="radio" name="q4" value="hips"> hips</label>
+    <div class="explain" id="ex4"><strong>Your ribs make a cage around your chest that protects your heart and lungs.</strong></div>
+  </div>
+
+  <div class="q" data-q="5">
+    <h3>Question 5</h3>
+    <p class="stem">What is the tube that carries food from your mouth to your stomach?</p>
+    <label class="opt"><input type="radio" name="q5" value="oesophagus"> oesophagus</label>
+    <label class="opt"><input type="radio" name="q5" value="windpipe"> windpipe</label>
+    <label class="opt"><input type="radio" name="q5" value="intestine"> intestine</label>
+    <label class="opt"><input type="radio" name="q5" value="vein"> vein</label>
+    <div class="explain" id="ex5"><strong>Food travels down the oesophagus, the tube from your mouth to your stomach.</strong></div>
+  </div>
+
+  <div class="q typeq" data-q="6">
+    <h3>Question 6 - Type it!</h3>
+    <p class="stem">What is the tube that carries air to your lungs? Type it.</p>
+    <input type="text" name="q6" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the word">
+    <div class="explain" id="ex6"><strong>The windpipe carries air to your lungs. Food never goes down it.</strong></div>
+  </div>
+
+  <div class="q" data-q="7">
+    <h3>Question 7</h3>
+    <p class="stem">Your lungs take in air. What do they pass into your blood?</p>
+    <label class="opt"><input type="radio" name="q7" value="oxygen"> oxygen</label>
+    <label class="opt"><input type="radio" name="q7" value="carbon dioxide"> carbon dioxide</label>
+    <label class="opt"><input type="radio" name="q7" value="water"> water</label>
+    <label class="opt"><input type="radio" name="q7" value="food"> food</label>
+    <div class="explain" id="ex7"><strong>Your lungs pass oxygen into your blood, and your red blood cells carry it everywhere.</strong></div>
+  </div>
+
+  <div class="q" data-q="8">
+    <h3>Question 8</h3>
+    <p class="stem">How many kidneys do you have?</p>
+    <label class="opt"><input type="radio" name="q8" value="two"> two</label>
+    <label class="opt"><input type="radio" name="q8" value="one"> one</label>
+    <label class="opt"><input type="radio" name="q8" value="four"> four</label>
+    <label class="opt"><input type="radio" name="q8" value="three"> three</label>
+    <div class="explain" id="ex8"><strong>You have two kidneys, one on each side, and they clean your blood.</strong></div>
+  </div>
+
+  <div class="q" data-q="9">
+    <h3>Question 9</h3>
+    <p class="stem">If a crumb went down your windpipe by mistake, what would happen?</p>
+    <label class="opt"><input type="radio" name="q9" value="you would cough"> you would cough</label>
+    <label class="opt"><input type="radio" name="q9" value="you would digest it faster"> you would digest it faster</label>
+    <label class="opt"><input type="radio" name="q9" value="nothing at all"> nothing at all</label>
+    <label class="opt"><input type="radio" name="q9" value="your heart would stop"> your heart would stop</label>
+    <div class="explain" id="ex9"><strong>Your windpipe is for air only, so your body coughs to push food out of it.</strong></div>
+  </div>
+
+  <div class="q" data-q="10">
+    <h3>Question 10</h3>
+    <p class="stem">Which bones make a cage around your chest?</p>
+    <label class="opt"><input type="radio" name="q10" value="ribs"> ribs</label>
+    <label class="opt"><input type="radio" name="q10" value="skull"> skull</label>
+    <label class="opt"><input type="radio" name="q10" value="fingers"> fingers</label>
+    <label class="opt"><input type="radio" name="q10" value="toes"> toes</label>
+    <div class="explain" id="ex10"><strong>Your ribs curve around your chest like a cage, guarding your heart and lungs.</strong></div>
+  </div>
+
+  <div class="q typeq" data-q="11">
+    <h3>Question 11 - Type it!</h3>
+    <p class="stem">What cleans your blood? Type the word.</p>
+    <input type="text" name="q11" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the word">
+    <div class="explain" id="ex11"><strong>The answer is kidney. Each kidney has a million little filters that clean your blood.</strong></div>
+  </div>
+
+  <div class="q" data-q="12">
+    <h3>Question 12</h3>
+    <p class="stem">Which pair works together to get oxygen into your blood and around your body?</p>
+    <label class="opt"><input type="radio" name="q12" value="lungs and heart"> lungs and heart</label>
+    <label class="opt"><input type="radio" name="q12" value="kidneys and skull"> kidneys and skull</label>
+    <label class="opt"><input type="radio" name="q12" value="ribs and oesophagus"> ribs and oesophagus</label>
+    <label class="opt"><input type="radio" name="q12" value="brain and stomach"> brain and stomach</label>
+    <div class="explain" id="ex12"><strong>Your lungs pass oxygen into your blood, and your heart pumps that blood all around your body.</strong></div>
+  </div>
+
+  <div id="warn"></div>
+  <button type="button" id="submitBtn">Submit</button>
+</form>
+
+<div id="result">
+  <div id="score"></div>
+  <img id="resultImg" alt="Maya's quiz result">
+  <div id="shareBox">
+    <strong>Share your result with Daddy:</strong> Tap the button and pick Messages to send him the picture.
+    <button type="button" id="shareBtn">Share with Daddy</button>
+    <a id="downloadLink" href="#" download="maya-science-course-lesson-1.png">Save the picture</a>
+    <div id="shareNote"></div>
+  </div>
+  <div id="answersBox" style="margin-top:16px;border:1px solid #ddd;border-radius:10px;padding:12px;background:#f9f9f9;">
+    <strong>Your answers:</strong>
+    <div id="answersList" style="font-size:15px;line-height:1.6;"></div>
+  </div>
+</div>
+
+<p class="footer">Made for Maya. Good luck!</p>
+
+<script>
+var ANSWERS = { q1: "lungs", q2: "kidney", q3: "skull", q4: "ribs", q5: "oesophagus", q6: "windpipe", q7: "oxygen", q8: "two", q9: "you would cough", q10: "ribs", q11: "kidney", q12: "lungs and heart" };
+var TYPE_QS = { q6: true, q11: true };
+var KEY = "maya-science-course-lesson-1";
+var STEMS = { q1: "Which organ helps you breathe in air?", q2: "Which organ cleans your blood?", q3: "What protects your brain?", q4: "What protects your heart and lungs?", q5: "What is the tube that carries food from your mouth to your stomach?", q6: "What is the tube that carries air to your lungs? Type it.", q7: "Your lungs take in air. What do they pass into your blood?", q8: "How many kidneys do you have?", q9: "If a crumb went down your windpipe by mistake, what would happen?", q10: "Which bones make a cage around your chest?", q11: "What cleans your blood? Type the word.", q12: "Which pair works together to get oxygen into your blood and around your body?" };
+var submitted = false;
+try { submitted = localStorage.getItem(KEY) === "done"; } catch (e) {}
+var resultBlob = null;
+var answerTimes = {};
+
+function harrySay(msg) {
+  document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + msg;
+}
+function norm(s) {
+  return (s || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function speak(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-GB"; u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+document.querySelectorAll(".speak").forEach(function (b) {
+  b.addEventListener("click", function () { speak(b.getAttribute("data-say")); });
+});
+
+var PAIRS = [["lungs","breathe in air"],["kidney","cleans your blood"],["skull","protects your brain"],["ribs","protect heart and lungs"],["oesophagus","carries food to stomach"],["windpipe","carries air to lungs"],["heart","pumps blood"],["brain","controls everything"]];
+var matchState = { first: null, lock: false, done: 0 };
+(function buildMatch() {
+  var cards = [];
+  PAIRS.forEach(function (p, i) {
+    cards.push({ pair: i, text: p[0] });
+    cards.push({ pair: i, text: p[1] });
+  });
+  for (var i = cards.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+  }
+  var grid = document.getElementById("matchGrid");
+  cards.forEach(function (c) {
+    var d = document.createElement("div");
+    d.className = "card";
+    d.textContent = c.text;
+    d.addEventListener("click", function () { pickCard(d, c.pair); });
+    grid.appendChild(d);
+  });
+})();
+function pickCard(el, pair) {
+  if (matchState.lock || el.classList.contains("matched") || el.classList.contains("picked")) return;
+  el.classList.add("picked");
+  if (matchState.first === null) { matchState.first = { el: el, pair: pair }; return; }
+  var f = matchState.first; matchState.first = null;
+  if (f.pair === pair) {
+    f.el.classList.remove("picked"); f.el.classList.add("matched");
+    el.classList.remove("picked"); el.classList.add("matched");
+    matchState.done++;
+    harrySay("Brilliant! That is a match!");
+    if (matchState.done === 8) {
+      harrySay("Brilliant! You matched them all! Now for the quiz!");
+      document.getElementById("matchDone").style.display = "block";
+    }
+  } else {
+    matchState.lock = true;
+    harrySay("Not quite, try again!");
+    setTimeout(function () {
+      f.el.classList.remove("picked"); el.classList.remove("picked");
+      matchState.lock = false;
+    }, 700);
+  }
+}
+
+var TOTAL = 360;
+var timeLeft = TOTAL, timerId = null, startTime = null, timerRunning = false;
+function fmt(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+function fmtElapsed(sec) { var m = Math.floor(sec / 60), s = sec % 60; return m + " min " + s + " s"; }
+function tick() {
+  timeLeft--;
+  document.getElementById("timerText").textContent = "⏱ " + fmt(timeLeft) + " left";
+  document.getElementById("timerFill").style.width = (timeLeft / TOTAL * 100) + "%";
+  if (timeLeft <= 60) document.getElementById("timerText").style.color = "#D32F2F";
+  if (timeLeft <= 0) { clearInterval(timerId); timerRunning = false; doSubmit(true); }
+}
+document.getElementById("startBtn").addEventListener("click", function () {
+  document.getElementById("startBox").style.display = "none";
+  document.getElementById("quizForm").style.display = "block";
+  document.getElementById("timerWrap").style.display = "block";
+  startTime = Date.now();
+  timerRunning = true;
+  timerId = setInterval(tick, 1000);
+  harrySay("Go, Maya! You have 6 minutes!");
+  document.getElementById("quizForm").scrollIntoView({ behavior: "smooth" });
+});
+
+function isTypeQ(j) { return !!TYPE_QS["q" + j]; }
+function getAnswer(j) {
+  if (isTypeQ(j)) {
+    return document.querySelector('input[name="q' + j + '"]').value;
+  }
+  var c = document.querySelector('input[name="q' + j + '"]:checked');
+  return c ? c.value : null;
+}
+function isAnswered(j) {
+  var a = getAnswer(j);
+  return a !== null && String(a).trim() !== "";
+}
+function answeredCount() {
+  var n = 0;
+  for (var i = 1; i <= 12; i++) if (isAnswered(i)) n++;
+  return n;
+}
+function updateProgress() {
+  var n = answeredCount();
+  document.getElementById("progressFill").style.width = (n / 12 * 100) + "%";
+  document.getElementById("progressText").textContent = "Answered " + n + " of 12";
+}
+var HARRY_CHEER = [
+  "Great thinking, Maya! You've got this!",
+  "Brilliant! Keep going, Maya!",
+  "Nice one, Maya! Harry is cheering for you!"
+];
+var cheerIdx = 0;
+document.querySelectorAll('input[type="radio"]').forEach(function (r) {
+  r.addEventListener("change", function () {
+    if (!answerTimes[r.name]) answerTimes[r.name] = Date.now();
+    updateProgress();
+    harrySay(HARRY_CHEER[cheerIdx % HARRY_CHEER.length]);
+    cheerIdx++;
+  });
+});
+document.querySelectorAll('input[type="text"]').forEach(function (t) {
+  t.addEventListener("input", function () {
+    if (t.value.trim() !== "" && !answerTimes[t.name]) answerTimes[t.name] = Date.now();
+    updateProgress();
+  });
+});
+
+function lockForm() {
+  document.querySelectorAll('input[type="radio"]').forEach(function (r) { r.disabled = true; });
+  document.querySelectorAll('input[type="text"]').forEach(function (t) { t.disabled = true; });
+  document.getElementById("submitBtn").disabled = true;
+}
+
+function confetti(x) {
+  var cols = ["#FF6B9D", "#FFD93D", "#6BCBFF", "#B388FF", "#FF8A65", "#81C784"];
+  var seed = 12345;
+  function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  for (var i = 0; i < 44; i++) {
+    var left = rnd() < 0.5;
+    var cx = left ? 30 + rnd() * 150 : 900 + rnd() * 150;
+    var cy = 320 + rnd() * 680;
+    var r = 6 + rnd() * 8;
+    x.fillStyle = cols[i % cols.length];
+    x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill();
+  }
+}
+
+function makeResultImage(score, fb, timeText, done) {
+  var c = document.createElement("canvas");
+  c.width = 1080; c.height = 1080;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, 1080, 1080);
+  confetti(x);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 280);
+  x.fillStyle = "#ffffff"; x.textAlign = "center";
+  x.font = "bold 64px -apple-system, Arial, sans-serif";
+  x.fillText("Science Course - Lesson 1", 540, 100);
+  x.font = "44px -apple-system, Arial, sans-serif";
+  x.fillText("Mixed-Up Body Pairs", 540, 160);
+  x.font = "bold 44px -apple-system, Arial, sans-serif";
+  x.fillText("Well done, Maya!", 540, 225);
+  x.fillStyle = "#222222";
+  x.font = "bold 170px -apple-system, Arial, sans-serif";
+  x.fillText(score + " / 12", 540, 455);
+  x.fillStyle = "#4CAF50";
+  x.font = "bold 56px -apple-system, Arial, sans-serif";
+  x.fillText(score === 12 ? "All correct!" : score >= 10 ? "Nearly perfect!" : score >= 7 ? "Good effort!" : "Keep going, Maya!", 540, 585);
+  var stars = "";
+  for (var s = 0; s < 12; s++) stars += (s < score) ? "★" : "☆";
+  x.fillStyle = "#F9A825";
+  x.font = "52px -apple-system, Arial, sans-serif";
+  x.fillText(stars, 540, 680);
+  x.fillStyle = "#222222";
+  x.font = "bold 40px -apple-system, Arial, sans-serif";
+  x.fillText("Feedback for Daddy:", 540, 750);
+  for (var i = 0; i < fb.length; i++) {
+    var size = 36;
+    x.font = size + "px -apple-system, Arial, sans-serif";
+    x.fillStyle = "#555555";
+    while (x.measureText(fb[i]).width > 980 && size > 24) {
+      size -= 2;
+      x.font = size + "px -apple-system, Arial, sans-serif";
+    }
+    x.fillText(fb[i], 540, 795 + i * 42);
+  }
+  x.fillStyle = "#555555";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(timeText, 540, 935);
+  var d = new Date();
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  x.fillStyle = "#888888";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 985);
+  x.fillText("Made for Maya", 540, 1030);
+  c.toBlob(function (b) { done(b); }, "image/png");
+}
+
+function doSubmit(auto) {
+  if (timerRunning) { clearInterval(timerId); timerRunning = false; }
+  var missing = [];
+  for (var i = 1; i <= 12; i++) if (!isAnswered(i)) missing.push(i);
+  var warn = document.getElementById("warn");
+  if (missing.length > 0 && !auto) {
+    warn.style.display = "block";
+    warn.textContent = "You still need to answer question" + (missing.length > 1 ? "s " : " ") + missing.join(", ") + ". Tap Submit again when they are all answered.";
+    return;
+  }
+  warn.style.display = "none";
+  var score = 0, wrongDetails = [];
+  for (var j = 1; j <= 12; j++) {
+    var picked = getAnswer(j);
+    var ex = document.getElementById("ex" + j);
+    ex.style.display = "block";
+    var ok = isTypeQ(j) ? (norm(picked) === norm(ANSWERS["q" + j])) : (picked === ANSWERS["q" + j]);
+    if (ok) {
+      score++;
+    } else {
+      wrongDetails.push({ q: j, picked: (picked === null || String(picked).trim() === "") ? "(no answer)" : String(picked), correct: ANSWERS["q" + j] });
+      ex.classList.add("wrong");
+    }
+  }
+  var slowestQ = null, slowestSecs = 0;
+  if (startTime) {
+    var prev = startTime;
+    for (var k = 1; k <= 12; k++) {
+      var t = answerTimes["q" + k];
+      if (!t) continue;
+      var gap = Math.round((t - prev) / 1000);
+      if (gap > slowestSecs) { slowestSecs = gap; slowestQ = k; }
+      prev = t;
+    }
+  }
+  var fb = [];
+  if (wrongDetails.length === 0) {
+    fb.push("No questions missed!");
+  } else {
+    wrongDetails.slice(0, 2).forEach(function (w) {
+      fb.push("Q" + w.q + ": you said " + w.picked + ", answer is " + w.correct);
+    });
+    if (wrongDetails.length > 2) fb.push("and " + (wrongDetails.length - 2) + " more missed");
+  }
+  if (timeLeft > 180) fb.push("Very fast: " + fmt(timeLeft) + " left. Next quiz harder!");
+  if (slowestQ && slowestSecs >= 10) fb.push("Slowest: Q" + slowestQ + " (" + slowestSecs + " s)");
+  fb = fb.slice(0, 3);
+  var elapsed = startTime ? Math.round((Date.now() - startTime) / 1000) : TOTAL;
+  var timeText = auto ? "Time ran out! Finished in 6 min 0 s" : "Finished in " + fmtElapsed(elapsed);
+  document.getElementById("score").textContent = "You scored " + score + " out of 12! " + (auto ? "Time ran out!" : "Finished in " + fmtElapsed(elapsed) + ".");
+  var harryEnd = score === 12 ? "Brilliant, Maya! Full marks, twelve out of twelve!"
+    : score >= 10 ? "Well done, Maya! Great work under pressure!"
+    : score >= 7 ? "Good effort, Maya! You are learning fast!"
+    : "Don't worry, Maya. Every wizard has tough days. Try again!";
+  harrySay(harryEnd);
+  var answersLines = [];
+  answersLines.push("Maya's Science Course - Lesson 1 - answers");
+  answersLines.push("Score: " + score + " / 12");
+  answersLines.push("Time: " + timeText);
+  answersLines.push("");
+  for (var j2 = 1; j2 <= 12; j2++) {
+    var picked2 = getAnswer(j2);
+    var said2 = (picked2 === null || String(picked2).trim() === "") ? "(no answer)" : String(picked2);
+    var ok2 = isTypeQ(j2) ? (norm(picked2) === norm(ANSWERS["q" + j2])) : (picked2 === ANSWERS["q" + j2]);
+    var t2 = answerTimes["q" + j2];
+    var when2 = t2 && startTime ? " (answered at " + fmtElapsed(Math.round((t2 - startTime) / 1000)) + ")" : "";
+    answersLines.push("Q" + j2 + ": " + STEMS["q" + j2] + " = " + ANSWERS["q" + j2] + ". You said: " + said2 + ". " + (ok2 ? "Correct." : "Wrong.") + when2);
+  }
+  var answersText = answersLines.join("\n");
+  // Auto-save her answers to Daddy's record (fire-and-forget, never blocks the quiz).
+  var submitStamp = new Date().toISOString().replace(/[:.]/g, "-");
+  try {
+    var payload = { quiz: "science-course-lesson-1", stamp: submitStamp, date: new Date().toISOString(), score: score, time: timeText, answers: [] };
+    for (var a = 1; a <= 12; a++) {
+      var ans = getAnswer(a);
+      payload.answers.push({
+        q: a,
+        sum: STEMS["q" + a],
+        correct: ANSWERS["q" + a],
+        said: (ans === null || String(ans).trim() === "") ? "" : String(ans)
+      });
+    }
+    var answersBody = JSON.stringify(payload);
+    function postAnswers(attempt) {
+      fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: answersBody
+      }).then(function (res) {
+        if (!res.ok && attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      }).catch(function () {
+        if (attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      });
+    }
+    postAnswers(1);
+  } catch (e) {}
+  document.getElementById("answersList").innerHTML = answersLines.slice(4).map(function (l) {
+    return l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "<br>";
+  }).join("");
+  document.getElementById("result").style.display = "block";
+  lockForm();
+  try { localStorage.setItem(KEY, "done"); } catch (e) {}
+  makeResultImage(score, fb, timeText, function (blob) {
+    resultBlob = blob;
+    var url = URL.createObjectURL(blob);
+    var img = document.getElementById("resultImg");
+    img.src = url; img.style.display = "block";
+    document.getElementById("downloadLink").href = url;
+  });
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+}
+
+document.getElementById("submitBtn").addEventListener("click", function () { doSubmit(false); });
+
+document.getElementById("shareBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareNote");
+  if (!resultBlob) {
+    note.textContent = "The picture is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([resultBlob], "maya-science-course-lesson-1.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      document.getElementById("downloadLink").style.display = "block";
+      note.textContent = "Sharing did not open. Tap Save the picture instead.";
+    });
+  } else {
+    document.getElementById("downloadLink").style.display = "block";
+    note.textContent = "Sharing pictures is not available here. Tap Save the picture, then send it from Photos.";
+  }
+});
+
+updateProgress();
+if (submitted) {
+  lockForm();
+  document.getElementById("submitBtn").textContent = "Already submitted on this iPad";
+}
+
+</script>
+</body>
+</html>
