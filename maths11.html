@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's Maths Quiz 11 - Decimal multiplication and division</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; margin-top: 28px; }
+  .intro { background: #fff3cd; border: 1px solid #e6c87a; border-radius: 10px; padding: 12px; }
+  .harry { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
+  .harry svg { flex: 0 0 72px; }
+  .harry p { margin: 0; font-size: 17px; }
+  #progressWrap { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; }
+  #progressBar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+  #progressFill { height: 100%; width: 0%; background: #4caf50; }
+  #progressText { font-weight: bold; margin-top: 4px; }
+  #timerWrap { display: none; margin-top: 8px; }
+  #timerText { font-weight: bold; font-size: 20px; }
+  #timerBar { height: 10px; background: #eee; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+  #timerFill { height: 100%; width: 100%; background: #ff9800; }
+  .q { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .q h3 { margin: 0 0 10px 0; }
+  .q p.stem { font-size: 22px; font-weight: bold; }
+  input[type=text] { width: 100%; box-sizing: border-box; padding: 12px; font-size: 19px; border: 2px solid #4caf50; border-radius: 8px; }
+  .explain { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #e8f5e9; }
+  .explain.wrong { background: #fdecea; }
+  #submitBtn { display: block; width: 100%; padding: 16px; font-size: 20px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; }
+  #submitBtn:disabled { background: #aaa; }
+  #warn { display: none; background: #fff3cd; border: 1px solid #e6c87a; border-radius: 8px; padding: 12px; margin: 12px 0; font-weight: bold; }
+  #result { display: none; margin: 20px 0; }
+  #score { font-size: 26px; font-weight: bold; }
+  #resultImg { display: none; max-width: 100%; border-radius: 12px; border: 1px solid #ddd; margin-top: 12px; }
+  #shareBox { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #f9f9f9; }
+  #shareBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #downloadLink { display: none; text-align: center; padding: 12px; font-size: 16px; font-weight: bold; color: #2196f3; }
+  #shareNote { color: #888; font-size: 14px; }
+  .footer { color: #888; margin-top: 24px; }
+  #matchGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+  .card { background: #fff; border: 2px solid #4caf50; border-radius: 12px; padding: 14px 4px; text-align: center; font-size: 17px; font-weight: bold; cursor: pointer; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+  .card.picked { background: #bbdefb; border-color: #1976d2; }
+  .card.matched { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; }
+  #matchDone { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; margin: 12px 0; }
+  #startBox { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 16px; text-align: center; font-size: 18px; margin: 16px 0; }
+  #startBtn { display: block; width: 100%; margin-top: 12px; padding: 14px; font-size: 20px; font-weight: bold; background: #ff9800; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #quizForm { display: none; }
+  .step { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .step b { color: #0d47a1; }
+  .example { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .tip { background: #e8f5e9; border: 2px solid #4caf50; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .visual { background: #fff; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .strip { display: flex; gap: 3px; margin: 8px 0; }
+  .box { width: 26px; height: 26px; border: 2px solid #1976d2; border-radius: 4px; box-sizing: border-box; }
+  .box.on { background: #4caf50; border-color: #2e7d32; }
+  .grid100 { display: grid; grid-template-columns: repeat(10, 18px); gap: 2px; margin: 8px 0; }
+  .cell { width: 18px; height: 18px; border: 1px solid #90caf9; border-radius: 2px; box-sizing: border-box; }
+  .cell.on { background: #4caf50; border-color: #2e7d32; }
+  .bar { height: 26px; border-radius: 6px; margin: 6px 0; }
+  .bigans { font-size: 34px; font-weight: bold; color: #2e7d32; text-align: center; margin: 8px 0; }
+  .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
+  .worklabel { font-size: 15px; color: #555; margin-top: 10px; }
+  .workpad { display: block; width: 100%; height: 220px; background: #fff; border: 2px solid #90caf9; border-radius: 8px; margin-top: 6px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
+  .rubout { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #e3f2fd; cursor: pointer; }
+  .rubout:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  .padtools { display: flex; gap: 8px; margin-top: 6px; }
+  .padtool { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #fff; cursor: pointer; }
+  .padtool.on { background: #4caf50; color: #fff; border-color: #4caf50; }
+  .padtool:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  #shareWorkingBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareAnswersBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareWorkNote { color: #888; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>Maya's Maths Quiz 11</h1>
+<p>Decimal multiplication and division together. Questions 1 to 14 are multiplication, questions 15 to 28 are division. You have 35 minutes.</p>
+
+<div class="harry">
+  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+    <circle cx="36" cy="42" r="19" fill="#F5CBA7"/>
+    <path d="M16 32 Q12 10 36 8 Q60 10 56 32 L50 24 L46 30 L40 22 L36 29 L30 22 L24 30 L20 24 Z" fill="#222222"/>
+    <path d="M33 30 L37 30 L34 35 L38 35 L31 42 L33.5 36 L30 36 Z" fill="#FFD93D"/>
+    <circle cx="28" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <circle cx="44" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <line x1="35" y1="42" x2="37" y2="42" stroke="#222222" stroke-width="2"/>
+    <line x1="21" y1="42" x2="17" y2="41" stroke="#222222" stroke-width="2"/>
+    <line x1="51" y1="42" x2="55" y2="41" stroke="#222222" stroke-width="2"/>
+    <circle cx="28" cy="42" r="2" fill="#6D4C41"/>
+    <circle cx="44" cy="42" r="2" fill="#6D4C41"/>
+    <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
+    <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. Round two! Same two topics, new numbers. Multiplication: say the carry out loud. Division: once you make the divisor whole, the answer you get IS the answer, do not move its point again. You have 35 minutes. You can do it!</p>
+</div>
+
+<h2>Learn how to do it first</h2>
+<p>Take your time with this part. Read it slowly. There is no timer here.</p>
+
+<div style="background:#fdecea;border:2px solid #d32f2f;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>The big trap: do NOT count decimal places in division.</b><br>
+  In multiplication you count the places in both numbers and move the point left that many. In division you do NOT. Making the divisor whole already fixes the point.<br><br>
+  Example: 2.4 ÷ 0.6. Move both points right once: 24 ÷ 6 = <b>4</b>. That IS the answer, not 0.4.<br>
+  Example: 6.72 ÷ 0.21. Move both points right twice: 672 ÷ 21 = <b>32</b>. That IS the answer, not 0.0032.</div>
+
+<div class="example"><b>Multiplication: adding the carry in the multiply step.</b><br>
+  Work 57 × 8 slowly:<br><br>
+  7 × 8 = <b>56</b>. Write the 6, carry the <b>5</b>.<br>
+  5 × 8 = <b>40</b>. Now ADD the carry: 40 + 5 = <b>45</b>.<br>
+  So the answer is <b>456</b>. Say it out loud: "forty plus five is forty-five."<br>
+  If you forget the carry, the times tables were right but the answer is still wrong.</div>
+
+<div class="example"><b>Multiplication: adding the carry when you add the two lines.</b><br>
+  Work 46 × 28 slowly:<br><br>
+  46 × 8 = <b>368</b>.<br>
+  46 × 20 = <b>920</b>, zero on the right.<br>
+  Add them: 368 + 920 = <b>1288</b>.<br>
+  When you add, carry the tens too: 8 + 2 = <b>10</b>, write 0, carry 1.</div>
+
+<div class="visual">
+  <b>What is 0.7?</b><br>
+  Imagine a chocolate bar with 10 pieces. 0.7 means 7 of those 10 pieces.
+  <div class="strip" id="tenthsStrip"></div>
+  7 green pieces out of 10. That is 7 tenths, we write it 0.7.<br><br>
+  And 0.07 means 7 hundredths. Imagine a big square with 100 tiny pieces. Only 7 are green.
+  <div class="grid100" id="hundredthsGrid"></div>
+  7 green pieces out of 100. That is much smaller than 0.7!
+</div>
+
+<div class="step"><b>Step 1.</b> Hide the decimal points. Multiply the numbers like whole numbers.<br>Example: 54.6 × 0.7 becomes 546 × 7 = <b>3822</b>.</div>
+<div class="step"><b>Step 2.</b> Count the digits after the decimal point in BOTH numbers, and add them up.<br>54.6 has 1 digit after the point, 0.7 has 1. Together that is <b>2</b>.</div>
+<div class="step"><b>Step 3.</b> Put the decimal point in your answer so it has that many digits after it.<br>3822 with 2 digits after the point is <b>38.22</b>. Done!</div>
+
+<p><button type="button" class="speak" data-say="Step 1. Hide the decimal points. Multiply the numbers like whole numbers. Step 2. Count the digits after the decimal point in both numbers, and add them up. Step 3. Put the decimal point in your answer so it has that many digits after it.">&#128266; Hear the 3 steps</button></p>
+
+<div class="example"><b>Division Rule 1: divide by 10 or 100, move the point LEFT.</b><br>
+  Dividing makes things smaller, so the point moves left.<br><br>
+  2.65 ÷ 10 = <b>0.265</b>. The point jumps left once.<br>
+  2.65 ÷ 100 = <b>0.0265</b>. The point jumps left twice.<br>
+  Count the zeros, move the point that many places left.</div>
+
+<div class="example"><b>Division Rule 2: decimal divided by a whole number.</b><br>
+  Hide the point, divide, put the point back in the same place.<br><br>
+  3.6 ÷ 3: hide the point, 36 ÷ 3 = <b>12</b>, put the point back, <b>1.2</b>.<br>
+  Money check: 3.60 shared by 3 is 1.20 each.</div>
+
+<div class="example"><b>Division Rule 3: decimal divided by a decimal.</b><br>
+  Make the divisor (the number AFTER the ÷ sign) whole first. Move its point right, and move the other number's point right the SAME number of places. Then divide.<br><br>
+  6.72 ÷ 0.21: move both points right twice, 672 ÷ 21 = <b>32</b>.<br>
+  7.56 ÷ 0.63: move both points right twice, 756 ÷ 63 = <b>12</b>.</div>
+
+<div class="tip"><b>Show your working!</b><br>
+  Under each question there is a white box. Write your working in it with your pen or your finger, just like on paper. Harry and Daddy want to see how you did each sum, so we can help with the exact step that went wrong.</div>
+
+<div class="tip"><b>Quick check before you finish: estimate!</b><br>
+  Round the numbers first. 23.4 × 0.6 is about 23 × 0.6, which is about 14.<br>
+  So 14.04 makes sense. If your answer is much bigger than your estimate, check the decimal point.<br>
+  For division too: 7.56 ÷ 0.63 is about 8 ÷ 0.5, about 16, so 12 makes sense and 0.12 does not.</div>
+
+<h2>Warm-up: match the pairs</h2>
+<p>Tap a sum, then tap its answer. Match all eight pairs! This part has no timer.</p>
+<div id="matchGrid"></div>
+<div id="matchDone">Brilliant! You matched them all! Now for the quiz.</div>
+
+<div id="startBox">
+  <strong>Ready?</strong><br>
+  You have <strong>35 minutes</strong> for all 28 questions. Take your time, write your working in the boxes, and remember the carry and the point rules!
+  <button type="button" id="startBtn">Start the quiz!</button>
+</div>
+
+<div id="progressWrap">
+  <div id="progressBar"><div id="progressFill"></div></div>
+  <div id="progressText">Answered 0 of 28</div>
+  <div id="timerWrap">
+    <div id="timerText">&#9201; 35:00 left</div>
+    <div id="timerBar"><div id="timerFill"></div></div>
+  </div>
+</div>
+
+<form id="quizForm">
+  <div class="q typeq" data-q="1">
+    <h3>Question 1 - Multiplication</h3>
+    <p class="stem">0.58 × 6 = ?</p>
+    <input type="text" name="q1" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad1" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad1" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad1" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad1">Clear all</button>
+    </div>
+    <div class="explain" id="ex1"><strong>3.48.</strong> Digits: 58 × 6 = 348. Say the carry: 8 × 6 = 48, carry 4. 5 × 6 = 30, 30 + 4 = 34. Decimal places: 2, so the answer is 3.48.</div>
+  </div>
+
+  <div class="q typeq" data-q="2">
+    <h3>Question 2 - Multiplication</h3>
+    <p class="stem">0.79 × 7 = ?</p>
+    <input type="text" name="q2" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad2" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad2" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad2" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad2">Clear all</button>
+    </div>
+    <div class="explain" id="ex2"><strong>5.53.</strong> Digits: 79 × 7 = 553. Say the carry: 9 × 7 = 63, carry 6. 7 × 7 = 49, 49 + 6 = 55. Decimal places: 2, so the answer is 5.53.</div>
+  </div>
+
+  <div class="q typeq" data-q="3">
+    <h3>Question 3 - Multiplication</h3>
+    <p class="stem">0.67 × 8 = ?</p>
+    <input type="text" name="q3" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad3" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad3" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad3" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad3">Clear all</button>
+    </div>
+    <div class="explain" id="ex3"><strong>5.36.</strong> Digits: 67 × 8 = 536. Say the carry: 7 × 8 = 56, carry 5. 6 × 8 = 48, 48 + 5 = 53. Decimal places: 2, so the answer is 5.36.</div>
+  </div>
+
+  <div class="q typeq" data-q="4">
+    <h3>Question 4 - Multiplication</h3>
+    <p class="stem">0.49 × 0.9 = ?</p>
+    <input type="text" name="q4" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad4" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad4" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad4" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad4">Clear all</button>
+    </div>
+    <div class="explain" id="ex4"><strong>0.441.</strong> Digits: 49 × 9 = 441. Say the carry: 9 × 9 = 81, carry 8. 4 × 9 = 36, 36 + 8 = 44. Decimal places: 2 + 1 = 3, so the answer is 0.441.</div>
+  </div>
+
+  <div class="q typeq" data-q="5">
+    <h3>Question 5 - Multiplication</h3>
+    <p class="stem">0.86 × 0.4 = ?</p>
+    <input type="text" name="q5" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad5" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad5" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad5" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad5">Clear all</button>
+    </div>
+    <div class="explain" id="ex5"><strong>0.344.</strong> Digits: 86 × 4 = 344. Say the carry: 6 × 4 = 24, carry 2. 8 × 4 = 32, 32 + 2 = 34. Decimal places: 2 + 1 = 3, so the answer is 0.344.</div>
+  </div>
+
+  <div class="q typeq" data-q="6">
+    <h3>Question 6 - Multiplication</h3>
+    <p class="stem">0.95 × 0.6 = ?</p>
+    <input type="text" name="q6" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad6" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad6" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad6" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad6">Clear all</button>
+    </div>
+    <div class="explain" id="ex6"><strong>0.57.</strong> Digits: 95 × 6 = 570. Say the carry: 5 × 6 = 30, carry 3. 9 × 6 = 54, 54 + 3 = 57. Decimal places: 2 + 1 = 3, so the answer is 0.570, which is 0.57.</div>
+  </div>
+
+  <div class="q typeq" data-q="7">
+    <h3>Question 7 - Multiplication</h3>
+    <p class="stem">0.74 × 0.5 = ?</p>
+    <input type="text" name="q7" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad7" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad7" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad7" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad7">Clear all</button>
+    </div>
+    <div class="explain" id="ex7"><strong>0.37.</strong> Digits: 74 × 5 = 370. Say the carry: 4 × 5 = 20, carry 2. 7 × 5 = 35, 35 + 2 = 37. Decimal places: 2 + 1 = 3, so the answer is 0.370, which is 0.37.</div>
+  </div>
+
+  <div class="q typeq" data-q="8">
+    <h3>Question 8 - Multiplication</h3>
+    <p class="stem">0.56 × 0.38 = ?</p>
+    <input type="text" name="q8" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad8" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad8" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad8" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad8">Clear all</button>
+    </div>
+    <div class="explain" id="ex8"><strong>0.2128.</strong> 56 × 8 = 448, 56 × 30 = 1680, zero on the right. Add them: 448 + 1680 = 2128. Decimal places: 2 + 2 = 4, so the answer is 0.2128.</div>
+  </div>
+
+  <div class="q typeq" data-q="9">
+    <h3>Question 9 - Multiplication</h3>
+    <p class="stem">0.67 × 0.46 = ?</p>
+    <input type="text" name="q9" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad9" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad9" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad9" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad9">Clear all</button>
+    </div>
+    <div class="explain" id="ex9"><strong>0.3082.</strong> 67 × 6 = 402, 67 × 40 = 2680, zero on the right. Add them: 402 + 2680 = 3082. Decimal places: 2 + 2 = 4, so the answer is 0.3082.</div>
+  </div>
+
+  <div class="q typeq" data-q="10">
+    <h3>Question 10 - Multiplication</h3>
+    <p class="stem">0.78 × 0.35 = ?</p>
+    <input type="text" name="q10" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad10" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad10" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad10" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad10">Clear all</button>
+    </div>
+    <div class="explain" id="ex10"><strong>0.273.</strong> 78 × 5 = 390, 78 × 30 = 2340, zero on the right. Add them: 390 + 2340 = 2730. Decimal places: 2 + 2 = 4, so the answer is 0.2730, which is 0.273.</div>
+  </div>
+
+  <div class="q typeq" data-q="11">
+    <h3>Question 11 - Multiplication</h3>
+    <p class="stem">0.83 × 0.29 = ?</p>
+    <input type="text" name="q11" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad11" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad11" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad11" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad11">Clear all</button>
+    </div>
+    <div class="explain" id="ex11"><strong>0.2407.</strong> 83 × 9 = 747, 83 × 20 = 1660, zero on the right. Add them: 747 + 1660 = 2407. Decimal places: 2 + 2 = 4, so the answer is 0.2407.</div>
+  </div>
+
+  <div class="q typeq" data-q="12">
+    <h3>Question 12 - Multiplication</h3>
+    <p class="stem">0.94 × 0.47 = ?</p>
+    <input type="text" name="q12" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad12" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad12" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad12" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad12">Clear all</button>
+    </div>
+    <div class="explain" id="ex12"><strong>0.4418.</strong> 94 × 7 = 658, 94 × 40 = 3760, zero on the right. Add them: 658 + 3760 = 4418. Decimal places: 2 + 2 = 4, so the answer is 0.4418.</div>
+  </div>
+
+  <div class="q typeq" data-q="13">
+    <h3>Question 13 - Multiplication</h3>
+    <p class="stem">0.69 × 0.58 = ?</p>
+    <input type="text" name="q13" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad13" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad13" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad13" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad13">Clear all</button>
+    </div>
+    <div class="explain" id="ex13"><strong>0.4002.</strong> 69 × 8 = 552, 69 × 50 = 3450, zero on the right. Add them: 552 + 3450 = 4002. Decimal places: 2 + 2 = 4, so the answer is 0.4002.</div>
+  </div>
+
+  <div class="q typeq" data-q="14">
+    <h3>Question 14 - Multiplication</h3>
+    <p class="stem">0.81 × 0.36 = ?</p>
+    <input type="text" name="q14" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad14" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad14" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad14" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad14">Clear all</button>
+    </div>
+    <div class="explain" id="ex14"><strong>0.2916.</strong> 81 × 6 = 486, 81 × 30 = 2430, zero on the right. Add them: 486 + 2430 = 2916. Decimal places: 2 + 2 = 4, so the answer is 0.2916.</div>
+  </div>
+
+  <div class="q typeq" data-q="15">
+    <h3>Question 15 - Division</h3>
+    <p class="stem">4.8 ÷ 4 = ?</p>
+    <input type="text" name="q15" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad15" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad15" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad15" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad15">Clear all</button>
+    </div>
+    <div class="explain" id="ex15"><strong>1.2.</strong> Hide the point: 48 ÷ 4 = 12. Put the point back: 1.2.</div>
+  </div>
+
+  <div class="q typeq" data-q="16">
+    <h3>Question 16 - Division</h3>
+    <p class="stem">9.6 ÷ 6 = ?</p>
+    <input type="text" name="q16" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad16" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad16" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad16" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad16">Clear all</button>
+    </div>
+    <div class="explain" id="ex16"><strong>1.6.</strong> Hide the point: 96 ÷ 6 = 16. Put the point back: 1.6.</div>
+  </div>
+
+  <div class="q typeq" data-q="17">
+    <h3>Question 17 - Division</h3>
+    <p class="stem">8.5 ÷ 5 = ?</p>
+    <input type="text" name="q17" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad17" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad17" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad17" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad17">Clear all</button>
+    </div>
+    <div class="explain" id="ex17"><strong>1.7.</strong> Hide the point: 85 ÷ 5 = 17. Put the point back: 1.7.</div>
+  </div>
+
+  <div class="q typeq" data-q="18">
+    <h3>Question 18 - Division</h3>
+    <p class="stem">3.45 ÷ 10 = ?</p>
+    <input type="text" name="q18" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad18" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad18" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad18" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad18">Clear all</button>
+    </div>
+    <div class="explain" id="ex18"><strong>0.345.</strong> Divide by 10, move the point LEFT once: 3.45 becomes 0.345. Do NOT take the point away.</div>
+  </div>
+
+  <div class="q typeq" data-q="19">
+    <h3>Question 19 - Division</h3>
+    <p class="stem">7.6 ÷ 100 = ?</p>
+    <input type="text" name="q19" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad19" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad19" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad19" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad19">Clear all</button>
+    </div>
+    <div class="explain" id="ex19"><strong>0.076.</strong> Divide by 100, move the point LEFT twice: 7.6 becomes 0.076.</div>
+  </div>
+
+  <div class="q typeq" data-q="20">
+    <h3>Question 20 - Division</h3>
+    <p class="stem">4.8 ÷ 40 = ?</p>
+    <input type="text" name="q20" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad20" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad20" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad20" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad20">Clear all</button>
+    </div>
+    <div class="explain" id="ex20"><strong>0.12.</strong> First 4.8 ÷ 4 = 1.2, then ÷ 10, move the point left once: 0.12.</div>
+  </div>
+
+  <div class="q typeq" data-q="21">
+    <h3>Question 21 - Division</h3>
+    <p class="stem">4.8 ÷ 400 = ?</p>
+    <input type="text" name="q21" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad21" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad21" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad21" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad21">Clear all</button>
+    </div>
+    <div class="explain" id="ex21"><strong>0.012.</strong> First 4.8 ÷ 4 = 1.2, then ÷ 100, move the point left twice: 0.012.</div>
+  </div>
+
+  <div class="q typeq" data-q="22">
+    <h3>Question 22 - Division</h3>
+    <p class="stem">3.6 ÷ 0.9 = ?</p>
+    <input type="text" name="q22" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad22" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad22" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad22" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad22">Clear all</button>
+    </div>
+    <div class="explain" id="ex22"><strong>4.</strong> Make the divisor whole: move both points right once, 36 ÷ 9 = 4. That IS the answer, do not move its point again.</div>
+  </div>
+
+  <div class="q typeq" data-q="23">
+    <h3>Question 23 - Division</h3>
+    <p class="stem">7.2 ÷ 0.8 = ?</p>
+    <input type="text" name="q23" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad23" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad23" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad23" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad23">Clear all</button>
+    </div>
+    <div class="explain" id="ex23"><strong>9.</strong> Make the divisor whole: move both points right once, 72 ÷ 8 = 9. That IS the answer.</div>
+  </div>
+
+  <div class="q typeq" data-q="24">
+    <h3>Question 24 - Division</h3>
+    <p class="stem">9.24 ÷ 2.2 = ?</p>
+    <input type="text" name="q24" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad24" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad24" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad24" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad24">Clear all</button>
+    </div>
+    <div class="explain" id="ex24"><strong>4.2.</strong> Make the divisor whole: move both points right once, 92.4 ÷ 22 = 4.2. That IS the answer.</div>
+  </div>
+
+  <div class="q typeq" data-q="25">
+    <h3>Question 25 - Division</h3>
+    <p class="stem">4.55 ÷ 1.3 = ?</p>
+    <input type="text" name="q25" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad25" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad25" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad25" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad25">Clear all</button>
+    </div>
+    <div class="explain" id="ex25"><strong>3.5.</strong> Make the divisor whole: move both points right once, 45.5 ÷ 13 = 3.5. That IS the answer.</div>
+  </div>
+
+  <div class="q typeq" data-q="26">
+    <h3>Question 26 - Division</h3>
+    <p class="stem">8.96 ÷ 0.28 = ?</p>
+    <input type="text" name="q26" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad26" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad26" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad26" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad26">Clear all</button>
+    </div>
+    <div class="explain" id="ex26"><strong>32.</strong> Make the divisor whole: move both points right twice, 896 ÷ 28 = 32. Not 0.0032.</div>
+  </div>
+
+  <div class="q typeq" data-q="27">
+    <h3>Question 27 - Division</h3>
+    <p class="stem">9.18 ÷ 0.54 = ?</p>
+    <input type="text" name="q27" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad27" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad27" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad27" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad27">Clear all</button>
+    </div>
+    <div class="explain" id="ex27"><strong>17.</strong> Make the divisor whole: move both points right twice, 918 ÷ 54 = 17. Not 0.0017.</div>
+  </div>
+
+  <div class="q typeq" data-q="28">
+    <h3>Question 28 - Division</h3>
+    <p class="stem">2.24 ÷ 0.16 = ?</p>
+    <input type="text" name="q28" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad28" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad28" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad28" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad28">Clear all</button>
+    </div>
+    <div class="explain" id="ex28"><strong>14.</strong> Make the divisor whole: move both points right twice, 224 ÷ 16 = 14. Not 0.0014.</div>
+  </div>
+
+  <div id="warn"></div>
+  <button type="button" id="submitBtn">Submit</button>
+</form>
+
+<div id="result">
+  <div id="score"></div>
+  <img id="resultImg" alt="Maya's quiz result">
+  <div id="shareBox">
+    <strong>Share your result with Daddy:</strong> Tap the button and pick Messages to send him the picture.
+    <button type="button" id="shareBtn">Share with Daddy</button>
+    <a id="downloadLink" href="#" download="maya-maths-quiz-11.png">Save the picture</a>
+    <div id="shareNote"></div>
+  </div>
+  <div id="shareBox">
+    <strong>Share your working with Daddy:</strong> Tap the button to send him the four pictures of your working, so he can see how you did each sum.
+    <button type="button" id="shareWorkingBtn">Share your working</button>
+    <a id="downloadWork1" href="#" download="maya-maths-quiz-11-working-1.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 1 (questions 1 to 7)</a>
+    <a id="downloadWork2" href="#" download="maya-maths-quiz-11-working-2.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 2 (questions 8 to 14)</a>
+    <a id="downloadWork3" href="#" download="maya-maths-quiz-11-working-3.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 3 (questions 15 to 21)</a>
+    <a id="downloadWork4" href="#" download="maya-maths-quiz-11-working-4.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 4 (questions 22 to 28)</a>
+    <div id="shareWorkNote"></div>
+    <div id="workSaveNote" style="font-size:15px;color:#555;margin-top:6px;"></div>
+  </div>
+  <div id="shareBox">
+    <strong>Share your answers with Daddy:</strong> Tap the button to send him a list of all your answers, so he can see every sum and help you with the ones to practise.
+    <button type="button" id="shareAnswersBtn">Share your answers</button>
+    <a id="downloadAnswers" href="#" download="maya-maths-quiz-11-answers.txt" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save the answers list</a>
+    <div id="shareAnswersNote"></div>
+    <div id="answersList" style="text-align:left;font-size:16px;line-height:1.6;margin-top:10px;"></div>
+  </div>
+</div>
+
+<p class="footer">Made for Maya. Good luck!</p>
+
+<script>
+var ANSWERS = { q1: "3.48", q2: "5.53", q3: "5.36", q4: "0.441", q5: "0.344", q6: "0.57", q7: "0.37", q8: "0.2128", q9: "0.3082", q10: "0.273", q11: "0.2407", q12: "0.4418", q13: "0.4002", q14: "0.2916", q15: "1.2", q16: "1.6", q17: "1.7", q18: "0.345", q19: "0.076", q20: "0.12", q21: "0.012", q22: "4", q23: "9", q24: "4.2", q25: "3.5", q26: "32", q27: "17", q28: "14" };
+var TYPE_QS = { q1: true, q2: true, q3: true, q4: true, q5: true, q6: true, q7: true, q8: true, q9: true, q10: true, q11: true, q12: true, q13: true, q14: true, q15: true, q16: true, q17: true, q18: true, q19: true, q20: true, q21: true, q22: true, q23: true, q24: true, q25: true, q26: true, q27: true, q28: true };
+var KEY = "maya-maths-quiz-11";
+var submitted = false;
+try { submitted = localStorage.getItem(KEY) === "done"; } catch (e) {}
+var resultBlob = null;
+var STEMS = { q1: "0.58 × 6", q2: "0.79 × 7", q3: "0.67 × 8", q4: "0.49 × 0.9", q5: "0.86 × 0.4", q6: "0.95 × 0.6", q7: "0.74 × 0.5", q8: "0.56 × 0.38", q9: "0.67 × 0.46", q10: "0.78 × 0.35", q11: "0.83 × 0.29", q12: "0.94 × 0.47", q13: "0.69 × 0.58", q14: "0.81 × 0.36", q15: "4.8 ÷ 4", q16: "9.6 ÷ 6", q17: "8.5 ÷ 5", q18: "3.45 ÷ 10", q19: "7.6 ÷ 100", q20: "4.8 ÷ 40", q21: "4.8 ÷ 400", q22: "3.6 ÷ 0.9", q23: "7.2 ÷ 0.8", q24: "9.24 ÷ 2.2", q25: "4.55 ÷ 1.3", q26: "8.96 ÷ 0.28", q27: "9.18 ÷ 0.54", q28: "2.24 ÷ 0.16" };
+var padDrawn = {};
+var padsLocked = false;
+var answerTimes = {};
+
+function harrySay(msg) {
+  document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + msg;
+}
+
+function speak(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-GB"; u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+document.querySelectorAll(".speak").forEach(function (b) {
+  b.addEventListener("click", function () { speak(b.getAttribute("data-say")); });
+});
+
+(function buildVisuals() {
+  var strip = document.getElementById("tenthsStrip");
+  for (var i = 0; i < 10; i++) {
+    var b = document.createElement("div");
+    b.className = "box" + (i < 7 ? " on" : "");
+    strip.appendChild(b);
+  }
+  var grid = document.getElementById("hundredthsGrid");
+  for (var j = 0; j < 100; j++) {
+    var c = document.createElement("div");
+    c.className = "cell" + (j < 7 ? " on" : "");
+    grid.appendChild(c);
+  }
+})();
+
+var PAIRS = [["0.58 × 6", "3.48"], ["0.79 × 7", "5.53"], ["0.67 × 8", "5.36"], ["0.49 × 0.9", "0.441"], ["4.8 ÷ 4", "1.2"], ["3.45 ÷ 10", "0.345"], ["3.6 ÷ 0.9", "4"], ["8.96 ÷ 0.28", "32"]];
+var matchState = { first: null, lock: false, done: 0 };
+(function buildMatch() {
+  var cards = [];
+  PAIRS.forEach(function (p, i) {
+    cards.push({ pair: i, text: p[0] });
+    cards.push({ pair: i, text: p[1] });
+  });
+  for (var i = cards.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+  }
+  var grid = document.getElementById("matchGrid");
+  cards.forEach(function (c) {
+    var d = document.createElement("div");
+    d.className = "card";
+    d.textContent = c.text;
+    d.addEventListener("click", function () { pickCard(d, c.pair); });
+    grid.appendChild(d);
+  });
+})();
+function pickCard(el, pair) {
+  if (matchState.lock || el.classList.contains("matched") || el.classList.contains("picked")) return;
+  el.classList.add("picked");
+  if (matchState.first === null) { matchState.first = { el: el, pair: pair }; return; }
+  var f = matchState.first; matchState.first = null;
+  if (f.pair === pair) {
+    f.el.classList.remove("picked"); f.el.classList.add("matched");
+    el.classList.remove("picked"); el.classList.add("matched");
+    matchState.done++;
+    harrySay("Brilliant! That is a match!");
+    if (matchState.done === 8) {
+      harrySay("Brilliant! You matched them all! Now for the quiz!");
+      document.getElementById("matchDone").style.display = "block";
+    }
+  } else {
+    matchState.lock = true;
+    harrySay("Not quite, try again!");
+    setTimeout(function () {
+      f.el.classList.remove("picked"); el.classList.remove("picked");
+      matchState.lock = false;
+    }, 700);
+  }
+}
+
+var TOTAL = 2100;
+var timeLeft = TOTAL, timerId = null, startTime = null, timerRunning = false;
+function fmt(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+function fmtElapsed(sec) { var m = Math.floor(sec / 60), s = sec % 60; return m + " min " + s + " s"; }
+function tick() {
+  timeLeft--;
+  document.getElementById("timerText").textContent = "⏱ " + fmt(timeLeft) + " left";
+  document.getElementById("timerFill").style.width = (timeLeft / TOTAL * 100) + "%";
+  if (timeLeft <= 60) document.getElementById("timerText").style.color = "#D32F2F";
+  if (timeLeft <= 0) { clearInterval(timerId); timerRunning = false; doSubmit(true); }
+}
+document.getElementById("startBtn").addEventListener("click", function () {
+  document.getElementById("startBox").style.display = "none";
+  document.getElementById("quizForm").style.display = "block";
+  document.getElementById("timerWrap").style.display = "block";
+  startTime = Date.now();
+  timerRunning = true;
+  timerId = setInterval(tick, 1000);
+  harrySay("Go, Maya! You have 35 minutes!");
+  document.getElementById("quizForm").scrollIntoView();
+});
+
+function isTypeQ(j) { return !!TYPE_QS["q" + j]; }
+function getAnswer(j) {
+  return document.querySelector('input[name="q' + j + '"]').value;
+}
+function isAnswered(j) {
+  var a = getAnswer(j);
+  return a !== null && String(a).trim() !== "";
+}
+function answeredCount() {
+  var n = 0;
+  for (var i = 1; i <= 28; i++) if (isAnswered(i)) n++;
+  return n;
+}
+function updateProgress() {
+  var n = answeredCount();
+  document.getElementById("progressFill").style.width = (n / 28 * 100) + "%";
+  document.getElementById("progressText").textContent = "Answered " + n + " of 28";
+}
+var HARRY_CHEER = [
+  "Great thinking, Maya! You've got this!",
+  "Brilliant! Keep going, Maya!",
+  "Nice one, Maya! Harry is cheering for you!"
+];
+var cheerIdx = 0;
+document.querySelectorAll('input[type="text"]').forEach(function (t) {
+  t.addEventListener("input", function () {
+    if (t.value.trim() !== "" && !answerTimes[t.name]) answerTimes[t.name] = Date.now();
+    
+    updateProgress();
+    if (t.value.trim() !== "") {
+      harrySay(HARRY_CHEER[cheerIdx % HARRY_CHEER.length]);
+      cheerIdx++;
+    }
+  });
+});
+
+// ---- working pads: draw with pen or finger ----
+document.querySelectorAll(".workpad").forEach(function (cv) {
+  var ctx = cv.getContext("2d");
+  ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#222222";
+  var drawing = false, last = null, tool = "pen";
+  function pos(e) {
+    var r = cv.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (cv.width / r.width), y: (e.clientY - r.top) * (cv.height / r.height) };
+  }
+  function touchPos(t) {
+    var r = cv.getBoundingClientRect();
+    return { x: (t.clientX - r.left) * (cv.width / r.width), y: (t.clientY - r.top) * (cv.height / r.height) };
+  }
+  function applyTool() {
+    if (tool === "rubber") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 40;
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "#222222";
+      ctx.fillStyle = "#222222";
+      ctx.lineWidth = 4;
+    }
+  }
+  function startAt(p) {
+    drawing = true; last = p;
+    applyTool();
+    ctx.beginPath(); ctx.arc(p.x, p.y, tool === "rubber" ? 20 : 3, 0, Math.PI * 2); ctx.fill();
+    padDrawn[cv.id] = true;
+  }
+  function moveTo(p) {
+    applyTool();
+    ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+    last = p;
+    padDrawn[cv.id] = true;
+  }
+  function endDraw() { drawing = false; }
+  // Pointer events: mouse and pen.
+  cv.addEventListener("pointerdown", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(pos(e));
+    try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  cv.addEventListener("pointermove", function (e) {
+    if (padsLocked) return;
+    // Recover if the pointerdown was missed: draw whenever the button is held.
+    if (!drawing) {
+      if (e.buttons & 1) startAt(pos(e));
+      return;
+    }
+    e.preventDefault();
+    moveTo(pos(e));
+  });
+  cv.addEventListener("pointerup", endDraw);
+  cv.addEventListener("pointercancel", endDraw);
+  // Mouse events: a second, independent path for desktop dragging.
+  cv.addEventListener("mousedown", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(pos(e));
+  });
+  cv.addEventListener("mousemove", function (e) {
+    if (padsLocked) return;
+    if (!drawing) {
+      if (e.buttons & 1) startAt(pos(e));
+      return;
+    }
+    moveTo(pos(e));
+  });
+  cv.addEventListener("mouseup", endDraw);
+  cv.addEventListener("mouseleave", endDraw);
+  // Touch events: the reliable path on iPad, where pointer events alone
+  // can swallow the first touch until a text field has been used.
+  cv.addEventListener("touchstart", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(touchPos(e.touches[0]));
+  }, { passive: false });
+  cv.addEventListener("touchmove", function (e) {
+    e.preventDefault();
+    if (!drawing) { startAt(touchPos(e.touches[0])); return; }
+    moveTo(touchPos(e.touches[0]));
+  }, { passive: false });
+  cv.addEventListener("touchend", endDraw);
+  cv.addEventListener("touchcancel", endDraw);
+  // Pen / rubber switch for this box.
+  document.querySelectorAll('.padtool[data-pad="' + cv.id + '"]').forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      if (padsLocked) return;
+      tool = btn.getAttribute("data-tool");
+      document.querySelectorAll('.padtool[data-pad="' + cv.id + '"]').forEach(function (b) {
+        b.classList.toggle("on", b === btn);
+      });
+    });
+  });
+});
+document.querySelectorAll(".rubout").forEach(function (b) {
+  b.addEventListener("click", function () {
+    if (padsLocked) return;
+    var cv = document.getElementById(b.getAttribute("data-pad"));
+    cv.getContext("2d").clearRect(0, 0, cv.width, cv.height);
+    padDrawn[cv.id] = false;
+  });
+});
+
+// ---- working sheets: four pictures, questions 1-7, 8-14, 15-21 and 22-28 ----
+var workingBlobs = [null, null, null, null];
+var answersText = "";
+function makeWorkingSheet(from, to, done) {
+  var c = document.createElement("canvas");
+  c.width = 1080; c.height = 170 + (to - from) * 400;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, c.width, c.height);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 120);
+  x.fillStyle = "#ffffff"; x.textAlign = "center";
+  x.font = "bold 48px -apple-system, Arial, sans-serif";
+  x.fillText("Maya's working - Maths Quiz 11", 540, 78);
+  x.textAlign = "left";
+  var y = 150;
+  for (var i = from; i < to; i++) {
+    var n = i + 1;
+    x.fillStyle = "#222222";
+    x.font = "bold 34px -apple-system, Arial, sans-serif";
+    x.fillText("Q" + n + ": " + STEMS["q" + n] + " = " + ANSWERS["q" + n], 40, y);
+    var said = getAnswer(n);
+    x.font = "28px -apple-system, Arial, sans-serif";
+    x.fillStyle = "#555555";
+    x.fillText("You said: " + (said === null || String(said).trim() === "" ? "(no answer)" : String(said)), 40, y + 40);
+    y += 60;
+    x.strokeStyle = "#90CAF9"; x.lineWidth = 2;
+    x.strokeRect(40, y, 1000, 300);
+    if (padDrawn["pad" + n]) {
+      x.drawImage(document.getElementById("pad" + n), 40, y, 1000, 300);
+    } else {
+      x.fillStyle = "#999999";
+      x.font = "28px -apple-system, Arial, sans-serif";
+      x.fillText("No working written", 60, y + 150);
+    }
+    y += 340;
+  }
+  c.toBlob(function (b) { done(b); }, "image/png");
+}
+function showWorkDownloads() {
+  var l1 = document.getElementById("downloadWork1");
+  var l2 = document.getElementById("downloadWork2");
+  var l3 = document.getElementById("downloadWork3");
+  var l4 = document.getElementById("downloadWork4");
+  l1.href = URL.createObjectURL(workingBlobs[0]);
+  l2.href = URL.createObjectURL(workingBlobs[1]);
+  l3.href = URL.createObjectURL(workingBlobs[2]);
+  l4.href = URL.createObjectURL(workingBlobs[3]);
+  l1.style.display = "block"; l2.style.display = "block";
+  l3.style.display = "block"; l4.style.display = "block";
+}
+document.getElementById("shareWorkingBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareWorkNote");
+  note.textContent = "Making your working pictures...";
+  var count = 0;
+  [0, 1, 2, 3].forEach(function (sIdx) {
+    makeWorkingSheet(sIdx * 7, sIdx * 7 + 7, function (b) {
+      workingBlobs[sIdx] = b;
+      count++;
+      if (count === 4) {
+        var files = [
+          new File([workingBlobs[0]], "maya-maths-quiz-11-working-1.png", { type: "image/png" }),
+          new File([workingBlobs[1]], "maya-maths-quiz-11-working-2.png", { type: "image/png" }),
+          new File([workingBlobs[2]], "maya-maths-quiz-11-working-3.png", { type: "image/png" }),
+          new File([workingBlobs[3]], "maya-maths-quiz-11-working-4.png", { type: "image/png" })
+        ];
+        if (navigator.canShare && navigator.canShare({ files: files })) {
+          navigator.share({ files: files }).catch(function (e) {
+            showWorkDownloads();
+            note.textContent = "Sharing did not open. Tap Save below instead.";
+          });
+        } else {
+          showWorkDownloads();
+          note.textContent = "Sharing pictures is not available here. Tap Save below, then send them from Photos.";
+        }
+      }
+    });
+  });
+});
+document.getElementById("shareAnswersBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareAnswersNote");
+  if (!answersText) {
+    note.textContent = "The answers list is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([answersText], "maya-maths-quiz-11-answers.txt", { type: "text/plain" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      showAnswersDownload();
+      note.textContent = "Sharing did not open. Tap Save the answers list instead.";
+    });
+  } else {
+    showAnswersDownload();
+    note.textContent = "Sharing is not available here. Tap Save the answers list, then send it from Files.";
+  }
+});
+function showAnswersDownload() {
+  var l = document.getElementById("downloadAnswers");
+  l.href = URL.createObjectURL(new Blob([answersText], { type: "text/plain" }));
+  l.style.display = "block";
+}
+
+
+function lockForm() {
+  document.querySelectorAll('input[type="text"]').forEach(function (t) { t.disabled = true; });
+  document.getElementById("submitBtn").disabled = true;
+  padsLocked = true;
+  document.querySelectorAll(".rubout").forEach(function (b) { b.disabled = true; });
+  document.querySelectorAll(".padtool").forEach(function (b) { b.disabled = true; });
+}
+
+function confetti(x) {
+  var cols = ["#FF6B9D", "#FFD93D", "#6BCBFF", "#B388FF", "#FF8A65", "#81C784"];
+  var seed = 12345;
+  function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  for (var i = 0; i < 44; i++) {
+    var left = rnd() < 0.5;
+    var cx = left ? 30 + rnd() * 150 : 900 + rnd() * 150;
+    var cy = 320 + rnd() * 680;
+    var r = 6 + rnd() * 8;
+    x.fillStyle = cols[i % cols.length];
+    x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill();
+  }
+}
+
+function makeResultImage(score, fb, timeText, done) {
+  var c = document.createElement("canvas");
+  c.width = 1080; c.height = 1080;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, 1080, 1080);
+  confetti(x);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 280);
+  x.fillStyle = "#ffffff"; x.textAlign = "center";
+  x.font = "bold 64px -apple-system, Arial, sans-serif";
+  x.fillText("Maya's Maths Quiz 11", 540, 100);
+  x.font = "44px -apple-system, Arial, sans-serif";
+  x.fillText("Decimal multiplication and division, 35 minutes", 540, 160);
+  x.font = "bold 44px -apple-system, Arial, sans-serif";
+  x.fillText("Well done, Maya!", 540, 225);
+  x.fillStyle = "#222222";
+  x.font = "bold 170px -apple-system, Arial, sans-serif";
+  x.fillText(score + " / 28", 540, 455);
+  x.fillStyle = "#4CAF50";
+  x.font = "bold 56px -apple-system, Arial, sans-serif";
+  x.fillText(score === 28 ? "All correct!" : score >= 22 ? "Nearly perfect!" : score >= 16 ? "Good effort!" : "Keep going, Maya!", 540, 585);
+  var stars = "";
+  for (var s = 0; s < 28; s++) stars += (s < score) ? "★" : "☆";
+  x.fillStyle = "#F9A825";
+  x.font = "30px -apple-system, Arial, sans-serif";
+  x.fillText(stars, 540, 680);
+  x.fillStyle = "#222222";
+  x.font = "bold 40px -apple-system, Arial, sans-serif";
+  x.fillText("Feedback for Daddy:", 540, 750);
+  for (var i = 0; i < fb.length; i++) {
+    var size = 36;
+    x.font = size + "px -apple-system, Arial, sans-serif";
+    x.fillStyle = "#555555";
+    while (x.measureText(fb[i]).width > 980 && size > 24) {
+      size -= 2;
+      x.font = size + "px -apple-system, Arial, sans-serif";
+    }
+    x.fillText(fb[i], 540, 795 + i * 42);
+  }
+  x.fillStyle = "#555555";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(timeText, 540, 935);
+  var d = new Date();
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  x.fillStyle = "#888888";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 985);
+  x.fillText("Made for Maya", 540, 1030);
+  c.toBlob(function (b) { done(b); }, "image/png");
+}
+
+function doSubmit(auto) {
+  if (timerRunning) { clearInterval(timerId); timerRunning = false; }
+  var missing = [];
+  for (var i = 1; i <= 28; i++) if (!isAnswered(i)) missing.push(i);
+  var warn = document.getElementById("warn");
+  if (missing.length > 0 && !auto) {
+    warn.style.display = "block";
+    warn.textContent = "You still need to answer question" + (missing.length > 1 ? "s " : " ") + missing.join(", ") + ". Tap Submit again when they are all answered.";
+    return;
+  }
+  warn.style.display = "none";
+  var score = 0, wrongDetails = [];
+  for (var j = 1; j <= 28; j++) {
+    var picked = getAnswer(j);
+    var ex = document.getElementById("ex" + j);
+    ex.style.display = "block";
+    var pv = parseFloat(picked), av = parseFloat(ANSWERS["q" + j]);
+    var ok = !isNaN(pv) && !isNaN(av) && Math.abs(pv - av) < 0.0000001;
+    if (ok) {
+      score++;
+    } else {
+      wrongDetails.push({ q: j, picked: (picked === null || String(picked).trim() === "") ? "(no answer)" : String(picked), correct: ANSWERS["q" + j] });
+      ex.classList.add("wrong");
+    }
+  }
+  var slowestQ = null, slowestSecs = 0;
+  if (startTime) {
+    var prev = startTime;
+    for (var k = 1; k <= 28; k++) {
+      var t = answerTimes["q" + k];
+      if (!t) continue;
+      var gap = Math.round((t - prev) / 1000);
+      if (gap > slowestSecs) { slowestSecs = gap; slowestQ = k; }
+      prev = t;
+    }
+  }
+  var fb = [];
+  if (wrongDetails.length === 0) {
+    fb.push("No questions missed!");
+  } else {
+    wrongDetails.slice(0, 2).forEach(function (w) {
+      fb.push("Q" + w.q + ": you said " + w.picked + ", answer is " + w.correct);
+    });
+    if (wrongDetails.length > 2) fb.push("and " + (wrongDetails.length - 2) + " more missed");
+  }
+  if (timeLeft > 1050) fb.push("Very fast: " + fmt(timeLeft) + " left. Next quiz harder!");
+  if (slowestQ && slowestSecs >= 10) fb.push("Slowest: Q" + slowestQ + " (" + slowestSecs + " s)");
+  fb = fb.slice(0, 3);
+  var elapsed = startTime ? Math.round((Date.now() - startTime) / 1000) : TOTAL;
+  var timeText = auto ? "Time ran out! Finished in 35 min 0 s" : "Finished in " + fmtElapsed(elapsed);
+  document.getElementById("score").textContent = "You scored " + score + " out of 28! " + (auto ? "Time ran out!" : "Finished in " + fmtElapsed(elapsed) + ".");
+  var harryEnd = score === 28 ? "Brilliant, Maya! Full marks, twenty-eight out of twenty-eight!"
+    : score >= 22 ? "Well done, Maya! Great work under pressure!"
+    : score >= 16 ? "Good effort, Maya! You are learning fast!"
+    : "Don't worry, Maya. Every wizard has tough days. Try again!";
+  var blankPads = 0;
+  for (var p = 1; p <= 28; p++) if (!padDrawn["pad" + p]) blankPads++;
+  if (blankPads >= 7) harryEnd += " Next time, write your working in the boxes, so Daddy can see how you did each sum!";
+  harrySay(harryEnd);
+  // Full answers record, for Daddy's follow-up teaching.
+  var answersLines = [];
+  answersLines.push("Maya's Maths Quiz 11 - all answers");
+  answersLines.push("Date: " + new Date().toLocaleDateString("en-IE"));
+  answersLines.push("Score: " + score + " out of 28. " + timeText);
+  answersLines.push("");
+  for (var a = 1; a <= 28; a++) {
+    var ans = getAnswer(a);
+    var ansText = (ans === null || String(ans).trim() === "") ? "(no answer)" : String(ans);
+    var av2 = parseFloat(ANSWERS["q" + a]);
+    var pv2 = parseFloat(ans);
+    var ok2 = !isNaN(pv2) && !isNaN(av2) && Math.abs(pv2 - av2) < 0.0000001;
+    var at = answerTimes["q" + a];
+    var when = (at && startTime) ? "answered at " + fmtElapsed(Math.round((at - startTime) / 1000)) : "no time recorded";
+    answersLines.push("Q" + a + ": " + STEMS["q" + a] + " = " + ANSWERS["q" + a] + ". You said: " + ansText + ". " + (ok2 ? "Correct." : "Wrong.") + " (" + when + ")");
+  }
+  answersText = answersLines.join("\n");
+  // Auto-save her answers to Daddy's record (fire-and-forget, never blocks the quiz).
+  var submitStamp = new Date().toISOString().replace(/[:.]/g, "-");
+  try {
+    var payload = { quiz: "maths11", stamp: submitStamp, date: new Date().toISOString(), score: score, time: timeText, answers: [] };
+    for (var a = 1; a <= 28; a++) {
+      var ans = getAnswer(a);
+      payload.answers.push({
+        q: a,
+        sum: STEMS["q" + a],
+        correct: ANSWERS["q" + a],
+        said: (ans === null || String(ans).trim() === "") ? "" : String(ans),
+        working: !!padDrawn["pad" + a]
+      });
+    }
+    var answersBody = JSON.stringify(payload);
+    function postAnswers(attempt) {
+      fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: answersBody
+      }).then(function (res) {
+        if (!res.ok && attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      }).catch(function () {
+        if (attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      });
+    }
+    postAnswers(1);
+  } catch (e) {}
+  // Auto-save her working pictures too (fire-and-forget, never blocks the quiz).
+  // One picture at a time, one retry each, and a status line that says what happened.
+  try {
+    var workNote = document.getElementById("workSaveNote");
+    var workResults = {};
+    function workStatus() {
+      if (!workNote) return;
+      var done = 0, saved = 0, reasons = [];
+      ["working-1", "working-2", "working-3", "working-4"].forEach(function (nm) {
+        if (workResults[nm]) {
+          done++;
+          if (workResults[nm] === "saved") saved++;
+          else reasons.push(nm + ": " + workResults[nm]);
+        }
+      });
+      if (done < 4) return;
+      workNote.textContent = saved === 4 ? "Working pictures saved."
+        : saved > 0 ? saved + " of 4 working pictures saved (" + reasons.join(", ") + "). Tap Share your working below to send the others."
+        : "Working pictures did not save (" + reasons.join(", ") + "). Tap Share your working below to send them.";
+    }
+    function postSheet(sIdx, attempt, done) {
+      var nm = "working-" + (sIdx + 1);
+      var fail = function (reason) {
+        if (attempt === 1) {
+          setTimeout(function () { postSheet(sIdx, 2, done); }, 2000);
+        } else {
+          workResults[nm] = reason;
+          workStatus();
+          done();
+        }
+      };
+      var ok = function () {
+        workResults[nm] = "saved";
+        workStatus();
+        done();
+      };
+      try {
+        makeWorkingSheet(sIdx * 7, sIdx * 7 + 7, function (b) {
+          if (!b) { fail("no picture made"); return; }
+          var r = new FileReader();
+          r.onload = function () {
+            var data = String(r.result).split(",")[1];
+            if (!data) { fail("no picture data"); return; }
+            fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ quiz: "maths11", stamp: submitStamp, working: [{ name: nm, data: data }] })
+            }).then(function (res) {
+              if (res.ok) ok();
+              else fail("server " + res.status);
+            }).catch(function () { fail("no connection"); });
+          };
+          r.onerror = function () { fail("could not read picture"); };
+          r.readAsDataURL(b);
+        });
+      } catch (err) {
+        fail("error: " + (err && err.message ? err.message : "unknown"));
+      }
+    }
+    // One picture at a time, so the four sends never race each other.
+    postSheet(0, 1, function () { postSheet(1, 1, function () { postSheet(2, 1, function () { postSheet(3, 1, function () {}); }); }); });
+  } catch (e) {}
+  document.getElementById("answersList").innerHTML = answersLines.slice(4).map(function (l) {
+    return l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "<br>";
+  }).join("");
+  document.getElementById("result").style.display = "block";
+  lockForm();
+  try { localStorage.setItem(KEY, "done"); } catch (e) {}
+  makeResultImage(score, fb, timeText, function (blob) {
+    resultBlob = blob;
+    var url = URL.createObjectURL(blob);
+    var img = document.getElementById("resultImg");
+    img.src = url; img.style.display = "block";
+    document.getElementById("downloadLink").href = url;
+  });
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+}
+
+document.getElementById("submitBtn").addEventListener("click", function () { doSubmit(false); });
+
+document.getElementById("shareBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareNote");
+  if (!resultBlob) {
+    note.textContent = "The picture is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([resultBlob], "maya-maths-quiz-11.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      document.getElementById("downloadLink").style.display = "block";
+      note.textContent = "Sharing did not open. Tap Save the picture instead.";
+    });
+  } else {
+    document.getElementById("downloadLink").style.display = "block";
+    note.textContent = "Sharing pictures is not available here. Tap Save the picture, then send it from Photos.";
+  }
+});
+
+updateProgress();
+if (submitted) {
+  lockForm();
+  document.getElementById("submitBtn").textContent = "Already submitted on this iPad";
+}
+
+</script>
+</body>
+</html>
