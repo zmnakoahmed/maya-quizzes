@@ -1,0 +1,92 @@
+{
+  "quiz": "spanish6",
+  "date": "2026-11-18T19:37:20.335Z",
+  "score": 13,
+  "time": "Finished in 2 min 31 s",
+  "answers": [
+    {
+      "q": 1,
+      "sum": "\"grandma\" in Spanish",
+      "correct": "abuela",
+      "said": "abuela"
+    },
+    {
+      "q": 2,
+      "sum": "\"primo\" means?",
+      "correct": "boy cousin",
+      "said": "boy cousin"
+    },
+    {
+      "q": 3,
+      "sum": "\"I like my grandma\" in Spanish",
+      "correct": "Me gusta mi abuela",
+      "said": "Me gusta mi abuela"
+    },
+    {
+      "q": 4,
+      "sum": "\"nose\" in Spanish",
+      "correct": "nariz",
+      "said": "Nariz"
+    },
+    {
+      "q": 5,
+      "sum": "\"morado\" means?",
+      "correct": "purple",
+      "said": "purple"
+    },
+    {
+      "q": 6,
+      "sum": "\"I like the white cat\" in Spanish",
+      "correct": "Me gusta el gato blanco",
+      "said": "Me gusta el gato blanco"
+    },
+    {
+      "q": 7,
+      "sum": "\"five\" in Spanish",
+      "correct": "cinco",
+      "said": "cinco"
+    },
+    {
+      "q": 8,
+      "sum": "\"azul oscuro\" means?",
+      "correct": "dark blue",
+      "said": "dark blue"
+    },
+    {
+      "q": 9,
+      "sum": "\"three cats\" in Spanish",
+      "correct": "tres gatos",
+      "said": "tres gato"
+    },
+    {
+      "q": 10,
+      "sum": "\"ojos\" means?",
+      "correct": "eyes",
+      "said": "eyes"
+    },
+    {
+      "q": 11,
+      "sum": "\"baby\" in Spanish",
+      "correct": "bebé",
+      "said": "bebe"
+    },
+    {
+      "q": 12,
+      "sum": "\"The dog is orange\" in Spanish",
+      "correct": "El perro es naranja",
+      "said": "El perro es naranja"
+    },
+    {
+      "q": 13,
+      "sum": "\"pájaro\" means?",
+      "correct": "bird",
+      "said": "bird"
+    },
+    {
+      "q": 14,
+      "sum": "\"I like the red bird and the blue fish\" in Spanish",
+      "correct": "Me gusta el pájaro rojo y el pez azul",
+      "said": "Me gusta el pájaro rojo y el pez azul"
+    }
+  ]
+}
