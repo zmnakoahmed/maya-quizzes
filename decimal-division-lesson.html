@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's Decimal Division Lesson</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; margin-top: 28px; }
+  .harry { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
+  .harry svg { flex: 0 0 72px; }
+  .harry p { margin: 0; font-size: 17px; }
+  .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
+  .example { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .step { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .step b { color: #0d47a1; }
+  .tip { background: #e8f5e9; border: 2px solid #4caf50; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .warnbox { background: #fdecea; border: 2px solid #e57373; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .sum { font-size: 20px; font-weight: bold; }
+  .q { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .q h3 { margin: 0 0 10px 0; }
+  .q p.stem { font-size: 20px; font-weight: bold; }
+  .reveal { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #e8f5e9; font-size: 18px; }
+  .revealBtn { display: block; width: 100%; padding: 12px; margin-top: 10px; font-size: 18px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  .linkbox { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 16px; margin: 24px 0; font-size: 19px; text-align: center; }
+  .linkbox a { color: #0d47a1; font-weight: bold; }
+  .footer { color: #888; margin-top: 24px; }
+</style>
+</head>
+<body>
+<h1>Maya's Decimal Division Lesson</h1>
+<p>Division with decimals. Four rules, and they all come from one big idea. Read it slowly, try the sums in your head, then try the practice at the end. Harry is your assistant. Tap the speaker to hear each rule.</p>
+
+<div class="harry">
+  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+    <circle cx="36" cy="42" r="19" fill="#F5CBA7"/>
+    <path d="M16 32 Q12 10 36 8 Q60 10 56 32 L50 24 L46 30 L40 22 L36 29 L30 22 L24 30 L20 24 Z" fill="#222222"/>
+    <path d="M33 30 L37 30 L34 35 L38 35 L31 42 L33.5 36 L30 36 Z" fill="#FFD93D"/>
+    <circle cx="28" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <circle cx="44" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <line x1="35" y1="42" x2="37" y2="42" stroke="#222222" stroke-width="2"/>
+    <line x1="21" y1="42" x2="17" y2="41" stroke="#222222" stroke-width="2"/>
+    <line x1="51" y1="42" x2="55" y2="41" stroke="#222222" stroke-width="2"/>
+    <circle cx="28" cy="42" r="2" fill="#6D4C41"/>
+    <circle cx="44" cy="42" r="2" fill="#6D4C41"/>
+    <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
+    <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. Division makes things smaller, so the point moves LEFT. That is the whole secret.</p>
+</div>
+
+<h2>1. The one big idea</h2>
+<p>Dividing means sharing, and sharing makes things smaller. Multiplying means making more, and that makes things bigger.</p>
+<div class="example"><b>Think of money.</b><br>
+  &euro;3.60 shared by 3 friends is &euro;1.20 each. Each friend gets <b>less</b> than &euro;3.60.<br><br>
+  So when you divide, your answer must be <b>SMALLER</b> than the number you started with. If your answer is bigger, the point went the wrong way.</div>
+<p><button type="button" class="speak" data-say="Division makes things smaller, so the point moves left. If your answer is bigger than the number you started with, the point went the wrong way.">&#128266; Hear the big idea</button></p>
+
+<h2>2. Rule 1: Divide by 10, 100, 1000</h2>
+<p>Move the point <b>LEFT</b>. 1 place for 10, 2 places for 100, 3 places for 1000.</p>
+<div class="step"><b>Count the zeros, move the point that many places left.</b><br>
+  10 has 1 zero, so move left once. 100 has 2 zeros, so move left twice. 1000 has 3 zeros, so move left three times.</div>
+<div class="example"><span class="sum">2.65 &divide; 10 = 0.265</span><br>
+  The point jumps left once, and a 0 goes in front to hold its place.<br><br>
+  <span class="sum">2.65 &divide; 100 = 0.0265</span><br>
+  Left twice.<br><br>
+  <span class="sum">2.65 &divide; 1000 = 0.00265</span><br>
+  Left three times.</div>
+<div class="example"><span class="sum">26.5 &divide; 10 = 2.65</span><br>
+  <span class="sum">26.5 &divide; 100 = 0.265</span><br>
+  <span class="sum">26.5 &divide; 1000 = 0.0265</span><br><br>
+  <span class="sum">265 &divide; 10 = 26.5</span><br>
+  <span class="sum">265 &divide; 100 = 2.65</span><br>
+  <span class="sum">265 &divide; 1000 = 0.265</span><br>
+  <span class="sum">265 &divide; 10000 = 0.0265</span></div>
+<div class="warnbox"><b>Watch out: zeros on the left do NOT move the point.</b><br>
+  For 2.65 &divide; 10 you wrote 265. The point just vanished, and 265 is much <b>bigger</b> than 2.65. That cannot be right, division makes things smaller.<br><br>
+  For 265 &divide; 100 you wrote 00.265. The zeros in front did nothing. The answer is 2.65, the point moved left twice, from after the 5 to before the 6.<br><br>
+  Only the point itself moves, and it moves <b>left</b>.</div>
+<p><button type="button" class="speak" data-say="Divide by ten, one hundred, one thousand. Move the point left. One place for ten, two places for one hundred, three places for one thousand.">&#128266; Hear Rule 1</button></p>
+
+<h2>3. Rule 2: Multiply by 10, 100</h2>
+<p>This is the opposite way. Multiplying makes things bigger, so move the point <b>RIGHT</b>.</p>
+<div class="example"><span class="sum">1.2 &times; 10 = 12</span><br>
+  Not 1.20. The point moves right once and disappears, because 12 has no point left to show.<br><br>
+  <span class="sum">1.2 &times; 30 = 36</span><br>
+  Do it in two easy steps. First 1.2 &times; 3 = 3.6, then &times; 10 = 36.</div>
+<div class="example"><span class="sum">0.42 &times; 10 = 4.2</span><br>
+  <span class="sum">0.42 &times; 100 = 42</span><br>
+  <span class="sum">0.42 &times; 200 = 84</span><br>
+  First 0.42 &times; 2 = 0.84, then &times; 100 = 84.</div>
+<div class="tip"><b>Well done!</b> Your 0.42 &times; 2 = 0.84, 0.42 &times; 10 = 4.20, 0.42 &times; 100 = 42.00 and 0.42 &times; 200 = 84.00 were all right.</div>
+<p><button type="button" class="speak" data-say="Multiply by ten or one hundred. Move the point right. It is the opposite of dividing.">&#128266; Hear Rule 2</button></p>
+
+<h2>4. Rule 3: Decimal divided by a whole number</h2>
+<p>Hide the point, divide, put the point back in the <b>same place</b>.</p>
+<div class="step"><b>Step 1.</b> Hide the point. <b>Step 2.</b> Divide like whole numbers. <b>Step 3.</b> Put the point back where it was.</div>
+<div class="example"><span class="sum">3.6 &divide; 3 = 1.2</span><br>
+  Hide the point: 36 &divide; 3 = 12. Put the point back in the same place: <b>1.2</b>.<br><br>
+  <b>Money check:</b> &euro;3.60 shared by 3 is &euro;1.20 each, not &euro;3.20. Your answer was 3.2, which is bigger than the sharing should give. The point stayed in the wrong place.</div>
+<div class="example"><span class="sum">3.6 &divide; 30 = 0.12</span><br>
+  First 3.6 &divide; 3 = 1.2, then &divide; 10 = 0.12. The point moves left once.<br><br>
+  <span class="sum">3.6 &divide; 300 = 0.012</span><br>
+  First 3.6 &divide; 3 = 1.2, then &divide; 100 = 0.012. The point moves left twice.</div>
+<p><button type="button" class="speak" data-say="Decimal divided by a whole number. Hide the point, divide, put the point back in the same place.">&#128266; Hear Rule 3</button></p>
+
+<h2>5. Rule 4: Decimal divided by a decimal</h2>
+<p>Make the divisor whole first. The divisor is the number <b>after</b> the &divide; sign, the one you divide <b>by</b>.</p>
+<div class="step"><b>Step 1.</b> Move the divisor's point right until it has no point left.<br>
+  <b>Step 2.</b> Move the other number's point right the <b>SAME</b> number of places.<br>
+  <b>Step 3.</b> Now divide as whole numbers.</div>
+<div class="example"><span class="sum">8.61 &divide; 2.1 = 4.1</span><br>
+  Move both points right once: 86.1 &divide; 21 = 4.1. You got this one right.<br><br>
+  <span class="sum">3.45 &divide; 1.5 = 2.3</span><br>
+  Move both points right once: 34.5 &divide; 15 = 2.3. Right.<br><br>
+  <span class="sum">46.5 &divide; 1.5 = 31</span><br>
+  Move both points right once: 465 &divide; 15 = 31. Right.</div>
+<div class="example"><span class="sum">6.72 &divide; 0.21 = 32</span><br>
+  Move both points right twice: 672 &divide; 21 = 32. Not 3.2, that is ten times too small.<br><br>
+  <span class="sum">7.56 &divide; 0.63 = 12</span><br>
+  Move both points right twice: 756 &divide; 63 = 12. Not 0.12, that is a hundred times too small.<br><br>
+  <span class="sum">1.96 &divide; 0.14 = 14</span><br>
+  Move both points right twice: 196 &divide; 14 = 14. Not 0.14.</div>
+<div class="warnbox"><b>See the pattern?</b> In this section your answers were too small because the point stayed too far left.<br><br>
+  <b>Check with sense:</b> 7.56 shared by about a half is about 12. It cannot be 0.12. If your answer looks far too small, the point needs to move right.</div>
+<p><button type="button" class="speak" data-say="Decimal divided by a decimal. Make the divisor whole first. Move both points right the same number of places, then divide.">&#128266; Hear Rule 4</button></p>
+
+<h2>6. Practice: tap to reveal</h2>
+<p>Try each one on paper first, then tap to see if you were right.</p>
+
+<div class="q">
+  <h3>Practice 1</h3>
+  <p class="stem">4.5 &divide; 10 = ?</p>
+  <button type="button" class="revealBtn" data-target="a1">Tap to see the answer</button>
+  <div class="reveal" id="a1"><strong>0.45.</strong> Move the point left once.</div>
+</div>
+
+<div class="q">
+  <h3>Practice 2</h3>
+  <p class="stem">36.5 &divide; 100 = ?</p>
+  <button type="button" class="revealBtn" data-target="a2">Tap to see the answer</button>
+  <div class="reveal" id="a2"><strong>0.365.</strong> Move the point left twice.</div>
+</div>
+
+<div class="q">
+  <h3>Practice 3</h3>
+  <p class="stem">2.4 &divide; 3 = ?</p>
+  <button type="button" class="revealBtn" data-target="a3">Tap to see the answer</button>
+  <div class="reveal" id="a3"><strong>0.8.</strong> Hide the point: 24 &divide; 3 = 8, put the point back: 0.8.</div>
+</div>
+
+<div class="q">
+  <h3>Practice 4</h3>
+  <p class="stem">7.2 &divide; 30 = ?</p>
+  <button type="button" class="revealBtn" data-target="a4">Tap to see the answer</button>
+  <div class="reveal" id="a4"><strong>0.24.</strong> First 7.2 &divide; 3 = 2.4, then &divide; 10 = 0.24.</div>
+</div>
+
+<div class="q">
+  <h3>Practice 5</h3>
+  <p class="stem">4.8 &divide; 0.6 = ?</p>
+  <button type="button" class="revealBtn" data-target="a5">Tap to see the answer</button>
+  <div class="reveal" id="a5"><strong>8.</strong> Move both points right once: 48 &divide; 6 = 8.</div>
+</div>
+
+<div class="q">
+  <h3>Practice 6</h3>
+  <p class="stem">9.45 &divide; 0.9 = ?</p>
+  <button type="button" class="revealBtn" data-target="a6">Tap to see the answer</button>
+  <div class="reveal" id="a6"><strong>10.5.</strong> Move both points right once: 94.5 &divide; 9 = 10.5.</div>
+</div>
+
+<div class="linkbox">
+  <strong>Now try Maths Quiz 10 - Decimal Division</strong><br>
+  <a href="https://zmnakoahmed.github.io/maya-quizzes/maths10.html">https://zmnakoahmed.github.io/maya-quizzes/maths10.html</a>
+</div>
+
+<p class="footer">Made for Maya</p>
+
+<script>
+function speak(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-GB"; u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+document.querySelectorAll(".speak").forEach(function (b) {
+  b.addEventListener("click", function () { speak(b.getAttribute("data-say")); });
+});
+document.querySelectorAll(".revealBtn").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var el = document.getElementById(b.getAttribute("data-target"));
+    if (el) { el.style.display = "block"; b.style.display = "none"; }
+  });
+});
+</script>
+</body>
+</html>
