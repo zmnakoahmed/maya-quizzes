@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maya's Maths Quiz 13 - The point hops: times and divide by 10, 100 and 1000</title>
+<title>Maya's Maths Quiz 13 - Count the places: times and divide by 10, 100 and 1000</title>
 <style>
   body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
   h1 { font-size: 26px; }
@@ -74,7 +74,7 @@
 </head>
 <body>
 <h1>Maya's Maths Quiz 13</h1>
-<p>Only moving the point. Questions 1 to 12 are times by 10, 100 and 1000, questions 13 to 24 are divide by 10, 100 and 1000, questions 25 to 30 are divide by 30, 40, 400, 20 and 200, two steps each. You have 40 minutes.</p>
+<p>Only counting the places. Questions 1 to 12 are times by 10, 100 and 1000, questions 13 to 24 are divide by 10, 100 and 1000, questions 25 to 30 are divide by 30, 40, 400, 20 and 200, two steps each. You have 40 minutes.</p>
 
 <div class="harry">
   <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
@@ -91,38 +91,39 @@
     <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
     <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
   </svg>
-  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. The point HOPS. One hop for each zero. Times, the point hops RIGHT and the answer gets BIGGER. Divide, the point hops LEFT and the answer gets SMALLER. Zeros go at the END of the whole number, never after the point. And write your working for EVERY question, even the easy ones. You have 40 minutes. You can do it!</p>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. Forget the points, count the places. For times, forget the points, multiply the whole numbers, then count the digits after the point in both numbers and put the point that many places from the right. For divide, do the same, but subtract the counts instead of adding them. And write your working for EVERY question, even the easy ones. You have 40 minutes. You can do it!</p>
 </div>
 
 <h2>Learn how to do it first</h2>
 <p>Take your time with this part. Read it slowly. There is no timer here.</p>
 
-<div style="background:#e8f5e9;border:2px solid #4CAF50;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 1: Times by 10, 100, 1000: move the point RIGHT.</b><br>
-  One place for each zero.<br><br>
-  7.8 × 10 = <b>78</b>. 7.8 × 100 = <b>780</b>. 7.8 × 1000 = <b>7800</b>.<br>
-  The point goes right, the number gets bigger.</div>
+<div style="background:#e8f5e9;border:2px solid #4CAF50;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 1: Times: forget the points, multiply, then count the places.</b><br>
+  Forget the points and multiply the whole numbers. Then add up the digits after the point in both numbers, and put the point that many places from the right.<br><br>
+  2.3 × 10: 23 × 10 = <b>230</b>. Count the places: 1. Point 1 place from the right: <b>23</b>.<br>
+  0.84 × 0.37: 84 × 37 = <b>3108</b>. Count the places: 2 + 2 = 4. Point 4 places from the right: <b>0.3108</b>.</div>
 
-<div style="background:#e3f2fd;border:2px solid #2196F3;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 2: Divide by 10, 100, 1000: move the point LEFT.</b><br>
-  One place for each zero.<br><br>
-  7.8 ÷ 10 = <b>0.78</b>. 7.8 ÷ 100 = <b>0.078</b>. 7.8 ÷ 1000 = <b>0.0078</b>.<br>
-  Remember: move the point LEFT for divide, move it RIGHT for times.</div>
+<div style="background:#e3f2fd;border:2px solid #2196F3;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 2: Divide by 10, 100, 1000: the digits stay, add the zeros to the count.</b><br>
+  Forget the points, the digits stay the same. Count the places in the number you started with, then add the zeros in 10, 100 or 1000.<br><br>
+  9.25 ÷ 100: digits stay 925. Count: 2 places, plus 2 zeros, that is 4 places. Point 4 places from the right: <b>0.0925</b>.<br>
+  7.8 ÷ 10 = <b>0.78</b>. 7.8 ÷ 100 = <b>0.078</b>. 7.8 ÷ 1000 = <b>0.0078</b>.</div>
 
-<div style="background:#f3e5f5;border:2px solid #9C27B0;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 3: Zeros go at the END, never after the point.</b><br>
-  The point HOPS, it does not stay still while you add zeros.<br><br>
-  3.4 × 1000: the point hops right 3 times, 3.4 goes to 34, then 340, then <b>3400</b>. Not 34.000.<br>
-  6.3 × 100: the point hops right 2 times, 6.3 goes to 63, then <b>630</b>. Not 63.00.</div>
+<div style="background:#f3e5f5;border:2px solid #9C27B0;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 3: Divide by a whole number: forget the points, divide, then subtract the counts.</b><br>
+  Forget the points and divide the whole numbers. Then take the places in the top number minus the places in the bottom number, and move the point in your answer left by that many.<br><br>
+  4.8 ÷ 4: 48 ÷ 4 = <b>12</b>. Count: 1 minus 0, that is 1. Move the point left 1: <b>1.2</b>.<br>
+  12 ÷ 1.5: 12 ÷ 15 = <b>0.8</b>. Count: 0 minus 1, that is minus 1, so move the point RIGHT 1: <b>8</b>.<br><br>
+  Times you ADD the counts. Divide you SUBTRACT them. That is the one difference.</div>
 
 <div style="background:#fff3e0;border:2px solid #FF9800;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 4: Divide by 30, 40 or 400: two steps, write both down.</b><br>
-  4.8 ÷ 40: first 48 ÷ 4 = 12, then divide by 10, the point hops left once: <b>0.12</b>.<br><br>
+  4.8 ÷ 40: first divide by 4, 48 ÷ 4 = 12, 1 place, so 1.2. Then divide by 10, 1 place plus 1 zero, 2 places, so <b>0.12</b>.<br><br>
   Do not stop after the first step. The second step is the whole point of the question.</div>
 
-<p><button type="button" class="speak" data-say="Times by 10, 100, 1000, the point hops right, and the answer gets bigger. Divide by 10, 100, 1000, the point hops left, and the answer gets smaller. Zeros go at the end of the whole number, never after the point.">&#128266; Hear the rules</button></p>
+<p><button type="button" class="speak" data-say="Times: forget the points, multiply the whole numbers, count the places, and put the point that many places from the right. Divide by 10, 100, 1000: the digits stay, add the zeros to the count. Divide by a whole number: forget the points, divide, and subtract the counts. Times you add, divide you subtract.">&#128266; Hear the rules</button></p>
 
 <div class="tip"><b>Show your working!</b><br>
   Under each question there is a white box. Write your working in it with your pen or your finger, just like on paper. Harry and Daddy want to see how you did each sum, so we can help with the exact step that went wrong.</div>
 
 <div class="tip"><b>Write working for EVERY question, even the easy ones!</b><br>
-  In the last drill, the four questions with no working were all wrong. When you write it down, you can see the point hop.<br>
+  In the last drill, the four questions with no working were all wrong. When you write it down, you can see the counting.<br>
   And before you type each answer, ask: should it be bigger or smaller than the number I started with?</div>
 
 <h2>Warm-up: match the pairs</h2>
@@ -132,7 +133,7 @@
 
 <div id="startBox">
   <strong>Ready?</strong><br>
-  You have <strong>40 minutes</strong> for all 30 questions. Take your time, write your working in the boxes, and remember the point moves!
+  You have <strong>40 minutes</strong> for all 30 questions. Take your time, write your working in the boxes, and remember to count the places!
   <button type="button" id="startBtn">Start the quiz!</button>
 </div>
 
@@ -147,7 +148,7 @@
 
 <form id="quizForm">
   <div class="q typeq" data-q="1">
-    <h3>Question 1 - Point moves</h3>
+    <h3>Question 1 - Count the places</h3>
     <p class="stem">2.6 × 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q1" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -158,10 +159,10 @@
       <button type="button" class="padtool rubber" data-pad="pad1" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad1">Clear all</button>
     </div>
-    <div class="explain" id="ex1"><strong>260.</strong> Point hops right 2: 2.6 goes to 26, then 260. The zeros go at the end, not after the point.</div>
+    <div class="explain" id="ex1"><strong>260.</strong> Forget the points: 26 × 100 = 2600. Count the places: 1. Put the point 1 place from the right: 260.</div>
   </div>
   <div class="q typeq" data-q="2">
-    <h3>Question 2 - Point moves</h3>
+    <h3>Question 2 - Count the places</h3>
     <p class="stem">0.7 × 1000 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q2" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -172,10 +173,10 @@
       <button type="button" class="padtool rubber" data-pad="pad2" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad2">Clear all</button>
     </div>
-    <div class="explain" id="ex2"><strong>700.</strong> Point hops right 3: 0.7 goes to 7, then 70, then 700.</div>
+    <div class="explain" id="ex2"><strong>700.</strong> Forget the points: 7 × 1000 = 7000. Count: 1 place: 700.</div>
   </div>
   <div class="q typeq" data-q="3">
-    <h3>Question 3 - Point moves</h3>
+    <h3>Question 3 - Count the places</h3>
     <p class="stem">4.8 × 10 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q3" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -186,10 +187,10 @@
       <button type="button" class="padtool rubber" data-pad="pad3" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad3">Clear all</button>
     </div>
-    <div class="explain" id="ex3"><strong>48.</strong> Point hops right 1: 4.8 goes to 48.</div>
+    <div class="explain" id="ex3"><strong>48.</strong> Forget the points: 48 × 10 = 480. Count: 1 place: 48.</div>
   </div>
   <div class="q typeq" data-q="4">
-    <h3>Question 4 - Point moves</h3>
+    <h3>Question 4 - Count the places</h3>
     <p class="stem">3.9 × 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q4" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -200,10 +201,10 @@
       <button type="button" class="padtool rubber" data-pad="pad4" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad4">Clear all</button>
     </div>
-    <div class="explain" id="ex4"><strong>390.</strong> Point hops right 2: 3.9 goes to 39, then 390.</div>
+    <div class="explain" id="ex4"><strong>390.</strong> Forget the points: 39 × 100 = 3900. Count: 1 place: 390.</div>
   </div>
   <div class="q typeq" data-q="5">
-    <h3>Question 5 - Point moves</h3>
+    <h3>Question 5 - Count the places</h3>
     <p class="stem">0.5 × 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q5" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -214,10 +215,10 @@
       <button type="button" class="padtool rubber" data-pad="pad5" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad5">Clear all</button>
     </div>
-    <div class="explain" id="ex5"><strong>50.</strong> Point hops right 2: 0.5 goes to 5, then 50.</div>
+    <div class="explain" id="ex5"><strong>50.</strong> Forget the points: 5 × 100 = 500. Count: 1 place: 50.</div>
   </div>
   <div class="q typeq" data-q="6">
-    <h3>Question 6 - Point moves</h3>
+    <h3>Question 6 - Count the places</h3>
     <p class="stem">7.2 × 1000 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q6" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -228,10 +229,10 @@
       <button type="button" class="padtool rubber" data-pad="pad6" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad6">Clear all</button>
     </div>
-    <div class="explain" id="ex6"><strong>7200.</strong> Point hops right 3: 7.2 goes to 72, then 720, then 7200.</div>
+    <div class="explain" id="ex6"><strong>7200.</strong> Forget the points: 72 × 1000 = 72000. Count: 1 place: 7200.</div>
   </div>
   <div class="q typeq" data-q="7">
-    <h3>Question 7 - Point moves</h3>
+    <h3>Question 7 - Count the places</h3>
     <p class="stem">1.4 × 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q7" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -242,10 +243,10 @@
       <button type="button" class="padtool rubber" data-pad="pad7" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad7">Clear all</button>
     </div>
-    <div class="explain" id="ex7"><strong>140.</strong> Point hops right 2: 1.4 goes to 14, then 140.</div>
+    <div class="explain" id="ex7"><strong>140.</strong> Forget the points: 14 × 100 = 1400. Count: 1 place: 140.</div>
   </div>
   <div class="q typeq" data-q="8">
-    <h3>Question 8 - Point moves</h3>
+    <h3>Question 8 - Count the places</h3>
     <p class="stem">0.3 × 10 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q8" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -256,10 +257,10 @@
       <button type="button" class="padtool rubber" data-pad="pad8" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad8">Clear all</button>
     </div>
-    <div class="explain" id="ex8"><strong>3.</strong> Point hops right 1: 0.3 goes to 3.</div>
+    <div class="explain" id="ex8"><strong>3.</strong> Forget the points: 3 × 10 = 30. Count: 1 place: 3.</div>
   </div>
   <div class="q typeq" data-q="9">
-    <h3>Question 9 - Point moves</h3>
+    <h3>Question 9 - Count the places</h3>
     <p class="stem">8.6 × 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q9" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -270,10 +271,10 @@
       <button type="button" class="padtool rubber" data-pad="pad9" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad9">Clear all</button>
     </div>
-    <div class="explain" id="ex9"><strong>860.</strong> Point hops right 2: 8.6 goes to 86, then 860.</div>
+    <div class="explain" id="ex9"><strong>860.</strong> Forget the points: 86 × 100 = 8600. Count: 1 place: 860.</div>
   </div>
   <div class="q typeq" data-q="10">
-    <h3>Question 10 - Point moves</h3>
+    <h3>Question 10 - Count the places</h3>
     <p class="stem">5.4 × 1000 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q10" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -284,10 +285,10 @@
       <button type="button" class="padtool rubber" data-pad="pad10" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad10">Clear all</button>
     </div>
-    <div class="explain" id="ex10"><strong>5400.</strong> Point hops right 3: 5.4 goes to 54, then 540, then 5400.</div>
+    <div class="explain" id="ex10"><strong>5400.</strong> Forget the points: 54 × 1000 = 54000. Count: 1 place: 5400.</div>
   </div>
   <div class="q typeq" data-q="11">
-    <h3>Question 11 - Point moves</h3>
+    <h3>Question 11 - Count the places</h3>
     <p class="stem">0.8 × 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q11" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -298,10 +299,10 @@
       <button type="button" class="padtool rubber" data-pad="pad11" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad11">Clear all</button>
     </div>
-    <div class="explain" id="ex11"><strong>80.</strong> Point hops right 2: 0.8 goes to 8, then 80.</div>
+    <div class="explain" id="ex11"><strong>80.</strong> Forget the points: 8 × 100 = 800. Count: 1 place: 80.</div>
   </div>
   <div class="q typeq" data-q="12">
-    <h3>Question 12 - Point moves</h3>
+    <h3>Question 12 - Count the places</h3>
     <p class="stem">6.1 × 10 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q12" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -312,10 +313,10 @@
       <button type="button" class="padtool rubber" data-pad="pad12" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad12">Clear all</button>
     </div>
-    <div class="explain" id="ex12"><strong>61.</strong> Point hops right 1: 6.1 goes to 61.</div>
+    <div class="explain" id="ex12"><strong>61.</strong> Forget the points: 61 × 10 = 610. Count: 1 place: 61.</div>
   </div>
   <div class="q typeq" data-q="13">
-    <h3>Question 13 - Point moves</h3>
+    <h3>Question 13 - Count the places</h3>
     <p class="stem">8.3 ÷ 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q13" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -326,10 +327,10 @@
       <button type="button" class="padtool rubber" data-pad="pad13" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad13">Clear all</button>
     </div>
-    <div class="explain" id="ex13"><strong>0.083.</strong> Point hops left 2: 8.3 goes to 0.83, then 0.083. Count the hops: 100 has 2 zeros, so 2 hops.</div>
+    <div class="explain" id="ex13"><strong>0.083.</strong> Forget the points, the digits stay 83. Count: 1 place in 8.3, plus 2 zeros in 100, that is 3 places. Put the point 3 places from the right: 0.083.</div>
   </div>
   <div class="q typeq" data-q="14">
-    <h3>Question 14 - Point moves</h3>
+    <h3>Question 14 - Count the places</h3>
     <p class="stem">4.6 ÷ 10 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q14" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -340,10 +341,10 @@
       <button type="button" class="padtool rubber" data-pad="pad14" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad14">Clear all</button>
     </div>
-    <div class="explain" id="ex14"><strong>0.46.</strong> Point hops left 1: 4.6 goes to 0.46.</div>
+    <div class="explain" id="ex14"><strong>0.46.</strong> Digits stay 46. Count: 1 place plus 1 zero, 2 places: 0.46.</div>
   </div>
   <div class="q typeq" data-q="15">
-    <h3>Question 15 - Point moves</h3>
+    <h3>Question 15 - Count the places</h3>
     <p class="stem">7.5 ÷ 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q15" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -354,10 +355,10 @@
       <button type="button" class="padtool rubber" data-pad="pad15" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad15">Clear all</button>
     </div>
-    <div class="explain" id="ex15"><strong>0.075.</strong> Point hops left 2: 7.5 goes to 0.75, then 0.075. Do not stop after one hop.</div>
+    <div class="explain" id="ex15"><strong>0.075.</strong> Digits stay 75. Count: 1 plus 2, 3 places: 0.075.</div>
   </div>
   <div class="q typeq" data-q="16">
-    <h3>Question 16 - Point moves</h3>
+    <h3>Question 16 - Count the places</h3>
     <p class="stem">36 ÷ 1000 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q16" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -368,10 +369,10 @@
       <button type="button" class="padtool rubber" data-pad="pad16" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad16">Clear all</button>
     </div>
-    <div class="explain" id="ex16"><strong>0.036.</strong> Point hops left 3: 36 goes to 3.6, then 0.36, then 0.036.</div>
+    <div class="explain" id="ex16"><strong>0.036.</strong> Digits stay 36. Count: 0 plus 3 zeros, 3 places: 0.036.</div>
   </div>
   <div class="q typeq" data-q="17">
-    <h3>Question 17 - Point moves</h3>
+    <h3>Question 17 - Count the places</h3>
     <p class="stem">9.4 ÷ 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q17" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -382,10 +383,10 @@
       <button type="button" class="padtool rubber" data-pad="pad17" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad17">Clear all</button>
     </div>
-    <div class="explain" id="ex17"><strong>0.094.</strong> Point hops left 2: 9.4 goes to 0.94, then 0.094.</div>
+    <div class="explain" id="ex17"><strong>0.094.</strong> Digits stay 94. Count: 1 plus 2, 3 places: 0.094.</div>
   </div>
   <div class="q typeq" data-q="18">
-    <h3>Question 18 - Point moves</h3>
+    <h3>Question 18 - Count the places</h3>
     <p class="stem">2.8 ÷ 10 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q18" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -396,10 +397,10 @@
       <button type="button" class="padtool rubber" data-pad="pad18" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad18">Clear all</button>
     </div>
-    <div class="explain" id="ex18"><strong>0.28.</strong> Point hops left 1: 2.8 goes to 0.28.</div>
+    <div class="explain" id="ex18"><strong>0.28.</strong> Digits stay 28. Count: 1 plus 1, 2 places: 0.28.</div>
   </div>
   <div class="q typeq" data-q="19">
-    <h3>Question 19 - Point moves</h3>
+    <h3>Question 19 - Count the places</h3>
     <p class="stem">6.7 ÷ 1000 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q19" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -410,10 +411,10 @@
       <button type="button" class="padtool rubber" data-pad="pad19" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad19">Clear all</button>
     </div>
-    <div class="explain" id="ex19"><strong>0.0067.</strong> Point hops left 3: 6.7 goes to 0.67, then 0.067, then 0.0067.</div>
+    <div class="explain" id="ex19"><strong>0.0067.</strong> Digits stay 67. Count: 1 plus 3, 4 places: 0.0067.</div>
   </div>
   <div class="q typeq" data-q="20">
-    <h3>Question 20 - Point moves</h3>
+    <h3>Question 20 - Count the places</h3>
     <p class="stem">54 ÷ 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q20" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -424,10 +425,10 @@
       <button type="button" class="padtool rubber" data-pad="pad20" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad20">Clear all</button>
     </div>
-    <div class="explain" id="ex20"><strong>0.54.</strong> Point hops left 2: 54 goes to 5.4, then 0.54.</div>
+    <div class="explain" id="ex20"><strong>0.54.</strong> Digits stay 54. Count: 0 plus 2, 2 places: 0.54.</div>
   </div>
   <div class="q typeq" data-q="21">
-    <h3>Question 21 - Point moves</h3>
+    <h3>Question 21 - Count the places</h3>
     <p class="stem">3.1 ÷ 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q21" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -438,10 +439,10 @@
       <button type="button" class="padtool rubber" data-pad="pad21" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad21">Clear all</button>
     </div>
-    <div class="explain" id="ex21"><strong>0.031.</strong> Point hops left 2: 3.1 goes to 0.31, then 0.031.</div>
+    <div class="explain" id="ex21"><strong>0.031.</strong> Digits stay 31. Count: 1 plus 2, 3 places: 0.031.</div>
   </div>
   <div class="q typeq" data-q="22">
-    <h3>Question 22 - Point moves</h3>
+    <h3>Question 22 - Count the places</h3>
     <p class="stem">8.9 ÷ 10 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q22" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -452,10 +453,10 @@
       <button type="button" class="padtool rubber" data-pad="pad22" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad22">Clear all</button>
     </div>
-    <div class="explain" id="ex22"><strong>0.89.</strong> Point hops left 1: 8.9 goes to 0.89.</div>
+    <div class="explain" id="ex22"><strong>0.89.</strong> Digits stay 89. Count: 1 plus 1, 2 places: 0.89.</div>
   </div>
   <div class="q typeq" data-q="23">
-    <h3>Question 23 - Point moves</h3>
+    <h3>Question 23 - Count the places</h3>
     <p class="stem">72 ÷ 1000 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q23" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -466,10 +467,10 @@
       <button type="button" class="padtool rubber" data-pad="pad23" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad23">Clear all</button>
     </div>
-    <div class="explain" id="ex23"><strong>0.072.</strong> Point hops left 3: 72 goes to 7.2, then 0.72, then 0.072.</div>
+    <div class="explain" id="ex23"><strong>0.072.</strong> Digits stay 72. Count: 0 plus 3, 3 places: 0.072.</div>
   </div>
   <div class="q typeq" data-q="24">
-    <h3>Question 24 - Point moves</h3>
+    <h3>Question 24 - Count the places</h3>
     <p class="stem">5.6 ÷ 100 = ?</p>
     <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
     <input type="text" name="q24" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
@@ -480,7 +481,7 @@
       <button type="button" class="padtool rubber" data-pad="pad24" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad24">Clear all</button>
     </div>
-    <div class="explain" id="ex24"><strong>0.056.</strong> Point hops left 2: 5.6 goes to 0.56, then 0.056.</div>
+    <div class="explain" id="ex24"><strong>0.056.</strong> Digits stay 56. Count: 1 plus 2, 3 places: 0.056.</div>
   </div>
   <div class="q typeq" data-q="25">
     <h3>Question 25 - Divide in two steps</h3>
@@ -494,7 +495,7 @@
       <button type="button" class="padtool rubber" data-pad="pad25" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad25">Clear all</button>
     </div>
-    <div class="explain" id="ex25"><strong>0.12.</strong> Two steps, write both down. First 36 ÷ 3 = 12. Then divide by 10, the point hops left 1: 0.12.</div>
+    <div class="explain" id="ex25"><strong>0.12.</strong> Two steps, write both down. First divide by 3: 36 ÷ 3 = 12, 1 place, so 1.2. Then divide by 10: 1 place plus 1 zero, 2 places, so 0.12.</div>
   </div>
   <div class="q typeq" data-q="26">
     <h3>Question 26 - Divide in two steps</h3>
@@ -508,7 +509,7 @@
       <button type="button" class="padtool rubber" data-pad="pad26" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad26">Clear all</button>
     </div>
-    <div class="explain" id="ex26"><strong>0.16.</strong> Two steps. First 64 ÷ 4 = 16. Then divide by 10: 0.16.</div>
+    <div class="explain" id="ex26"><strong>0.16.</strong> Two steps. First divide by 4: 64 ÷ 4 = 16, 1 place, so 1.6. Then divide by 10: 2 places, so 0.16.</div>
   </div>
   <div class="q typeq" data-q="27">
     <h3>Question 27 - Divide in two steps</h3>
@@ -522,7 +523,7 @@
       <button type="button" class="padtool rubber" data-pad="pad27" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad27">Clear all</button>
     </div>
-    <div class="explain" id="ex27"><strong>0.018.</strong> Two steps. First 72 ÷ 4 = 18. Then divide by 100, the point hops left 2: 0.018.</div>
+    <div class="explain" id="ex27"><strong>0.018.</strong> Two steps. First divide by 4: 72 ÷ 4 = 18, 1 place, so 1.8. Then divide by 100: 1 place plus 2 zeros, 3 places, so 0.018.</div>
   </div>
   <div class="q typeq" data-q="28">
     <h3>Question 28 - Divide in two steps</h3>
@@ -536,7 +537,7 @@
       <button type="button" class="padtool rubber" data-pad="pad28" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad28">Clear all</button>
     </div>
-    <div class="explain" id="ex28"><strong>0.27.</strong> Two steps. First 54 ÷ 2 = 27. Then divide by 10: 0.27.</div>
+    <div class="explain" id="ex28"><strong>0.27.</strong> Two steps. First divide by 2: 54 ÷ 2 = 27, 1 place, so 2.7. Then divide by 10: 2 places, so 0.27.</div>
   </div>
   <div class="q typeq" data-q="29">
     <h3>Question 29 - Divide in two steps</h3>
@@ -550,7 +551,7 @@
       <button type="button" class="padtool rubber" data-pad="pad29" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad29">Clear all</button>
     </div>
-    <div class="explain" id="ex29"><strong>0.27.</strong> Two steps. First 81 ÷ 3 = 27. Then divide by 10: 0.27.</div>
+    <div class="explain" id="ex29"><strong>0.27.</strong> Two steps. First divide by 3: 81 ÷ 3 = 27, 1 place, so 2.7. Then divide by 10: 2 places, so 0.27.</div>
   </div>
   <div class="q typeq" data-q="30">
     <h3>Question 30 - Divide in two steps</h3>
@@ -564,7 +565,7 @@
       <button type="button" class="padtool rubber" data-pad="pad30" data-tool="rubber">Rubber</button>
       <button type="button" class="rubout" data-pad="pad30">Clear all</button>
     </div>
-    <div class="explain" id="ex30"><strong>0.014.</strong> Two steps. First 28 ÷ 2 = 14. Then divide by 100, the point hops left 2: 0.014.</div>
+    <div class="explain" id="ex30"><strong>0.014.</strong> Two steps. First divide by 2: 28 ÷ 2 = 14, 1 place, so 1.4. Then divide by 100: 3 places, so 0.014.</div>
   </div>
 
   <div id="warn"></div>
@@ -974,7 +975,7 @@ function makeResultImage(score, fb, timeText, done) {
   x.font = "bold 64px -apple-system, Arial, sans-serif";
   x.fillText("Maya's Maths Quiz 13", 540, 100);
   x.font = "44px -apple-system, Arial, sans-serif";
-  x.fillText("The point hops, 40 minutes", 540, 160);
+  x.fillText("Count the places, 40 minutes", 540, 160);
   x.font = "bold 44px -apple-system, Arial, sans-serif";
   x.fillText("Well done, Maya!", 540, 225);
   x.fillStyle = "#222222";
