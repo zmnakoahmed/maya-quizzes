@@ -1,0 +1,218 @@
+{
+  "quiz": "maths13",
+  "date": "2026-11-20T21:11:49.539Z",
+  "score": 30,
+  "time": "Finished in 0 min 59 s",
+  "answers": [
+    {
+      "q": 1,
+      "sum": "2.6 × 100",
+      "correct": "260",
+      "said": "260",
+      "working": false
+    },
+    {
+      "q": 2,
+      "sum": "0.7 × 1000",
+      "correct": "700",
+      "said": "700",
+      "working": false
+    },
+    {
+      "q": 3,
+      "sum": "4.8 × 10",
+      "correct": "48",
+      "said": "48",
+      "working": false
+    },
+    {
+      "q": 4,
+      "sum": "3.9 × 100",
+      "correct": "390",
+      "said": "390",
+      "working": false
+    },
+    {
+      "q": 5,
+      "sum": "0.5 × 100",
+      "correct": "50",
+      "said": "50",
+      "working": false
+    },
+    {
+      "q": 6,
+      "sum": "7.2 × 1000",
+      "correct": "7200",
+      "said": "7200",
+      "working": false
+    },
+    {
+      "q": 7,
+      "sum": "1.4 × 100",
+      "correct": "140",
+      "said": "140",
+      "working": false
+    },
+    {
+      "q": 8,
+      "sum": "0.3 × 10",
+      "correct": "3",
+      "said": "3",
+      "working": false
+    },
+    {
+      "q": 9,
+      "sum": "8.6 × 100",
+      "correct": "860",
+      "said": "860",
+      "working": false
+    },
+    {
+      "q": 10,
+      "sum": "5.4 × 1000",
+      "correct": "5400",
+      "said": "5400",
+      "working": false
+    },
+    {
+      "q": 11,
+      "sum": "0.8 × 100",
+      "correct": "80",
+      "said": "80",
+      "working": false
+    },
+    {
+      "q": 12,
+      "sum": "6.1 × 10",
+      "correct": "61",
+      "said": "61",
+      "working": false
+    },
+    {
+      "q": 13,
+      "sum": "8.3 ÷ 100",
+      "correct": "0.083",
+      "said": "0.083",
+      "working": false
+    },
+    {
+      "q": 14,
+      "sum": "4.6 ÷ 10",
+      "correct": "0.46",
+      "said": "0.46",
+      "working": false
+    },
+    {
+      "q": 15,
+      "sum": "7.5 ÷ 100",
+      "correct": "0.075",
+      "said": "0.075",
+      "working": false
+    },
+    {
+      "q": 16,
+      "sum": "36 ÷ 1000",
+      "correct": "0.036",
+      "said": "0.036",
+      "working": false
+    },
+    {
+      "q": 17,
+      "sum": "9.4 ÷ 100",
+      "correct": "0.094",
+      "said": "0.094",
+      "working": false
+    },
+    {
+      "q": 18,
+      "sum": "2.8 ÷ 10",
+      "correct": "0.28",
+      "said": "0.28",
+      "working": false
+    },
+    {
+      "q": 19,
+      "sum": "6.7 ÷ 1000",
+      "correct": "0.0067",
+      "said": "0.0067",
+      "working": false
+    },
+    {
+      "q": 20,
+      "sum": "54 ÷ 100",
+      "correct": "0.54",
+      "said": "0.54",
+      "working": false
+    },
+    {
+      "q": 21,
+      "sum": "3.1 ÷ 100",
+      "correct": "0.031",
+      "said": "0.031",
+      "working": false
+    },
+    {
+      "q": 22,
+      "sum": "8.9 ÷ 10",
+      "correct": "0.89",
+      "said": "0.89",
+      "working": false
+    },
+    {
+      "q": 23,
+      "sum": "72 ÷ 1000",
+      "correct": "0.072",
+      "said": "0.072",
+      "working": false
+    },
+    {
+      "q": 24,
+      "sum": "5.6 ÷ 100",
+      "correct": "0.056",
+      "said": "0.056",
+      "working": false
+    },
+    {
+      "q": 25,
+      "sum": "3.6 ÷ 30",
+      "correct": "0.12",
+      "said": "0.12",
+      "working": false
+    },
+    {
+      "q": 26,
+      "sum": "6.4 ÷ 40",
+      "correct": "0.16",
+      "said": "0.16",
+      "working": false
+    },
+    {
+      "q": 27,
+      "sum": "7.2 ÷ 400",
+      "correct": "0.018",
+      "said": "0.018",
+      "working": false
+    },
+    {
+      "q": 28,
+      "sum": "5.4 ÷ 20",
+      "correct": "0.27",
+      "said": "0.27",
+      "working": false
+    },
+    {
+      "q": 29,
+      "sum": "8.1 ÷ 30",
+      "correct": "0.27",
+      "said": "0.27",
+      "working": false
+    },
+    {
+      "q": 30,
+      "sum": "2.8 ÷ 200",
+      "correct": "0.014",
+      "said": "0.014",
+      "working": false
+    }
+  ]
+}
