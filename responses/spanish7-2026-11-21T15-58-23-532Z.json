@@ -1,0 +1,92 @@
+{
+  "quiz": "spanish7",
+  "date": "2026-11-21T15:58:23.532Z",
+  "score": 14,
+  "time": "Finished in 2 min 1 s",
+  "answers": [
+    {
+      "q": 1,
+      "sum": "\"grandad\" in Spanish",
+      "correct": "abuelo",
+      "said": "abuelo"
+    },
+    {
+      "q": 2,
+      "sum": "\"tío\" means?",
+      "correct": "uncle",
+      "said": "uncle"
+    },
+    {
+      "q": 3,
+      "sum": "\"mouth\" in Spanish",
+      "correct": "boca",
+      "said": "boca"
+    },
+    {
+      "q": 4,
+      "sum": "\"The horse is white\" in Spanish",
+      "correct": "El caballo es blanco",
+      "said": "El caballo es blanco"
+    },
+    {
+      "q": 5,
+      "sum": "\"grey\" in Spanish",
+      "correct": "gris",
+      "said": "gris"
+    },
+    {
+      "q": 6,
+      "sum": "\"I like the white rabbit\" in Spanish",
+      "correct": "Me gusta el conejo blanco",
+      "said": "Me gusta el conejo blanco"
+    },
+    {
+      "q": 7,
+      "sum": "\"eight\" in Spanish",
+      "correct": "ocho",
+      "said": "ocho"
+    },
+    {
+      "q": 8,
+      "sum": "\"rainbow\" in Spanish",
+      "correct": "arcoíris",
+      "said": "arcoíris"
+    },
+    {
+      "q": 9,
+      "sum": "\"two grandmothers\" in Spanish",
+      "correct": "dos abuelas",
+      "said": "dos abuelas"
+    },
+    {
+      "q": 10,
+      "sum": "\"school\" in Spanish",
+      "correct": "escuela",
+      "said": "escuela"
+    },
+    {
+      "q": 11,
+      "sum": "\"My sister has a pink flower\" in Spanish",
+      "correct": "Mi hermana tiene una flor rosa",
+      "said": "Mi hermana tiene una flor rosa"
+    },
+    {
+      "q": 12,
+      "sum": "\"león\" means?",
+      "correct": "lion",
+      "said": "lion"
+    },
+    {
+      "q": 13,
+      "sum": "\"I like the dog and the horse\" in Spanish",
+      "correct": "Me gusta el perro y el caballo",
+      "said": "Me gusta el perro y el caballo"
+    },
+    {
+      "q": 14,
+      "sum": "\"¿Cómo estás?\" means?",
+      "correct": "how are you",
+      "said": "how are you"
+    }
+  ]
+}
