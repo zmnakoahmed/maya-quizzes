@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's Maths Quiz 14 - Count the places, one place at a time</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; margin-top: 28px; }
+  .intro { background: #fff3cd; border: 1px solid #e6c87a; border-radius: 10px; padding: 12px; }
+  .harry { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
+  .harry svg { flex: 0 0 72px; }
+  .harry p { margin: 0; font-size: 17px; }
+  #progressWrap { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; }
+  #progressBar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+  #progressFill { height: 100%; width: 0%; background: #4caf50; }
+  #progressText { font-weight: bold; margin-top: 4px; }
+  #timerWrap { display: none; margin-top: 8px; }
+  #timerText { font-weight: bold; font-size: 20px; }
+  #timerBar { height: 10px; background: #eee; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+  #timerFill { height: 100%; width: 100%; background: #ff9800; }
+  .q { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .q h3 { margin: 0 0 10px 0; }
+  .q p.stem { font-size: 22px; font-weight: bold; }
+  input[type=text] { width: 100%; box-sizing: border-box; padding: 12px; font-size: 19px; border: 2px solid #4caf50; border-radius: 8px; }
+  .explain { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #e8f5e9; }
+  .explain.wrong { background: #fdecea; }
+  #submitBtn { display: block; width: 100%; padding: 16px; font-size: 20px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; }
+  #submitBtn:disabled { background: #aaa; }
+  #warn { display: none; background: #fff3cd; border: 1px solid #e6c87a; border-radius: 8px; padding: 12px; margin: 12px 0; font-weight: bold; }
+  #result { display: none; margin: 20px 0; }
+  #score { font-size: 26px; font-weight: bold; }
+  #resultImg { display: none; max-width: 100%; border-radius: 12px; border: 1px solid #ddd; margin-top: 12px; }
+  #shareBox { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #f9f9f9; }
+  #shareBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #downloadLink { display: none; text-align: center; padding: 12px; font-size: 16px; font-weight: bold; color: #2196f3; }
+  #shareNote { color: #888; font-size: 14px; }
+  .footer { color: #888; margin-top: 24px; }
+  #matchGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+  .card { background: #fff; border: 2px solid #4caf50; border-radius: 12px; padding: 14px 4px; text-align: center; font-size: 17px; font-weight: bold; cursor: pointer; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+  .card.picked { background: #bbdefb; border-color: #1976d2; }
+  .card.matched { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; }
+  #matchDone { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; margin: 12px 0; }
+  #startBox { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 16px; text-align: center; font-size: 18px; margin: 16px 0; }
+  #startBtn { display: block; width: 100%; margin-top: 12px; padding: 14px; font-size: 20px; font-weight: bold; background: #ff9800; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #quizForm { display: none; }
+  .step { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .step b { color: #0d47a1; }
+  .example { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .tip { background: #e8f5e9; border: 2px solid #4caf50; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .visual { background: #fff; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .strip { display: flex; gap: 3px; margin: 8px 0; }
+  .box { width: 26px; height: 26px; border: 2px solid #1976d2; border-radius: 4px; box-sizing: border-box; }
+  .box.on { background: #4caf50; border-color: #2e7d32; }
+  .grid100 { display: grid; grid-template-columns: repeat(10, 18px); gap: 2px; margin: 8px 0; }
+  .cell { width: 18px; height: 18px; border: 1px solid #90caf9; border-radius: 2px; box-sizing: border-box; }
+  .cell.on { background: #4caf50; border-color: #2e7d32; }
+  .bar { height: 26px; border-radius: 6px; margin: 6px 0; }
+  .bigans { font-size: 34px; font-weight: bold; color: #2e7d32; text-align: center; margin: 8px 0; }
+  .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
+  .worklabel { font-size: 15px; color: #555; margin-top: 10px; }
+  .workpad { display: block; width: 100%; height: 220px; background: #fff; border: 2px solid #90caf9; border-radius: 8px; margin-top: 6px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
+  .rubout { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #e3f2fd; cursor: pointer; }
+  .rubout:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  .padtools { display: flex; gap: 8px; margin-top: 6px; }
+  .padtool { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #fff; cursor: pointer; }
+  .padtool.on { background: #4caf50; color: #fff; border-color: #4caf50; }
+  .padtool:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  #shareWorkingBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareAnswersBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareWorkNote { color: #888; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>Maya's Maths Quiz 14</h1>
+<p>Counting off by one is the trap now. Questions 1 to 10 are times by 100 and 1000, questions 11 to 20 are divide by 10 and 1000, questions 21 to 26 are divide by 30, 40, 400, 20 and 200 in two steps, questions 27 to 30 are mixed, read the sign. You have 40 minutes.</p>
+
+<div class="harry">
+  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+    <circle cx="36" cy="42" r="19" fill="#F5CBA7"/>
+    <path d="M16 32 Q12 10 36 8 Q60 10 56 32 L50 24 L46 30 L40 22 L36 29 L30 22 L24 30 L20 24 Z" fill="#222222"/>
+    <path d="M33 30 L37 30 L34 35 L38 35 L31 42 L33.5 36 L30 36 Z" fill="#FFD93D"/>
+    <circle cx="28" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <circle cx="44" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <line x1="35" y1="42" x2="37" y2="42" stroke="#222222" stroke-width="2"/>
+    <line x1="21" y1="42" x2="17" y2="41" stroke="#222222" stroke-width="2"/>
+    <line x1="51" y1="42" x2="55" y2="41" stroke="#222222" stroke-width="2"/>
+    <circle cx="28" cy="42" r="2" fill="#6D4C41"/>
+    <circle cx="44" cy="42" r="2" fill="#6D4C41"/>
+    <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
+    <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. This one is all about counting the places exactly right. One place too many or one too few, and the answer is wrong, even when the digits are right. Count out loud, one, two, three. And read the sign: times or divide? Write your working for EVERY question. You have 40 minutes. You can do it!</p>
+</div>
+
+<h2>Learn how to do it first</h2>
+<p>Take your time with this part. Read it slowly. There is no timer here.</p>
+
+<div style="background:#e8f5e9;border:2px solid #4CAF50;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 1: Times: forget the points, multiply, then count the places.</b><br>
+  Forget the points and multiply the whole numbers. Then add up the digits after the point in both numbers, and put the point that many places from the right.<br><br>
+  5.4 × 1000: 54 × 1000 = <b>54000</b>. Count: 1 place. Point 1 place from the right: <b>5400</b>. Not 540.</div>
+
+<div style="background:#e3f2fd;border:2px solid #2196F3;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 2: Divide by 10 and 1000: the digits stay, add the zeros to the count.</b><br>
+  Forget the points, the digits stay the same. Count the places in the number you started with, then add the zeros in 10 or 1000.<br><br>
+  36 ÷ 1000: digits stay 36. Count: 0 plus 3 zeros, 3 places. Point 3 places from the right: <b>0.036</b>. Not 0.36.</div>
+
+<div style="background:#f3e5f5;border:2px solid #9C27B0;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 3: Count out loud, one place at a time.</b><br>
+  Say the count as you write the point.<br><br>
+  2.8 ÷ 10: digits stay 28. Count: 1 plus 1, 2 places: <b>0.28</b>. Not 0.028.</div>
+
+<div style="background:#fff3e0;border:2px solid #FF9800;border-radius:12px;padding:12px;margin:10px 0;font-size:18px;"><b>Box 4: Divide by 30, 40 or 400: two steps, write both down.</b><br>
+  8.1 ÷ 30: first divide by 3, 81 ÷ 3 = 27, 1 place, so 2.7. Then divide by 10, 2 places, so <b>0.27</b>. Not 0.027.<br><br>
+  Do not stop after the first step. The second step is the whole point of the question.</div>
+
+<p><button type="button" class="speak" data-say="Times: forget the points, multiply the whole numbers, count the places, and put the point that many places from the right. Divide by 10 and 1000: the digits stay, add the zeros to the count. Count out loud, one place at a time. Times you add, divide you subtract.">&#128266; Hear the rules</button></p>
+
+<div class="tip"><b>Show your working!</b><br>
+  Under each question there is a white box. Write your working in it with your pen or your finger, just like on paper. Harry and Daddy want to see how you did each sum, so we can help with the exact step that went wrong.</div>
+
+<div class="tip"><b>Write working for EVERY question, even the easy ones!</b><br>
+  In the last drill, the four questions with no working were all wrong. When you write it down, you can see the counting.<br>
+  And before you type each answer, ask: should it be bigger or smaller than the number I started with?<br>
+  Type the answer exactly as you worked it. Check the digits and the point before you move on.</div>
+
+<h2>Warm-up: match the pairs</h2>
+<p>Tap a sum, then tap its answer. Match all eight pairs! This part has no timer.</p>
+<div id="matchGrid"></div>
+<div id="matchDone">Brilliant! You matched them all! Now for the quiz.</div>
+
+<div id="startBox">
+  <strong>Ready?</strong><br>
+  You have <strong>40 minutes</strong> for all 30 questions. Take your time, write your working in the boxes, and remember to count the places!
+  <button type="button" id="startBtn">Start the quiz!</button>
+</div>
+
+<div id="progressWrap">
+  <div id="progressBar"><div id="progressFill"></div></div>
+  <div id="progressText">Answered 0 of 30</div>
+  <div id="timerWrap">
+    <div id="timerText">&#9201; 40:00 left</div>
+    <div id="timerBar"><div id="timerFill"></div></div>
+  </div>
+</div>
+
+<form id="quizForm">
+  <div class="q typeq" data-q="1">
+    <h3>Question 1 - Count the places</h3>
+    <p class="stem">4.6 × 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q1" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad1" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad1" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad1" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad1">Clear all</button>
+    </div>
+    <div class="explain" id="ex1"><strong>4600.</strong> Forget the points: 46 × 1000 = 46000. Count: 1 place: 4600.</div>
+  </div>
+  <div class="q typeq" data-q="2">
+    <h3>Question 2 - Count the places</h3>
+    <p class="stem">8.3 × 100 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q2" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad2" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad2" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad2" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad2">Clear all</button>
+    </div>
+    <div class="explain" id="ex2"><strong>830.</strong> Forget the points: 83 × 100 = 8300. Count: 1 place: 830.</div>
+  </div>
+  <div class="q typeq" data-q="3">
+    <h3>Question 3 - Count the places</h3>
+    <p class="stem">2.9 × 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q3" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad3" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad3" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad3" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad3">Clear all</button>
+    </div>
+    <div class="explain" id="ex3"><strong>2900.</strong> Forget the points: 29 × 1000 = 29000. Count: 1 place: 2900.</div>
+  </div>
+  <div class="q typeq" data-q="4">
+    <h3>Question 4 - Count the places</h3>
+    <p class="stem">6.7 × 100 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q4" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad4" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad4" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad4" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad4">Clear all</button>
+    </div>
+    <div class="explain" id="ex4"><strong>670.</strong> Forget the points: 67 × 100 = 6700. Count: 1 place: 670.</div>
+  </div>
+  <div class="q typeq" data-q="5">
+    <h3>Question 5 - Count the places</h3>
+    <p class="stem">3.5 × 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q5" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad5" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad5" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad5" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad5">Clear all</button>
+    </div>
+    <div class="explain" id="ex5"><strong>3500.</strong> Forget the points: 35 × 1000 = 35000. Count: 1 place: 3500.</div>
+  </div>
+  <div class="q typeq" data-q="6">
+    <h3>Question 6 - Count the places</h3>
+    <p class="stem">9.2 × 100 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q6" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad6" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad6" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad6" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad6">Clear all</button>
+    </div>
+    <div class="explain" id="ex6"><strong>920.</strong> Forget the points: 92 × 100 = 9200. Count: 1 place: 920.</div>
+  </div>
+  <div class="q typeq" data-q="7">
+    <h3>Question 7 - Count the places</h3>
+    <p class="stem">5.8 × 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q7" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad7" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad7" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad7" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad7">Clear all</button>
+    </div>
+    <div class="explain" id="ex7"><strong>5800.</strong> Forget the points: 58 × 1000 = 58000. Count: 1 place: 5800.</div>
+  </div>
+  <div class="q typeq" data-q="8">
+    <h3>Question 8 - Count the places</h3>
+    <p class="stem">1.6 × 100 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q8" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad8" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad8" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad8" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad8">Clear all</button>
+    </div>
+    <div class="explain" id="ex8"><strong>160.</strong> Forget the points: 16 × 100 = 1600. Count: 1 place: 160.</div>
+  </div>
+  <div class="q typeq" data-q="9">
+    <h3>Question 9 - Count the places</h3>
+    <p class="stem">7.4 × 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q9" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad9" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad9" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad9" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad9">Clear all</button>
+    </div>
+    <div class="explain" id="ex9"><strong>7400.</strong> Forget the points: 74 × 1000 = 74000. Count: 1 place: 7400.</div>
+  </div>
+  <div class="q typeq" data-q="10">
+    <h3>Question 10 - Count the places</h3>
+    <p class="stem">0.9 × 100 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q10" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad10" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad10" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad10" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad10">Clear all</button>
+    </div>
+    <div class="explain" id="ex10"><strong>90.</strong> Forget the points: 9 × 100 = 900. Count: 1 place: 90.</div>
+  </div>
+  <div class="q typeq" data-q="11">
+    <h3>Question 11 - Count the places</h3>
+    <p class="stem">48 ÷ 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q11" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad11" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad11" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad11" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad11">Clear all</button>
+    </div>
+    <div class="explain" id="ex11"><strong>0.048.</strong> Digits stay 48. Count: 0 plus 3 zeros, 3 places: 0.048.</div>
+  </div>
+  <div class="q typeq" data-q="12">
+    <h3>Question 12 - Count the places</h3>
+    <p class="stem">7.3 ÷ 10 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q12" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad12" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad12" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad12" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad12">Clear all</button>
+    </div>
+    <div class="explain" id="ex12"><strong>0.73.</strong> Digits stay 73. Count: 1 plus 1, 2 places: 0.73.</div>
+  </div>
+  <div class="q typeq" data-q="13">
+    <h3>Question 13 - Count the places</h3>
+    <p class="stem">92 ÷ 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q13" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad13" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad13" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad13" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad13">Clear all</button>
+    </div>
+    <div class="explain" id="ex13"><strong>0.092.</strong> Digits stay 92. Count: 0 plus 3, 3 places: 0.092.</div>
+  </div>
+  <div class="q typeq" data-q="14">
+    <h3>Question 14 - Count the places</h3>
+    <p class="stem">5.8 ÷ 10 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q14" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad14" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad14" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad14" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad14">Clear all</button>
+    </div>
+    <div class="explain" id="ex14"><strong>0.58.</strong> Digits stay 58. Count: 1 plus 1, 2 places: 0.58.</div>
+  </div>
+  <div class="q typeq" data-q="15">
+    <h3>Question 15 - Count the places</h3>
+    <p class="stem">64 ÷ 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q15" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad15" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad15" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad15" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad15">Clear all</button>
+    </div>
+    <div class="explain" id="ex15"><strong>0.064.</strong> Digits stay 64. Count: 0 plus 3, 3 places: 0.064.</div>
+  </div>
+  <div class="q typeq" data-q="16">
+    <h3>Question 16 - Count the places</h3>
+    <p class="stem">9.6 ÷ 10 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q16" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad16" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad16" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad16" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad16">Clear all</button>
+    </div>
+    <div class="explain" id="ex16"><strong>0.96.</strong> Digits stay 96. Count: 1 plus 1, 2 places: 0.96.</div>
+  </div>
+  <div class="q typeq" data-q="17">
+    <h3>Question 17 - Count the places</h3>
+    <p class="stem">35 ÷ 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q17" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad17" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad17" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad17" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad17">Clear all</button>
+    </div>
+    <div class="explain" id="ex17"><strong>0.035.</strong> Digits stay 35. Count: 0 plus 3, 3 places: 0.035.</div>
+  </div>
+  <div class="q typeq" data-q="18">
+    <h3>Question 18 - Count the places</h3>
+    <p class="stem">4.2 ÷ 10 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q18" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad18" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad18" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad18" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad18">Clear all</button>
+    </div>
+    <div class="explain" id="ex18"><strong>0.42.</strong> Digits stay 42. Count: 1 plus 1, 2 places: 0.42.</div>
+  </div>
+  <div class="q typeq" data-q="19">
+    <h3>Question 19 - Count the places</h3>
+    <p class="stem">81 ÷ 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q19" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad19" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad19" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad19" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad19">Clear all</button>
+    </div>
+    <div class="explain" id="ex19"><strong>0.081.</strong> Digits stay 81. Count: 0 plus 3, 3 places: 0.081.</div>
+  </div>
+  <div class="q typeq" data-q="20">
+    <h3>Question 20 - Count the places</h3>
+    <p class="stem">6.9 ÷ 10 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q20" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad20" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad20" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad20" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad20">Clear all</button>
+    </div>
+    <div class="explain" id="ex20"><strong>0.69.</strong> Digits stay 69. Count: 1 plus 1, 2 places: 0.69.</div>
+  </div>
+  <div class="q typeq" data-q="21">
+    <h3>Question 21 - Divide in two steps</h3>
+    <p class="stem">4.5 ÷ 30 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q21" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad21" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad21" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad21" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad21">Clear all</button>
+    </div>
+    <div class="explain" id="ex21"><strong>0.15.</strong> Two steps. First divide by 3: 45 ÷ 3 = 15, 1 place, so 1.5. Then divide by 10: 2 places, so 0.15.</div>
+  </div>
+  <div class="q typeq" data-q="22">
+    <h3>Question 22 - Divide in two steps</h3>
+    <p class="stem">7.2 ÷ 40 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q22" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad22" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad22" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad22" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad22">Clear all</button>
+    </div>
+    <div class="explain" id="ex22"><strong>0.18.</strong> Two steps. First divide by 4: 72 ÷ 4 = 18, 1 place, so 1.8. Then divide by 10: 2 places, so 0.18.</div>
+  </div>
+  <div class="q typeq" data-q="23">
+    <h3>Question 23 - Divide in two steps</h3>
+    <p class="stem">9.6 ÷ 400 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q23" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad23" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad23" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad23" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad23">Clear all</button>
+    </div>
+    <div class="explain" id="ex23"><strong>0.024.</strong> Two steps. First divide by 4: 96 ÷ 4 = 24, 1 place, so 2.4. Then divide by 100: 1 place plus 2 zeros, 3 places, so 0.024.</div>
+  </div>
+  <div class="q typeq" data-q="24">
+    <h3>Question 24 - Divide in two steps</h3>
+    <p class="stem">6.3 ÷ 20 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q24" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad24" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad24" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad24" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad24">Clear all</button>
+    </div>
+    <div class="explain" id="ex24"><strong>0.315.</strong> Two steps. First divide by 2: 63 ÷ 2 = 31.5, 1 place, so 3.15. Then divide by 10: 2 places, so 0.315.</div>
+  </div>
+  <div class="q typeq" data-q="25">
+    <h3>Question 25 - Divide in two steps</h3>
+    <p class="stem">8.4 ÷ 30 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q25" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad25" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad25" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad25" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad25">Clear all</button>
+    </div>
+    <div class="explain" id="ex25"><strong>0.28.</strong> Two steps. First divide by 3: 84 ÷ 3 = 28, 1 place, so 2.8. Then divide by 10: 2 places, so 0.28.</div>
+  </div>
+  <div class="q typeq" data-q="26">
+    <h3>Question 26 - Divide in two steps</h3>
+    <p class="stem">3.6 ÷ 200 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q26" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad26" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad26" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad26" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad26">Clear all</button>
+    </div>
+    <div class="explain" id="ex26"><strong>0.018.</strong> Two steps. First divide by 2: 36 ÷ 2 = 18, 1 place, so 1.8. Then divide by 100: 3 places, so 0.018.</div>
+  </div>
+  <div class="q typeq" data-q="27">
+    <h3>Question 27 - Read the sign</h3>
+    <p class="stem">5.2 × 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q27" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad27" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad27" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad27" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad27">Clear all</button>
+    </div>
+    <div class="explain" id="ex27"><strong>5200.</strong> Read the sign: TIMES. Forget the points: 52 × 1000 = 52000. Count: 1 place: 5200.</div>
+  </div>
+  <div class="q typeq" data-q="28">
+    <h3>Question 28 - Read the sign</h3>
+    <p class="stem">6.8 ÷ 1000 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q28" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad28" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad28" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad28" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad28">Clear all</button>
+    </div>
+    <div class="explain" id="ex28"><strong>0.0068.</strong> Read the sign: DIVIDE. Digits stay 68. Count: 1 plus 3, 4 places: 0.0068.</div>
+  </div>
+  <div class="q typeq" data-q="29">
+    <h3>Question 29 - Read the sign</h3>
+    <p class="stem">3.7 × 100 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q29" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad29" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad29" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad29" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad29">Clear all</button>
+    </div>
+    <div class="explain" id="ex29"><strong>370.</strong> Read the sign: TIMES. Forget the points: 37 × 100 = 3700. Count: 1 place: 370.</div>
+  </div>
+  <div class="q typeq" data-q="30">
+    <h3>Question 30 - Read the sign</h3>
+    <p class="stem">4.9 ÷ 100 = ?</p>
+    <p style="font-size:15px;color:#555;margin:0 0 8px 0;">Before you type: should the answer be bigger or smaller than the number you started with?</p>
+    <input type="text" name="q30" inputmode="decimal" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Type the answer">
+    <div class="worklabel">Show your working here. Write with your pen or your finger.</div>
+    <canvas class="workpad" id="pad30" width="1000" height="300"></canvas>
+    <div class="padtools">
+      <button type="button" class="padtool pen on" data-pad="pad30" data-tool="pen">Pen</button>
+      <button type="button" class="padtool rubber" data-pad="pad30" data-tool="rubber">Rubber</button>
+      <button type="button" class="rubout" data-pad="pad30">Clear all</button>
+    </div>
+    <div class="explain" id="ex30"><strong>0.049.</strong> Read the sign: DIVIDE. Digits stay 49. Count: 1 plus 2, 3 places: 0.049.</div>
+  </div>
+
+  <div id="warn"></div>
+  <button type="button" id="submitBtn">Submit</button>
+</form>
+
+<div id="result">
+  <div id="score"></div>
+  <img id="resultImg" alt="Maya's quiz result">
+  <div id="shareBox">
+    <strong>Share your result with Daddy:</strong> Tap the button and pick Messages to send him the picture.
+    <button type="button" id="shareBtn">Share with Daddy</button>
+    <a id="downloadLink" href="#" download="maya-maths-quiz-14.png">Save the picture</a>
+    <div id="shareNote"></div>
+  </div>
+  <div id="shareBox">
+    <strong>Share your working with Daddy:</strong> Tap the button to send him the four pictures of your working, so he can see how you did each sum.
+    <button type="button" id="shareWorkingBtn">Share your working</button>
+    <a id="downloadWork1" href="#" download="maya-maths-quiz-14-working-1.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 1 (questions 1 to 8)</a>
+    <a id="downloadWork2" href="#" download="maya-maths-quiz-14-working-2.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 2 (questions 9 to 16)</a>
+    <a id="downloadWork3" href="#" download="maya-maths-quiz-14-working-3.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 3 (questions 17 to 24)</a>
+    <a id="downloadWork4" href="#" download="maya-maths-quiz-14-working-4.png" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save working picture 4 (questions 25 to 30)</a>
+    <div id="shareWorkNote"></div>
+    <div id="workSaveNote" style="font-size:15px;color:#555;margin-top:6px;"></div>
+  </div>
+  <div id="shareBox">
+    <strong>Share your answers with Daddy:</strong> Tap the button to send him a list of all your answers, so he can see every sum and help you with the ones to practise.
+    <button type="button" id="shareAnswersBtn">Share your answers</button>
+    <a id="downloadAnswers" href="#" download="maya-maths-quiz-14-answers.txt" style="display:none;text-align:center;padding:12px;font-size:16px;font-weight:bold;color:#2196f3;">Save the answers list</a>
+    <div id="shareAnswersNote"></div>
+    <div id="answersList" style="text-align:left;font-size:16px;line-height:1.6;margin-top:10px;"></div>
+  </div>
+</div>
+
+<p class="footer">Made for Maya. Good luck!</p>
+
+<script>
+var ANSWERS = { q1: "4600", q2: "830", q3: "2900", q4: "670", q5: "3500", q6: "920", q7: "5800", q8: "160", q9: "7400", q10: "90", q11: "0.048", q12: "0.73", q13: "0.092", q14: "0.58", q15: "0.064", q16: "0.96", q17: "0.035", q18: "0.42", q19: "0.081", q20: "0.69", q21: "0.15", q22: "0.18", q23: "0.024", q24: "0.315", q25: "0.28", q26: "0.018", q27: "5200", q28: "0.0068", q29: "370", q30: "0.049" };
+var TYPE_QS = { q1: true, q2: true, q3: true, q4: true, q5: true, q6: true, q7: true, q8: true, q9: true, q10: true, q11: true, q12: true, q13: true, q14: true, q15: true, q16: true, q17: true, q18: true, q19: true, q20: true, q21: true, q22: true, q23: true, q24: true, q25: true, q26: true, q27: true, q28: true, q29: true, q30: true };
+var KEY = "maya-maths-quiz-14";
+var submitted = false;
+try { submitted = localStorage.getItem(KEY) === "done"; } catch (e) {}
+var resultBlob = null;
+var STEMS = { q1: "4.6 × 1000", q2: "8.3 × 100", q3: "2.9 × 1000", q4: "6.7 × 100", q5: "3.5 × 1000", q6: "9.2 × 100", q7: "5.8 × 1000", q8: "1.6 × 100", q9: "7.4 × 1000", q10: "0.9 × 100", q11: "48 ÷ 1000", q12: "7.3 ÷ 10", q13: "92 ÷ 1000", q14: "5.8 ÷ 10", q15: "64 ÷ 1000", q16: "9.6 ÷ 10", q17: "35 ÷ 1000", q18: "4.2 ÷ 10", q19: "81 ÷ 1000", q20: "6.9 ÷ 10", q21: "4.5 ÷ 30", q22: "7.2 ÷ 40", q23: "9.6 ÷ 400", q24: "6.3 ÷ 20", q25: "8.4 ÷ 30", q26: "3.6 ÷ 200", q27: "5.2 × 1000", q28: "6.8 ÷ 1000", q29: "3.7 × 100", q30: "4.9 ÷ 100" };
+var padDrawn = {};
+var padsLocked = false;
+var answerTimes = {};
+
+function harrySay(msg) {
+  document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + msg;
+}
+
+function speak(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-GB"; u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+document.querySelectorAll(".speak").forEach(function (b) {
+  b.addEventListener("click", function () { speak(b.getAttribute("data-say")); });
+});
+
+var PAIRS = [["4.6 × 1000", "4600"], ["48 ÷ 1000", "0.048"], ["7.2 ÷ 40", "0.18"], ["5.2 × 1000", "5200"], ["9.6 ÷ 10", "0.96"], ["3.5 × 1000", "3500"], ["6.8 ÷ 1000", "0.0068"], ["8.4 ÷ 30", "0.28"]];
+var matchState = { first: null, lock: false, done: 0 };
+(function buildMatch() {
+  var cards = [];
+  PAIRS.forEach(function (p, i) {
+    cards.push({ pair: i, text: p[0] });
+    cards.push({ pair: i, text: p[1] });
+  });
+  for (var i = cards.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+  }
+  var grid = document.getElementById("matchGrid");
+  cards.forEach(function (c) {
+    var d = document.createElement("div");
+    d.className = "card";
+    d.textContent = c.text;
+    d.addEventListener("click", function () { pickCard(d, c.pair); });
+    grid.appendChild(d);
+  });
+})();
+function pickCard(el, pair) {
+  if (matchState.lock || el.classList.contains("matched") || el.classList.contains("picked")) return;
+  el.classList.add("picked");
+  if (matchState.first === null) { matchState.first = { el: el, pair: pair }; return; }
+  var f = matchState.first; matchState.first = null;
+  if (f.pair === pair) {
+    f.el.classList.remove("picked"); f.el.classList.add("matched");
+    el.classList.remove("picked"); el.classList.add("matched");
+    matchState.done++;
+    harrySay("Brilliant! That is a match!");
+    if (matchState.done === 8) {
+      harrySay("Brilliant! You matched them all! Now for the quiz!");
+      document.getElementById("matchDone").style.display = "block";
+    }
+  } else {
+    matchState.lock = true;
+    harrySay("Not quite, try again!");
+    setTimeout(function () {
+      f.el.classList.remove("picked"); el.classList.remove("picked");
+      matchState.lock = false;
+    }, 700);
+  }
+}
+
+var TOTAL = 2400;
+var timeLeft = TOTAL, timerId = null, startTime = null, timerRunning = false;
+function fmt(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+function fmtElapsed(sec) { var m = Math.floor(sec / 60), s = sec % 60; return m + " min " + s + " s"; }
+function tick() {
+  timeLeft--;
+  document.getElementById("timerText").textContent = "⏱ " + fmt(timeLeft) + " left";
+  document.getElementById("timerFill").style.width = (timeLeft / TOTAL * 100) + "%";
+  if (timeLeft <= 60) document.getElementById("timerText").style.color = "#D32F2F";
+  if (timeLeft <= 0) { clearInterval(timerId); timerRunning = false; doSubmit(true); }
+}
+document.getElementById("startBtn").addEventListener("click", function () {
+  document.getElementById("startBox").style.display = "none";
+  document.getElementById("quizForm").style.display = "block";
+  document.getElementById("timerWrap").style.display = "block";
+  startTime = Date.now();
+  timerRunning = true;
+  timerId = setInterval(tick, 1000);
+  harrySay("Go, Maya! You have 40 minutes!");
+  document.getElementById("quizForm").scrollIntoView();
+});
+
+function isTypeQ(j) { return !!TYPE_QS["q" + j]; }
+function getAnswer(j) {
+  return document.querySelector('input[name="q' + j + '"]').value;
+}
+function isAnswered(j) {
+  var a = getAnswer(j);
+  return a !== null && String(a).trim() !== "";
+}
+function answeredCount() {
+  var n = 0;
+  for (var i = 1; i <= 30; i++) if (isAnswered(i)) n++;
+  return n;
+}
+function updateProgress() {
+  var n = answeredCount();
+  document.getElementById("progressFill").style.width = (n / 30 * 100) + "%";
+  document.getElementById("progressText").textContent = "Answered " + n + " of 30";
+}
+var HARRY_CHEER = [
+  "Great thinking, Maya! You've got this!",
+  "Brilliant! Keep going, Maya!",
+  "Nice one, Maya! Harry is cheering for you!"
+];
+var cheerIdx = 0;
+document.querySelectorAll('input[type="text"]').forEach(function (t) {
+  t.addEventListener("input", function () {
+    if (t.value.trim() !== "" && !answerTimes[t.name]) answerTimes[t.name] = Date.now();
+    
+    updateProgress();
+    if (t.value.trim() !== "") {
+      harrySay(HARRY_CHEER[cheerIdx % HARRY_CHEER.length]);
+      cheerIdx++;
+    }
+  });
+});
+
+// ---- working pads: draw with pen or finger ----
+document.querySelectorAll(".workpad").forEach(function (cv) {
+  var ctx = cv.getContext("2d");
+  ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#222222";
+  var drawing = false, last = null, tool = "pen";
+  function pos(e) {
+    var r = cv.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (cv.width / r.width), y: (e.clientY - r.top) * (cv.height / r.height) };
+  }
+  function touchPos(t) {
+    var r = cv.getBoundingClientRect();
+    return { x: (t.clientX - r.left) * (cv.width / r.width), y: (t.clientY - r.top) * (cv.height / r.height) };
+  }
+  function applyTool() {
+    if (tool === "rubber") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 40;
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "#222222";
+      ctx.fillStyle = "#222222";
+      ctx.lineWidth = 4;
+    }
+  }
+  function startAt(p) {
+    drawing = true; last = p;
+    applyTool();
+    ctx.beginPath(); ctx.arc(p.x, p.y, tool === "rubber" ? 20 : 3, 0, Math.PI * 2); ctx.fill();
+    padDrawn[cv.id] = true;
+  }
+  function moveTo(p) {
+    applyTool();
+    ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+    last = p;
+    padDrawn[cv.id] = true;
+  }
+  function endDraw() { drawing = false; }
+  // Pointer events: mouse and pen.
+  cv.addEventListener("pointerdown", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(pos(e));
+    try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  cv.addEventListener("pointermove", function (e) {
+    if (padsLocked) return;
+    // Recover if the pointerdown was missed: draw whenever the button is held.
+    if (!drawing) {
+      if (e.buttons & 1) startAt(pos(e));
+      return;
+    }
+    e.preventDefault();
+    moveTo(pos(e));
+  });
+  cv.addEventListener("pointerup", endDraw);
+  cv.addEventListener("pointercancel", endDraw);
+  // Mouse events: a second, independent path for desktop dragging.
+  cv.addEventListener("mousedown", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(pos(e));
+  });
+  cv.addEventListener("mousemove", function (e) {
+    if (padsLocked) return;
+    if (!drawing) {
+      if (e.buttons & 1) startAt(pos(e));
+      return;
+    }
+    moveTo(pos(e));
+  });
+  cv.addEventListener("mouseup", endDraw);
+  cv.addEventListener("mouseleave", endDraw);
+  // Touch events: the reliable path on iPad, where pointer events alone
+  // can swallow the first touch until a text field has been used.
+  cv.addEventListener("touchstart", function (e) {
+    if (padsLocked) return;
+    e.preventDefault();
+    startAt(touchPos(e.touches[0]));
+  }, { passive: false });
+  cv.addEventListener("touchmove", function (e) {
+    e.preventDefault();
+    if (!drawing) { startAt(touchPos(e.touches[0])); return; }
+    moveTo(touchPos(e.touches[0]));
+  }, { passive: false });
+  cv.addEventListener("touchend", endDraw);
+  cv.addEventListener("touchcancel", endDraw);
+  // Pen / rubber switch for this box.
+  document.querySelectorAll('.padtool[data-pad="' + cv.id + '"]').forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      if (padsLocked) return;
+      tool = btn.getAttribute("data-tool");
+      document.querySelectorAll('.padtool[data-pad="' + cv.id + '"]').forEach(function (b) {
+        b.classList.toggle("on", b === btn);
+      });
+    });
+  });
+});
+document.querySelectorAll(".rubout").forEach(function (b) {
+  b.addEventListener("click", function () {
+    if (padsLocked) return;
+    var cv = document.getElementById(b.getAttribute("data-pad"));
+    cv.getContext("2d").clearRect(0, 0, cv.width, cv.height);
+    padDrawn[cv.id] = false;
+  });
+});
+
+// ---- working sheets: four pictures, questions 1-8, 9-16, 17-24 and 25-30 ----
+var workingBlobs = [null, null, null, null];
+var SHEET_RANGES = [[0, 8], [8, 16], [16, 24], [24, 30]];
+var answersText = "";
+function makeWorkingSheet(from, to, done) {
+  var c = document.createElement("canvas");
+  c.width = 1080; c.height = 170 + (to - from) * 400;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, c.width, c.height);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 120);
+  x.fillStyle = "#ffffff"; x.textAlign = "center";
+  x.font = "bold 48px -apple-system, Arial, sans-serif";
+  x.fillText("Maya's working - Maths Quiz 14", 540, 78);
+  x.textAlign = "left";
+  var y = 150;
+  for (var i = from; i < to; i++) {
+    var n = i + 1;
+    x.fillStyle = "#222222";
+    x.font = "bold 34px -apple-system, Arial, sans-serif";
+    x.fillText("Q" + n + ": " + STEMS["q" + n] + " = " + ANSWERS["q" + n], 40, y);
+    var said = getAnswer(n);
+    x.font = "28px -apple-system, Arial, sans-serif";
+    x.fillStyle = "#555555";
+    x.fillText("You said: " + (said === null || String(said).trim() === "" ? "(no answer)" : String(said)), 40, y + 40);
+    y += 60;
+    x.strokeStyle = "#90CAF9"; x.lineWidth = 2;
+    x.strokeRect(40, y, 1000, 300);
+    if (padDrawn["pad" + n]) {
+      x.drawImage(document.getElementById("pad" + n), 40, y, 1000, 300);
+    } else {
+      x.fillStyle = "#999999";
+      x.font = "28px -apple-system, Arial, sans-serif";
+      x.fillText("No working written", 60, y + 150);
+    }
+    y += 340;
+  }
+  c.toBlob(function (b) { done(b); }, "image/png");
+}
+function showWorkDownloads() {
+  var l1 = document.getElementById("downloadWork1");
+  var l2 = document.getElementById("downloadWork2");
+  var l3 = document.getElementById("downloadWork3");
+  var l4 = document.getElementById("downloadWork4");
+  l1.href = URL.createObjectURL(workingBlobs[0]);
+  l2.href = URL.createObjectURL(workingBlobs[1]);
+  l3.href = URL.createObjectURL(workingBlobs[2]);
+  l4.href = URL.createObjectURL(workingBlobs[3]);
+  l1.style.display = "block"; l2.style.display = "block";
+  l3.style.display = "block"; l4.style.display = "block";
+}
+document.getElementById("shareWorkingBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareWorkNote");
+  note.textContent = "Making your working pictures...";
+  var count = 0;
+  [0, 1, 2, 3].forEach(function (sIdx) {
+    makeWorkingSheet(SHEET_RANGES[sIdx][0], SHEET_RANGES[sIdx][1], function (b) {
+      workingBlobs[sIdx] = b;
+      count++;
+      if (count === 4) {
+        var files = [
+          new File([workingBlobs[0]], "maya-maths-quiz-14-working-1.png", { type: "image/png" }),
+          new File([workingBlobs[1]], "maya-maths-quiz-14-working-2.png", { type: "image/png" }),
+          new File([workingBlobs[2]], "maya-maths-quiz-14-working-3.png", { type: "image/png" }),
+          new File([workingBlobs[3]], "maya-maths-quiz-14-working-4.png", { type: "image/png" })
+        ];
+        if (navigator.canShare && navigator.canShare({ files: files })) {
+          navigator.share({ files: files }).catch(function (e) {
+            showWorkDownloads();
+            note.textContent = "Sharing did not open. Tap Save below instead.";
+          });
+        } else {
+          showWorkDownloads();
+          note.textContent = "Sharing pictures is not available here. Tap Save below, then send them from Photos.";
+        }
+      }
+    });
+  });
+});
+document.getElementById("shareAnswersBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareAnswersNote");
+  if (!answersText) {
+    note.textContent = "The answers list is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([answersText], "maya-maths-quiz-14-answers.txt", { type: "text/plain" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      showAnswersDownload();
+      note.textContent = "Sharing did not open. Tap Save the answers list instead.";
+    });
+  } else {
+    showAnswersDownload();
+    note.textContent = "Sharing is not available here. Tap Save the answers list, then send it from Files.";
+  }
+});
+function showAnswersDownload() {
+  var l = document.getElementById("downloadAnswers");
+  l.href = URL.createObjectURL(new Blob([answersText], { type: "text/plain" }));
+  l.style.display = "block";
+}
+
+
+function lockForm() {
+  document.querySelectorAll('input[type="text"]').forEach(function (t) { t.disabled = true; });
+  document.getElementById("submitBtn").disabled = true;
+  padsLocked = true;
+  document.querySelectorAll(".rubout").forEach(function (b) { b.disabled = true; });
+  document.querySelectorAll(".padtool").forEach(function (b) { b.disabled = true; });
+}
+
+function confetti(x) {
+  var cols = ["#FF6B9D", "#FFD93D", "#6BCBFF", "#B388FF", "#FF8A65", "#81C784"];
+  var seed = 12345;
+  function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  for (var i = 0; i < 44; i++) {
+    var left = rnd() < 0.5;
+    var cx = left ? 30 + rnd() * 150 : 900 + rnd() * 150;
+    var cy = 320 + rnd() * 680;
+    var r = 6 + rnd() * 8;
+    x.fillStyle = cols[i % cols.length];
+    x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill();
+  }
+}
+
+function makeResultImage(score, fb, timeText, done) {
+  var c = document.createElement("canvas");
+  c.width = 1080; c.height = 1080;
+  var x = c.getContext("2d");
+  x.fillStyle = "#FFF8E1"; x.fillRect(0, 0, 1080, 1080);
+  confetti(x);
+  x.fillStyle = "#4CAF50"; x.fillRect(0, 0, 1080, 280);
+  x.fillStyle = "#ffffff"; x.textAlign = "center";
+  x.font = "bold 64px -apple-system, Arial, sans-serif";
+  x.fillText("Maya's Maths Quiz 14", 540, 100);
+  x.font = "44px -apple-system, Arial, sans-serif";
+  x.fillText("Count the places, one at a time, 40 minutes", 540, 160);
+  x.font = "bold 44px -apple-system, Arial, sans-serif";
+  x.fillText("Well done, Maya!", 540, 225);
+  x.fillStyle = "#222222";
+  x.font = "bold 170px -apple-system, Arial, sans-serif";
+  x.fillText(score + " / 30", 540, 455);
+  x.fillStyle = "#4CAF50";
+  x.font = "bold 56px -apple-system, Arial, sans-serif";
+  x.fillText(score === 30 ? "All correct!" : score >= 24 ? "Nearly perfect!" : score >= 18 ? "Good effort!" : "Keep going, Maya!", 540, 585);
+  var stars = "";
+  for (var s = 0; s < 30; s++) stars += (s < score) ? "★" : "☆";
+  x.fillStyle = "#F9A825";
+  x.font = "28px -apple-system, Arial, sans-serif";
+  x.fillText(stars, 540, 680);
+  x.fillStyle = "#222222";
+  x.font = "bold 40px -apple-system, Arial, sans-serif";
+  x.fillText("Feedback for Daddy:", 540, 750);
+  for (var i = 0; i < fb.length; i++) {
+    var size = 36;
+    x.font = size + "px -apple-system, Arial, sans-serif";
+    x.fillStyle = "#555555";
+    while (x.measureText(fb[i]).width > 980 && size > 24) {
+      size -= 2;
+      x.font = size + "px -apple-system, Arial, sans-serif";
+    }
+    x.fillText(fb[i], 540, 795 + i * 42);
+  }
+  x.fillStyle = "#555555";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(timeText, 540, 935);
+  var d = new Date();
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  x.fillStyle = "#888888";
+  x.font = "40px -apple-system, Arial, sans-serif";
+  x.fillText(d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear(), 540, 985);
+  x.fillText("Made for Maya", 540, 1030);
+  c.toBlob(function (b) { done(b); }, "image/png");
+}
+
+function doSubmit(auto) {
+  if (timerRunning) { clearInterval(timerId); timerRunning = false; }
+  var missing = [];
+  for (var i = 1; i <= 30; i++) if (!isAnswered(i)) missing.push(i);
+  var warn = document.getElementById("warn");
+  if (missing.length > 0 && !auto) {
+    warn.style.display = "block";
+    warn.textContent = "You still need to answer question" + (missing.length > 1 ? "s " : " ") + missing.join(", ") + ". Tap Submit again when they are all answered.";
+    return;
+  }
+  warn.style.display = "none";
+  var score = 0, wrongDetails = [];
+  for (var j = 1; j <= 30; j++) {
+    var picked = getAnswer(j);
+    var ex = document.getElementById("ex" + j);
+    ex.style.display = "block";
+    var pv = parseFloat(picked), av = parseFloat(ANSWERS["q" + j]);
+    var ok = !isNaN(pv) && !isNaN(av) && Math.abs(pv - av) < 0.0000001;
+    if (ok) {
+      score++;
+    } else {
+      wrongDetails.push({ q: j, picked: (picked === null || String(picked).trim() === "") ? "(no answer)" : String(picked), correct: ANSWERS["q" + j] });
+      ex.classList.add("wrong");
+    }
+  }
+  var slowestQ = null, slowestSecs = 0;
+  if (startTime) {
+    var prev = startTime;
+    for (var k = 1; k <= 30; k++) {
+      var t = answerTimes["q" + k];
+      if (!t) continue;
+      var gap = Math.round((t - prev) / 1000);
+      if (gap > slowestSecs) { slowestSecs = gap; slowestQ = k; }
+      prev = t;
+    }
+  }
+  var fb = [];
+  if (wrongDetails.length === 0) {
+    fb.push("No questions missed!");
+  } else {
+    wrongDetails.slice(0, 2).forEach(function (w) {
+      fb.push("Q" + w.q + ": you said " + w.picked + ", answer is " + w.correct);
+    });
+    if (wrongDetails.length > 2) fb.push("and " + (wrongDetails.length - 2) + " more missed");
+  }
+  if (timeLeft > 1200) fb.push("Very fast: " + fmt(timeLeft) + " left. Next quiz harder!");
+  if (slowestQ && slowestSecs >= 10) fb.push("Slowest: Q" + slowestQ + " (" + slowestSecs + " s)");
+  fb = fb.slice(0, 3);
+  var elapsed = startTime ? Math.round((Date.now() - startTime) / 1000) : TOTAL;
+  var timeText = auto ? "Time ran out! Finished in 40 min 0 s" : "Finished in " + fmtElapsed(elapsed);
+  document.getElementById("score").textContent = "You scored " + score + " out of 30! " + (auto ? "Time ran out!" : "Finished in " + fmtElapsed(elapsed) + ".");
+  var harryEnd = score === 30 ? "Brilliant, Maya! Full marks, thirty out of thirty!"
+    : score >= 24 ? "Well done, Maya! Great work under pressure!"
+    : score >= 18 ? "Good effort, Maya! You are learning fast!"
+    : "Don't worry, Maya. Every wizard has tough days. Try again!";
+  var blankPads = 0;
+  for (var p = 1; p <= 30; p++) if (!padDrawn["pad" + p]) blankPads++;
+  if (blankPads >= 7) harryEnd += " Next time, write your working in the boxes, so Daddy can see how you did each sum!";
+  harrySay(harryEnd);
+  // Full answers record, for Daddy's follow-up teaching.
+  var answersLines = [];
+  answersLines.push("Maya's Maths Quiz 14 - all answers");
+  answersLines.push("Date: " + new Date().toLocaleDateString("en-IE"));
+  answersLines.push("Score: " + score + " out of 30. " + timeText);
+  answersLines.push("");
+  for (var a = 1; a <= 30; a++) {
+    var ans = getAnswer(a);
+    var ansText = (ans === null || String(ans).trim() === "") ? "(no answer)" : String(ans);
+    var av2 = parseFloat(ANSWERS["q" + a]);
+    var pv2 = parseFloat(ans);
+    var ok2 = !isNaN(pv2) && !isNaN(av2) && Math.abs(pv2 - av2) < 0.0000001;
+    var at = answerTimes["q" + a];
+    var when = (at && startTime) ? "answered at " + fmtElapsed(Math.round((at - startTime) / 1000)) : "no time recorded";
+    answersLines.push("Q" + a + ": " + STEMS["q" + a] + " = " + ANSWERS["q" + a] + ". You said: " + ansText + ". " + (ok2 ? "Correct." : "Wrong.") + " (" + when + ")");
+  }
+  answersText = answersLines.join("\n");
+  // Auto-save her answers to Daddy's record (fire-and-forget, never blocks the quiz).
+  var submitStamp = new Date().toISOString().replace(/[:.]/g, "-");
+  try {
+    var payload = { quiz: "maths14", stamp: submitStamp, date: new Date().toISOString(), score: score, time: timeText, answers: [] };
+    for (var a = 1; a <= 30; a++) {
+      var ans = getAnswer(a);
+      payload.answers.push({
+        q: a,
+        sum: STEMS["q" + a],
+        correct: ANSWERS["q" + a],
+        said: (ans === null || String(ans).trim() === "") ? "" : String(ans),
+        working: !!padDrawn["pad" + a]
+      });
+    }
+    var answersBody = JSON.stringify(payload);
+    function postAnswers(attempt) {
+      fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: answersBody
+      }).then(function (res) {
+        if (!res.ok && attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      }).catch(function () {
+        if (attempt === 1) setTimeout(function () { postAnswers(2); }, 2000);
+      });
+    }
+    postAnswers(1);
+  } catch (e) {}
+  // Auto-save her working pictures too (fire-and-forget, never blocks the quiz).
+  // One picture at a time, one retry each, and a status line that says what happened.
+  try {
+    var workNote = document.getElementById("workSaveNote");
+    var workResults = {};
+    function workStatus() {
+      if (!workNote) return;
+      var done = 0, saved = 0, reasons = [];
+      ["working-1", "working-2", "working-3", "working-4"].forEach(function (nm) {
+        if (workResults[nm]) {
+          done++;
+          if (workResults[nm] === "saved") saved++;
+          else reasons.push(nm + ": " + workResults[nm]);
+        }
+      });
+      if (done < 4) return;
+      workNote.textContent = saved === 4 ? "Working pictures saved."
+        : saved > 0 ? saved + " of 4 working pictures saved (" + reasons.join(", ") + "). Tap Share your working below to send the others."
+        : "Working pictures did not save (" + reasons.join(", ") + "). Tap Share your working below to send them.";
+    }
+    function postSheet(sIdx, attempt, done) {
+      var nm = "working-" + (sIdx + 1);
+      var fail = function (reason) {
+        if (attempt === 1) {
+          setTimeout(function () { postSheet(sIdx, 2, done); }, 2000);
+        } else {
+          workResults[nm] = reason;
+          workStatus();
+          done();
+        }
+      };
+      var ok = function () {
+        workResults[nm] = "saved";
+        workStatus();
+        done();
+      };
+      try {
+        makeWorkingSheet(SHEET_RANGES[sIdx][0], SHEET_RANGES[sIdx][1], function (b) {
+          if (!b) { fail("no picture made"); return; }
+          var r = new FileReader();
+          r.onload = function () {
+            var data = String(r.result).split(",")[1];
+            if (!data) { fail("no picture data"); return; }
+            fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ quiz: "maths14", stamp: submitStamp, working: [{ name: nm, data: data }] })
+            }).then(function (res) {
+              if (res.ok) ok();
+              else fail("server " + res.status);
+            }).catch(function () { fail("no connection"); });
+          };
+          r.onerror = function () { fail("could not read picture"); };
+          r.readAsDataURL(b);
+        });
+      } catch (err) {
+        fail("error: " + (err && err.message ? err.message : "unknown"));
+      }
+    }
+    // One picture at a time, so the four sends never race each other.
+    postSheet(0, 1, function () { postSheet(1, 1, function () { postSheet(2, 1, function () { postSheet(3, 1, function () {}); }); }); });
+  } catch (e) {}
+  document.getElementById("answersList").innerHTML = answersLines.slice(4).map(function (l) {
+    return l.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "<br>";
+  }).join("");
+  document.getElementById("result").style.display = "block";
+  lockForm();
+  try { localStorage.setItem(KEY, "done"); } catch (e) {}
+  makeResultImage(score, fb, timeText, function (blob) {
+    resultBlob = blob;
+    var url = URL.createObjectURL(blob);
+    var img = document.getElementById("resultImg");
+    img.src = url; img.style.display = "block";
+    document.getElementById("downloadLink").href = url;
+  });
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+}
+
+document.getElementById("submitBtn").addEventListener("click", function () { doSubmit(false); });
+
+document.getElementById("shareBtn").addEventListener("click", function () {
+  var note = document.getElementById("shareNote");
+  if (!resultBlob) {
+    note.textContent = "The picture is still being made, tap again in a second.";
+    return;
+  }
+  var file = new File([resultBlob], "maya-maths-quiz-14.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file] }).catch(function (e) {
+      document.getElementById("downloadLink").style.display = "block";
+      note.textContent = "Sharing did not open. Tap Save the picture instead.";
+    });
+  } else {
+    document.getElementById("downloadLink").style.display = "block";
+    note.textContent = "Sharing pictures is not available here. Tap Save the picture, then send it from Photos.";
+  }
+});
+
+updateProgress();
+if (submitted) {
+  lockForm();
+  document.getElementById("submitBtn").textContent = "Already submitted on this iPad";
+}
+
+</script>
+</body>
+</html>
