@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's Book Quiz 1 - My First Book of Questions and Answers</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; margin-top: 28px; }
+  .intro { background: #fff3cd; border: 1px solid #e6c87a; border-radius: 10px; padding: 12px; }
+  .harry { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
+  .harry svg { flex: 0 0 72px; }
+  .harry p { margin: 0; font-size: 17px; }
+  #progressWrap { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; }
+  #progressBar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+  #progressFill { height: 100%; width: 0%; background: #4caf50; }
+  #progressText { font-weight: bold; margin-top: 4px; }
+  #timerWrap { display: none; margin-top: 8px; }
+  #timerText { font-weight: bold; font-size: 20px; }
+  #timerBar { height: 10px; background: #eee; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+  #timerFill { height: 100%; width: 100%; background: #ff9800; }
+  .q { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .q h3 { margin: 0 0 10px 0; }
+  .q p.stem { font-size: 22px; font-weight: bold; }
+  input[type=text] { width: 100%; box-sizing: border-box; padding: 12px; font-size: 19px; border: 2px solid #4caf50; border-radius: 8px; }
+  .explain { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #e8f5e9; }
+  .explain.wrong { background: #fdecea; }
+  #submitBtn { display: block; width: 100%; padding: 16px; font-size: 20px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; }
+  #submitBtn:disabled { background: #aaa; }
+  #warn { display: none; background: #fff3cd; border: 1px solid #e6c87a; border-radius: 8px; padding: 12px; margin: 12px 0; font-weight: bold; }
+  #result { display: none; margin: 20px 0; }
+  #score { font-size: 26px; font-weight: bold; }
+  #resultImg { display: none; max-width: 100%; border-radius: 12px; border: 1px solid #ddd; margin-top: 12px; }
+  #shareBox { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #f9f9f9; }
+  #shareBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #downloadLink { display: none; text-align: center; padding: 12px; font-size: 16px; font-weight: bold; color: #2196f3; }
+  #shareNote { color: #888; font-size: 14px; }
+  .footer { color: #888; margin-top: 24px; }
+  #matchGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+  .card { background: #fff; border: 2px solid #4caf50; border-radius: 12px; padding: 14px 4px; text-align: center; font-size: 17px; font-weight: bold; cursor: pointer; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+  .card.picked { background: #bbdefb; border-color: #1976d2; }
+  .card.matched { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; }
+  #matchDone { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; margin: 12px 0; }
+  #startBox { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 16px; text-align: center; font-size: 18px; margin: 16px 0; }
+  #startBtn { display: block; width: 100%; margin-top: 12px; padding: 14px; font-size: 20px; font-weight: bold; background: #ff9800; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #quizForm { display: none; }
+  .step { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .step b { color: #0d47a1; }
+  .example { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .tip { background: #e8f5e9; border: 2px solid #4caf50; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .visual { background: #fff; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .strip { display: flex; gap: 3px; margin: 8px 0; }
+  .box { width: 26px; height: 26px; border: 2px solid #1976d2; border-radius: 4px; box-sizing: border-box; }
+  .box.on { background: #4caf50; border-color: #2e7d32; }
+  .grid100 { display: grid; grid-template-columns: repeat(10, 18px); gap: 2px; margin: 8px 0; }
+  .cell { width: 18px; height: 18px; border: 1px solid #90caf9; border-radius: 2px; box-sizing: border-box; }
+  .cell.on { background: #4caf50; border-color: #2e7d32; }
+  .bar { height: 26px; border-radius: 6px; margin: 6px 0; }
+  .bigans { font-size: 34px; font-weight: bold; color: #2e7d32; text-align: center; margin: 8px 0; }
+  .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
+  .worklabel { font-size: 15px; color: #555; margin-top: 10px; }
+  .workpad { display: block; width: 100%; height: 220px; background: #fff; border: 2px solid #90caf9; border-radius: 8px; margin-top: 6px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
+  .rubout { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #e3f2fd; cursor: pointer; }
+  .rubout:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  .padtools { display: flex; gap: 8px; margin-top: 6px; }
+  .padtool { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #fff; cursor: pointer; }
+  .padtool.on { background: #4caf50; color: #fff; border-color: #4caf50; }
+  .padtool:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  #shareWorkingBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareAnswersBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareWorkNote { color: #888; font-size: 14px; }
+
+  textarea { width: 100%; box-sizing: border-box; padding: 12px; font-size: 18px; border: 2px solid #4caf50; border-radius: 8px; font-family: inherit; min-height: 96px; }
+  .qtext { font-size: 19px; margin: 0 0 10px 0; }
+  .chapter { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 26px 0 8px 0; font-size: 20px; }
+  .chapter b { color: #0d47a1; }
+  #doneBox { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 12px; padding: 16px; margin: 20px 0; font-size: 19px; }
+  #saveNote { font-size: 15px; color: #555; margin-top: 6px; }
+  #downloadAnswers { display: none; text-align: center; padding: 12px; font-size: 16px; font-weight: bold; color: #2196f3; }
+</style>
+</head>
+<body>
+<h1>Maya's Book Quiz 1</h1>
+<p><b>My First Book of Questions and Answers</b>, chapters 1 and 2: <b>Space</b> and <b>Planet Earth</b>. This is an <b>open book</b> quiz, so keep your book open beside you. There are 15 questions and you have 30 minutes. No phone, just your book and your own words.</p>
+
+<div class="harry">
+  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+    <circle cx="36" cy="42" r="19" fill="#F5CBA7"/>
+    <path d="M16 32 Q12 10 36 8 Q60 10 56 32 L50 24 L46 30 L40 22 L36 29 L30 22 L24 30 L20 24 Z" fill="#222222"/>
+    <path d="M33 30 L37 30 L34 35 L38 35 L31 42 L33.5 36 L30 36 Z" fill="#FFD93D"/>
+    <circle cx="28" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <circle cx="44" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <line x1="35" y1="42" x2="37" y2="42" stroke="#222222" stroke-width="2"/>
+    <line x1="21" y1="42" x2="17" y2="41" stroke="#222222" stroke-width="2"/>
+    <line x1="51" y1="42" x2="55" y2="41" stroke="#222222" stroke-width="2"/>
+    <circle cx="28" cy="42" r="2" fill="#6D4C41"/>
+    <circle cx="44" cy="42" r="2" fill="#6D4C41"/>
+    <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
+    <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. You finished the whole book, and now it is time to show what you remember. Your book stays open, so look in it whenever you need to. But answer in your own words, in full sentences, and tell me the why, not just the what. Roj will read every answer and tell Daddy how you did. You have 30 minutes. You can do it!</p>
+</div>
+
+<h2>How this quiz works</h2>
+<p>Take your time with this part. Read it slowly. There is no timer here.</p>
+
+<div class="tip"><b>Open book!</b><br>
+  Keep your book open beside you. You may look at chapters 1 and 2 as much as you like while you answer. No phone, no looking things up anywhere else.</div>
+
+<div class="tip"><b>Answer in your own words, in full sentences.</b><br>
+  Do not copy a sentence straight out of the book. Read it, close the idea in your mind, and then explain it yourself. Two or three sentences for each question is good.</div>
+
+<div class="tip"><b>Tell me the why.</b><br>
+  Most questions ask you to explain why something happens, or how two things are different. That is the part Roj wants to see. If you only write one word, it is not a full answer.</div>
+
+<div class="tip"><b>No score on this page.</b><br>
+  There are no right or wrong marks here. When you tap Submit, your answers go to Roj, and Roj will read them and tell Daddy how you did.</div>
+
+<h2>Warm-up: match the topic to its chapter</h2>
+<p>Tap a topic, then tap the chapter it belongs to. Match all four pairs! This part has no timer.</p>
+<div id="matchGrid"></div>
+<div id="matchDone">Brilliant! You matched them all! Now for the quiz.</div>
+
+<div id="startBox">
+  Ready? You have 30 minutes for 15 questions. Your book stays open.
+  <button type="button" id="startBtn">Start the quiz</button>
+</div>
+
+<form id="quizForm" onsubmit="return false;">
+  <div id="progressWrap">
+    <div id="progressBar"><div id="progressFill"></div></div>
+    <div id="progressText">Answered 0 of 15</div>
+    <div id="timerWrap">
+      <div id="timerText"></div>
+      <div id="timerBar"><div id="timerFill"></div></div>
+    </div>
+  </div>
+
+<div class="chapter"><b>Chapter 1: Space</b> (questions 1 to 8)</div>
+<div class="q">
+  <h3>Question 1</h3>
+  <p class="qtext">The book says the Sun is the star that keeps us warm. Explain in your own words how the Sun warms the Earth, and what would happen to us if the Sun stopped shining.</p>
+  <p><button type="button" class="speak" data-say="The book says the Sun is the star that keeps us warm. Explain in your own words how the Sun warms the Earth, and what would happen to us if the Sun stopped shining.">&#128266; Hear the question</button></p>
+  <textarea name="q1" id="q1" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 2</h3>
+  <p class="qtext">Mercury is the closest planet to the Sun, but Venus is the hottest planet. Explain why Venus is hotter than Mercury.</p>
+  <p><button type="button" class="speak" data-say="Mercury is the closest planet to the Sun, but Venus is the hottest planet. Explain why Venus is hotter than Mercury.">&#128266; Hear the question</button></p>
+  <textarea name="q2" id="q2" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 3</h3>
+  <p class="qtext">Does Pluto have a moon? Tell me its name, and explain what a moon is.</p>
+  <p><button type="button" class="speak" data-say="Does Pluto have a moon? Tell me its name, and explain what a moon is.">&#128266; Hear the question</button></p>
+  <textarea name="q3" id="q3" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 4</h3>
+  <p class="qtext">The book says Earth is the only planet with life, as far as we know. What does Earth have that the other planets do not? Name two things and explain why each one matters for life.</p>
+  <p><button type="button" class="speak" data-say="The book says Earth is the only planet with life, as far as we know. What does Earth have that the other planets do not? Name two things and explain why each one matters for life.">&#128266; Hear the question</button></p>
+  <textarea name="q4" id="q4" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 5</h3>
+  <p class="qtext">What keeps all the planets moving around the Sun? Explain what would happen if it stopped.</p>
+  <p><button type="button" class="speak" data-say="What keeps all the planets moving around the Sun? Explain what would happen if it stopped.">&#128266; Hear the question</button></p>
+  <textarea name="q5" id="q5" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 6</h3>
+  <p class="qtext">The book asks if there are robots in space. What jobs do robots do in space, and why are robots better than people for those jobs?</p>
+  <p><button type="button" class="speak" data-say="The book asks if there are robots in space. What jobs do robots do in space, and why are robots better than people for those jobs?">&#128266; Hear the question</button></p>
+  <textarea name="q6" id="q6" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 7</h3>
+  <p class="qtext">Astronauts sleep in space very differently from how you sleep at home. Describe how they sleep, and explain why they have to do it that way.</p>
+  <p><button type="button" class="speak" data-say="Astronauts sleep in space very differently from how you sleep at home. Describe how they sleep, and explain why they have to do it that way.">&#128266; Hear the question</button></p>
+  <textarea name="q7" id="q7" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 8</h3>
+  <p class="qtext">How does a rocket get into space? Describe what happens, and explain why it needs so much power.</p>
+  <p><button type="button" class="speak" data-say="How does a rocket get into space? Describe what happens, and explain why it needs so much power.">&#128266; Hear the question</button></p>
+  <textarea name="q8" id="q8" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="chapter"><b>Chapter 2: Planet Earth</b> (questions 9 to 15)</div>
+<div class="q">
+  <h3>Question 9</h3>
+  <p class="qtext">Describe what is inside the Earth, layer by layer, from the outside to the middle. Which layer is the hottest, and why?</p>
+  <p><button type="button" class="speak" data-say="Describe what is inside the Earth, layer by layer, from the outside to the middle. Which layer is the hottest, and why?">&#128266; Hear the question</button></p>
+  <textarea name="q9" id="q9" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 10</h3>
+  <p class="qtext">What is a volcano? Explain in your own words what happens when a volcano erupts, and where the hot rock comes from.</p>
+  <p><button type="button" class="speak" data-say="What is a volcano? Explain in your own words what happens when a volcano erupts, and where the hot rock comes from.">&#128266; Hear the question</button></p>
+  <textarea name="q10" id="q10" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 11</h3>
+  <p class="qtext">How do mountains form? Explain the idea of the Earth&#x27;s plates pushing together, in your own words.</p>
+  <p><button type="button" class="speak" data-say="How do mountains form? Explain the idea of the Earth's plates pushing together, in your own words.">&#128266; Hear the question</button></p>
+  <textarea name="q11" id="q11" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 12</h3>
+  <p class="qtext">What are fossils, and what can they tell us about animals and plants that lived long ago? Give one example of something we learned from fossils.</p>
+  <p><button type="button" class="speak" data-say="What are fossils, and what can they tell us about animals and plants that lived long ago? Give one example of something we learned from fossils.">&#128266; Hear the question</button></p>
+  <textarea name="q12" id="q12" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 13</h3>
+  <p class="qtext">What is a glacier, and how is an iceberg different from a glacier? Explain both.</p>
+  <p><button type="button" class="speak" data-say="What is a glacier, and how is an iceberg different from a glacier? Explain both.">&#128266; Hear the question</button></p>
+  <textarea name="q13" id="q13" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 14</h3>
+  <p class="qtext">The book shows how people damage the Earth. Choose two ways people damage the Earth, and explain what harm each one does.</p>
+  <p><button type="button" class="speak" data-say="The book shows how people damage the Earth. Choose two ways people damage the Earth, and explain what harm each one does.">&#128266; Hear the question</button></p>
+  <textarea name="q14" id="q14" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+<div class="q">
+  <h3>Question 15</h3>
+  <p class="qtext">What is recycling? Explain how recycling helps the Earth, and name two things from your own home that can be recycled.</p>
+  <p><button type="button" class="speak" data-say="What is recycling? Explain how recycling helps the Earth, and name two things from your own home that can be recycled.">&#128266; Hear the question</button></p>
+  <textarea name="q15" id="q15" rows="4" placeholder="Write your answer in full sentences, in your own words. Two or three sentences is good."></textarea>
+</div>
+
+  <div id="warn"></div>
+  <button type="button" id="submitBtn">Send my answers to Roj</button>
+  <div id="saveNote"></div>
+  <a id="downloadAnswers" href="#" download="maya-book-quiz-1-answers.txt">Save my answers</a>
+</form>
+
+<div id="doneBox">
+  <strong>Well done, Maya! Your answers are sent.</strong><br>
+  Roj will read every answer and tell Daddy how you did.
+</div>
+
+<p class="footer">Made for Maya. Good luck!</p>
+
+<script>
+var KEY = "maya-book-quiz-1";
+var QUIZ = "book-quiz-1";
+var submitted = false;
+try { submitted = localStorage.getItem(KEY) === "done"; } catch (e) {}
+var STEMS = {"q1": "The book says the Sun is the star that keeps us warm. Explain in your own words how the Sun warms the Earth, and what would happen to us if the Sun stopped shining.", "q2": "Mercury is the closest planet to the Sun, but Venus is the hottest planet. Explain why Venus is hotter than Mercury.", "q3": "Does Pluto have a moon? Tell me its name, and explain what a moon is.", "q4": "The book says Earth is the only planet with life, as far as we know. What does Earth have that the other planets do not? Name two things and explain why each one matters for life.", "q5": "What keeps all the planets moving around the Sun? Explain what would happen if it stopped.", "q6": "The book asks if there are robots in space. What jobs do robots do in space, and why are robots better than people for those jobs?", "q7": "Astronauts sleep in space very differently from how you sleep at home. Describe how they sleep, and explain why they have to do it that way.", "q8": "How does a rocket get into space? Describe what happens, and explain why it needs so much power.", "q9": "Describe what is inside the Earth, layer by layer, from the outside to the middle. Which layer is the hottest, and why?", "q10": "What is a volcano? Explain in your own words what happens when a volcano erupts, and where the hot rock comes from.", "q11": "How do mountains form? Explain the idea of the Earth's plates pushing together, in your own words.", "q12": "What are fossils, and what can they tell us about animals and plants that lived long ago? Give one example of something we learned from fossils.", "q13": "What is a glacier, and how is an iceberg different from a glacier? Explain both.", "q14": "The book shows how people damage the Earth. Choose two ways people damage the Earth, and explain what harm each one does.", "q15": "What is recycling? Explain how recycling helps the Earth, and name two things from your own home that can be recycled."};
+var startTime = null, timeLeft = 1800, timerId = null, timerRunning = false;
+var TOTAL = 1800;
+var answersText = "";
+
+function harrySay(msg) {
+  document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + msg;
+}
+
+function speak(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-GB"; u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+document.querySelectorAll(".speak").forEach(function (b) {
+  b.addEventListener("click", function () { speak(b.getAttribute("data-say")); });
+});
+
+var PAIRS = [["The Sun", "Space"], ["Charon, Pluto's moon", "Space"], ["Volcano", "Planet Earth"], ["Fossil", "Planet Earth"]];
+var matchState = { first: null, lock: false, done: 0 };
+(function buildMatch() {
+  var cards = [];
+  PAIRS.forEach(function (p, i) {
+    cards.push({ pair: i, text: p[0] });
+    cards.push({ pair: i, text: p[1] });
+  });
+  for (var i = cards.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+  }
+  var grid = document.getElementById("matchGrid");
+  cards.forEach(function (c) {
+    var d = document.createElement("div");
+    d.className = "card";
+    d.textContent = c.text;
+    d.addEventListener("click", function () { pickCard(d, c.pair); });
+    grid.appendChild(d);
+  });
+})();
+function pickCard(el, pair) {
+  if (matchState.lock || el.classList.contains("matched") || el.classList.contains("picked")) return;
+  el.classList.add("picked");
+  if (matchState.first === null) { matchState.first = { el: el, pair: pair }; return; }
+  var f = matchState.first; matchState.first = null;
+  if (f.pair === pair) {
+    f.el.classList.remove("picked"); f.el.classList.add("matched");
+    el.classList.remove("picked"); el.classList.add("matched");
+    matchState.done++;
+    harrySay("Brilliant! That is a match!");
+    if (matchState.done === 4) {
+      harrySay("Brilliant! You matched them all! Now for the quiz!");
+      document.getElementById("matchDone").style.display = "block";
+    }
+  } else {
+    matchState.lock = true;
+    harrySay("Not quite, try again!");
+    setTimeout(function () {
+      f.el.classList.remove("picked"); el.classList.remove("picked");
+      matchState.lock = false;
+    }, 700);
+  }
+}
+
+function fmt(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+function fmtElapsed(sec) { var m = Math.floor(sec / 60), s = sec % 60; return m + " min " + s + " s"; }
+function tick() {
+  timeLeft--;
+  document.getElementById("timerText").textContent = "⏱ " + fmt(timeLeft) + " left";
+  document.getElementById("timerFill").style.width = (timeLeft / TOTAL * 100) + "%";
+  if (timeLeft <= 60) document.getElementById("timerText").style.color = "#D32F2F";
+  if (timeLeft <= 0) doSubmit(true);
+}
+document.getElementById("startBtn").addEventListener("click", function () {
+  document.getElementById("startBox").style.display = "none";
+  document.getElementById("quizForm").style.display = "block";
+  document.getElementById("timerWrap").style.display = "block";
+  startTime = Date.now();
+  timerRunning = true;
+  document.getElementById("timerText").textContent = "⏱ " + fmt(timeLeft) + " left";
+  timerId = setInterval(tick, 1000);
+  document.getElementById("quizForm").scrollIntoView();
+});
+
+function getAnswer(i) {
+  var el = document.getElementById("q" + i);
+  return el ? el.value : "";
+}
+function isAnswered(i) { return getAnswer(i).trim().length > 0; }
+function updateProgress() {
+  var n = 0;
+  for (var i = 1; i <= 15; i++) if (isAnswered(i)) n++;
+  document.getElementById("progressFill").style.width = (n / 15 * 100) + "%";
+  document.getElementById("progressText").textContent = "Answered " + n + " of 15";
+}
+for (var i = 1; i <= 15; i++) {
+  (function (n) {
+    document.getElementById("q" + n).addEventListener("input", updateProgress);
+  })(i);
+}
+function lockForm() {
+  for (var i = 1; i <= 15; i++) document.getElementById("q" + i).disabled = true;
+  document.getElementById("submitBtn").disabled = true;
+}
+
+function doSubmit(auto) {
+  if (timerRunning) { clearInterval(timerId); timerRunning = false; }
+  var missing = [];
+  for (var i = 1; i <= 15; i++) if (!isAnswered(i)) missing.push(i);
+  var warn = document.getElementById("warn");
+  if (missing.length > 0 && !auto) {
+    warn.style.display = "block";
+    warn.textContent = "You still need to answer question" + (missing.length > 1 ? "s " : " ") + missing.join(", ") + ". Tap Submit again when they are all answered.";
+    return;
+  }
+  warn.style.display = "none";
+  var elapsed = startTime ? Math.round((Date.now() - startTime) / 1000) : TOTAL;
+  var timeText = auto ? "Time ran out! Finished in 30 min 0 s" : "Finished in " + fmtElapsed(elapsed);
+  var lines = [];
+  lines.push("Maya's Book Quiz 1 - all answers");
+  lines.push("Date: " + new Date().toLocaleDateString("en-IE"));
+  lines.push(timeText);
+  lines.push("");
+  for (var a = 1; a <= 15; a++) {
+    var ans = getAnswer(a);
+    lines.push("Q" + a + ": " + STEMS["q" + a]);
+    lines.push("Maya said: " + ((ans === null || String(ans).trim() === "") ? "(no answer)" : String(ans)));
+    lines.push("");
+  }
+  answersText = lines.join("\n");
+  var submitStamp = new Date().toISOString().replace(/[:.]/g, "-");
+  var saveNote = document.getElementById("saveNote");
+  try {
+    var payload = { quiz: QUIZ, stamp: submitStamp, date: new Date().toISOString(), score: null, time: timeText, answers: [] };
+    for (var a = 1; a <= 15; a++) {
+      payload.answers.push({ q: a, sum: STEMS["q" + a], said: String(getAnswer(a)) });
+    }
+    var answersBody = JSON.stringify(payload);
+    function postAnswers(attempt) {
+      fetch("https://maya-quiz-answers-roj-messaging-hub.vercel.app/api/save-answers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: answersBody
+      }).then(function (res) {
+        if (res.ok) {
+          saveNote.textContent = "Your answers are saved. Roj will read them.";
+        } else if (attempt === 1) {
+          setTimeout(function () { postAnswers(2); }, 2000);
+        } else {
+          saveNote.textContent = "Saving did not work. Tap Save my answers below, then send the file to Daddy.";
+          showDownload();
+        }
+      }).catch(function () {
+        if (attempt === 1) {
+          setTimeout(function () { postAnswers(2); }, 2000);
+        } else {
+          saveNote.textContent = "Saving did not work. Tap Save my answers below, then send the file to Daddy.";
+          showDownload();
+        }
+      });
+    }
+    postAnswers(1);
+  } catch (e) {
+    saveNote.textContent = "Saving did not work. Tap Save my answers below, then send the file to Daddy.";
+    showDownload();
+  }
+  function showDownload() {
+    var blob = new Blob([answersText], { type: "text/plain" });
+    var url = URL.createObjectURL(blob);
+    var l = document.getElementById("downloadAnswers");
+    l.href = url; l.style.display = "block";
+  }
+  harrySay("Well done, Maya! Your answers are sent. Roj will read them all and tell Daddy how you did!");
+  document.getElementById("doneBox").style.display = "block";
+  lockForm();
+  try { localStorage.setItem(KEY, "done"); } catch (e) {}
+  document.getElementById("doneBox").scrollIntoView({ behavior: "smooth" });
+}
+
+document.getElementById("submitBtn").addEventListener("click", function () { doSubmit(false); });
+
+updateProgress();
+if (submitted) {
+  lockForm();
+  document.getElementById("submitBtn").textContent = "Already submitted on this iPad";
+}
+</script>
+</body>
+</html>
