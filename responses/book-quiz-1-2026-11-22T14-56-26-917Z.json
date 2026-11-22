@@ -1,0 +1,83 @@
+{
+  "quiz": "book-quiz-1",
+  "date": "2026-11-22T14:56:26.917Z",
+  "score": null,
+  "time": "Time ran out! Finished in 30 min 0 s",
+  "answers": [
+    {
+      "q": 1,
+      "sum": "The book says the Sun is the star that keeps us warm. Explain in your own words how the Sun warms the Earth, and what would happen to us if the Sun stopped shining.",
+      "said": "the sun is really hot and the closer the sun the hotter the planet if the sun stopped it would be too cold to live in"
+    },
+    {
+      "q": 2,
+      "sum": "Mercury is the closest planet to the Sun, but Venus is the hottest planet. Explain why Venus is hotter than Mercury.",
+      "said": "the heat gets stuck in venuses gasses and can’t escape"
+    },
+    {
+      "q": 3,
+      "sum": "Does Pluto have a moon? Tell me its name, and explain what a moon is.",
+      "said": "pluto has 5 moons pluto’s biggest moon is called charon "
+    },
+    {
+      "q": 4,
+      "sum": "The book says Earth is the only planet with life, as far as we know. What does Earth have that the other planets do not? Name two things and explain why each one matters for life.",
+      "said": "earth has oxygen and our body needs oxygen too breathe\nand on earth theres gravity so we don’t always have to float"
+    },
+    {
+      "q": 5,
+      "sum": "What keeps all the planets moving around the Sun? Explain what would happen if it stopped.",
+      "said": "the gravity makes the planets moving if the planets stop orbiting there would be no years"
+    },
+    {
+      "q": 6,
+      "sum": "The book asks if there are robots in space. What jobs do robots do in space, and why are robots better than people for those jobs?",
+      "said": "robots in space are called probes\nprobe take pics and the people know all about the planet it’s safer for robots to go because ther isnt much oxygen"
+    },
+    {
+      "q": 7,
+      "sum": "Astronauts sleep in space very differently from how you sleep at home. Describe how they sleep, and explain why they have to do it that way.",
+      "said": "astronauts sleep in sleeping bags that float"
+    },
+    {
+      "q": 8,
+      "sum": "How does a rocket get into space? Describe what happens, and explain why it needs so much power.",
+      "said": "rocket have a really powerfull engine that pretty much blasts lots of fire to help it fly"
+    },
+    {
+      "q": 9,
+      "sum": "Describe what is inside the Earth, layer by layer, from the outside to the middle. Which layer is the hottest, and why?",
+      "said": "we live on the surface of the layersmolten is the hottest"
+    },
+    {
+      "q": 10,
+      "sum": "What is a volcano? Explain in your own words what happens when a volcano erupts, and where the hot rock comes from.",
+      "said": "a volcano is a mountain that has fire inside it when a \n volcano erups fire come out of the top and can kill lots of people"
+    },
+    {
+      "q": 11,
+      "sum": "How do mountains form? Explain the idea of the Earth's plates pushing together, in your own words.",
+      "said": "when the earth plates push together it’s pushing the mountain out from under the ground"
+    },
+    {
+      "q": 12,
+      "sum": "What are fossils, and what can they tell us about animals and plants that lived long ago? Give one example of something we learned from fossils.",
+      "said": "fossils are like bones like dinosaur bones we found out the type of dinosaurs"
+    },
+    {
+      "q": 13,
+      "sum": "What is a glacier, and how is an iceberg different from a glacier? Explain both.",
+      "said": "a glacier that is like an icecube but different"
+    },
+    {
+      "q": 14,
+      "sum": "The book shows how people damage the Earth. Choose two ways people damage the Earth, and explain what harm each one does.",
+      "said": "people damage the earth by littering and not recycling"
+    },
+    {
+      "q": 15,
+      "sum": "What is recycling? Explain how recycling helps the Earth, and name two things from your own home that can be recycled.",
+      "said": "recycling is where we put plastic things in a "
+    }
+  ]
+}
