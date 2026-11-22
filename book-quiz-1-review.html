@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya's Space and Earth Adventure - Book Quiz 1 Review</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 16px; color: #222; line-height: 1.5; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; margin-top: 28px; }
+  .intro { background: #fff3cd; border: 1px solid #e6c87a; border-radius: 10px; padding: 12px; }
+  .harry { display: flex; gap: 12px; align-items: center; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 16px; padding: 12px; margin: 16px 0; }
+  .harry svg { flex: 0 0 72px; }
+  .harry p { margin: 0; font-size: 17px; }
+  #progressWrap { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; }
+  #progressBar { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+  #progressFill { height: 100%; width: 0%; background: #4caf50; }
+  #progressText { font-weight: bold; margin-top: 4px; }
+  #timerWrap { display: none; margin-top: 8px; }
+  #timerText { font-weight: bold; font-size: 20px; }
+  #timerBar { height: 10px; background: #eee; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+  #timerFill { height: 100%; width: 100%; background: #ff9800; }
+  .q { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin: 16px 0; }
+  .q h3 { margin: 0 0 10px 0; }
+  .q p.stem { font-size: 22px; font-weight: bold; }
+  input[type=text] { width: 100%; box-sizing: border-box; padding: 12px; font-size: 19px; border: 2px solid #4caf50; border-radius: 8px; }
+  .explain { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #e8f5e9; }
+  .explain.wrong { background: #fdecea; }
+  #submitBtn { display: block; width: 100%; padding: 16px; font-size: 20px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; }
+  #submitBtn:disabled { background: #aaa; }
+  #warn { display: none; background: #fff3cd; border: 1px solid #e6c87a; border-radius: 8px; padding: 12px; margin: 12px 0; font-weight: bold; }
+  #result { display: none; margin: 20px 0; }
+  #score { font-size: 26px; font-weight: bold; }
+  #resultImg { display: none; max-width: 100%; border-radius: 12px; border: 1px solid #ddd; margin-top: 12px; }
+  #shareBox { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #f9f9f9; }
+  #shareBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #4caf50; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #downloadLink { display: none; text-align: center; padding: 12px; font-size: 16px; font-weight: bold; color: #2196f3; }
+  #shareNote { color: #888; font-size: 14px; }
+  .footer { color: #888; margin-top: 24px; }
+  #matchGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+  .card { background: #fff; border: 2px solid #4caf50; border-radius: 12px; padding: 14px 4px; text-align: center; font-size: 17px; font-weight: bold; cursor: pointer; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+  .card.picked { background: #bbdefb; border-color: #1976d2; }
+  .card.matched { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; }
+  #matchDone { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; margin: 12px 0; }
+  #startBox { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 16px; text-align: center; font-size: 18px; margin: 16px 0; }
+  #startBtn { display: block; width: 100%; margin-top: 12px; padding: 14px; font-size: 20px; font-weight: bold; background: #ff9800; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #quizForm { display: none; }
+  .step { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .step b { color: #0d47a1; }
+  .example { background: #fff3cd; border: 2px solid #e6c87a; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .tip { background: #e8f5e9; border: 2px solid #4caf50; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .visual { background: #fff; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 10px 0; font-size: 18px; }
+  .strip { display: flex; gap: 3px; margin: 8px 0; }
+  .box { width: 26px; height: 26px; border: 2px solid #1976d2; border-radius: 4px; box-sizing: border-box; }
+  .box.on { background: #4caf50; border-color: #2e7d32; }
+  .grid100 { display: grid; grid-template-columns: repeat(10, 18px); gap: 2px; margin: 8px 0; }
+  .cell { width: 18px; height: 18px; border: 1px solid #90caf9; border-radius: 2px; box-sizing: border-box; }
+  .cell.on { background: #4caf50; border-color: #2e7d32; }
+  .bar { height: 26px; border-radius: 6px; margin: 6px 0; }
+  .bigans { font-size: 34px; font-weight: bold; color: #2e7d32; text-align: center; margin: 8px 0; }
+  .speak { font-size: 18px; padding: 8px 14px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 2px; }
+  .worklabel { font-size: 15px; color: #555; margin-top: 10px; }
+  .workpad { display: block; width: 100%; height: 220px; background: #fff; border: 2px solid #90caf9; border-radius: 8px; margin-top: 6px; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
+  .rubout { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #e3f2fd; cursor: pointer; }
+  .rubout:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  .padtools { display: flex; gap: 8px; margin-top: 6px; }
+  .padtool { font-size: 15px; padding: 6px 12px; border-radius: 16px; border: 2px solid #90caf9; background: #fff; cursor: pointer; }
+  .padtool.on { background: #4caf50; color: #fff; border-color: #4caf50; }
+  .padtool:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  #shareWorkingBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareAnswersBtn { display: block; width: 100%; padding: 14px; margin: 10px 0; font-size: 18px; font-weight: bold; background: #1976d2; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  #shareWorkNote { color: #888; font-size: 14px; }
+
+  .station { border: 2px solid #4caf50; border-radius: 14px; padding: 14px; margin: 22px 0; background: #fff; }
+  .station h3 { margin: 0 0 6px 0; font-size: 20px; }
+  .chapter { background: #e3f2fd; border: 2px solid #1976d2; border-radius: 12px; padding: 12px; margin: 26px 0 8px 0; font-size: 20px; }
+  .chapter b { color: #0d47a1; }
+  .mark { display: inline-block; font-weight: bold; border-radius: 999px; padding: 3px 12px; font-size: 15px; margin: 6px 0; }
+  .mark.correct { background: #c8e6c9; color: #2e7d32; }
+  .mark.partly { background: #fff3cd; color: #7a5c00; }
+  .mark.needs { background: #fdecea; color: #b71c1c; }
+  .mark.unfinished { background: #e3f2fd; color: #0d47a1; }
+  .saidbox { background: #e8f5e9; border-radius: 8px; padding: 10px; font-size: 17px; margin: 8px 0; }
+  .answerbox { background: #e3f2fd; border-radius: 8px; padding: 10px; font-size: 17px; margin: 8px 0; }
+  .hidden { display: none; }
+  .game { background: #fff8e1; border: 2px dashed #ffb300; border-radius: 12px; padding: 12px; margin: 12px 0; }
+  .game h4 { margin: 0 0 8px 0; font-size: 18px; }
+  .gamebtn { font-size: 17px; padding: 10px 16px; border-radius: 20px; border: 2px solid #4caf50; background: #e8f5e9; cursor: pointer; margin: 4px; font-weight: bold; }
+  .gamebtn:disabled { background: #eee; color: #aaa; border-color: #ddd; }
+  .sort-item { display: inline-block; font-size: 17px; padding: 10px 14px; border-radius: 20px; border: 2px solid #1976d2; background: #e3f2fd; cursor: pointer; margin: 4px; font-weight: bold; }
+  .sort-item.picked { background: #bbdefb; border-color: #0d47a1; }
+  .sort-item.placed { background: #c8e6c9; border-color: #2e7d32; color: #2e7d32; cursor: default; }
+  .sort-item.shake { animation: shake 0.4s; }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  .sort-box { border: 2px solid #1976d2; border-radius: 12px; padding: 10px; margin: 8px 0; min-height: 52px; background: #fff; cursor: pointer; }
+  .sort-box b { color: #0d47a1; }
+  .tickbtn { display: block; width: 100%; text-align: left; font-size: 17px; padding: 10px 14px; border-radius: 12px; border: 2px solid #4caf50; background: #fff; cursor: pointer; margin: 6px 0; }
+  .tickbtn.ticked { background: #c8e6c9; border-color: #2e7d32; }
+  .hotspot { font-size: 17px; padding: 10px 14px; border-radius: 20px; border: 2px solid #9c27b0; background: #f3e5f5; cursor: pointer; margin: 4px; font-weight: bold; }
+  .hotspot.done { background: #c8e6c9; border-color: #2e7d32; }
+  .hotlabel { font-size: 17px; margin: 6px 0; }
+  #starRow { position: sticky; top: 0; background: #fff; padding: 10px 0; z-index: 10; text-align: center; font-size: 22px; }
+  #starRow .st { color: #ddd; }
+  #starRow .st.on { color: #ffb300; }
+  #doneBox { display: none; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 12px; padding: 16px; margin: 20px 0; font-size: 19px; text-align: center; }
+  .scene { border: 2px solid #90caf9; border-radius: 12px; padding: 14px; margin: 8px 0; background: #e3f2fd; text-align: center; min-height: 110px; }
+  .scene.dark { background: #263238; color: #fff; }
+  .sun { font-size: 52px; }
+  .earth { font-size: 52px; }
+  .orbit { position: relative; width: 200px; height: 200px; margin: 0 auto; border: 2px dashed #90caf9; border-radius: 50%; }
+  .orbit .sunC { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 44px; }
+  .planet { position: absolute; font-size: 26px; transition: all 1s; }
+  .orbit.off .planet { opacity: 0.25; }
+  .orbit.off .p1 { transform: translate(-70px, -60px); }
+  .orbit.off .p2 { transform: translate(80px, -40px); }
+  .orbit.off .p3 { transform: translate(60px, 70px); }
+  .p1 { left: 8px; top: 70px; }
+  .p2 { left: 160px; top: 30px; }
+  .p3 { left: 90px; top: 160px; }
+  .tempbar { height: 26px; background: #eee; border-radius: 13px; overflow: hidden; margin: 8px 0; }
+  .tempfill { height: 100%; width: 20%; background: #ff9800; transition: width 1s; }
+  .tempfill.hot { width: 100%; background: #d32f2f; }
+  .bar-row { margin: 8px 0; font-size: 17px; }
+  .bar-track { height: 24px; background: #eee; border-radius: 12px; overflow: hidden; margin-top: 2px; }
+  .bar-fill { height: 100%; width: 0; background: #4caf50; transition: width 1.2s; }
+  .band { display: block; width: 100%; text-align: left; font-size: 17px; padding: 12px; border: none; cursor: pointer; color: #fff; font-weight: bold; }
+  .band.crust { background: #8d6e63; }
+  .band.mantle { background: #e65100; }
+  .band.outer { background: #ff8f00; }
+  .band.inner { background: #d32f2f; border-radius: 0 0 12px 12px; }
+  .band.done { outline: 3px solid #2e7d32; }
+  .mountain { font-size: 60px; display: block; text-align: center; transition: font-size 0.6s; }
+  .plate { display: inline-block; font-size: 40px; transition: margin 0.6s; }
+  .rock { font-size: 44px; background: #eceff1; border: 2px solid #90a4ae; border-radius: 12px; padding: 10px 16px; cursor: pointer; margin: 4px; }
+  .rock.done { background: #c8e6c9; border-color: #2e7d32; }
+  .moon-dot { display: inline-block; width: 54px; height: 54px; line-height: 54px; border-radius: 50%; background: #eceff1; border: 2px solid #90a4ae; cursor: pointer; margin: 4px; font-size: 15px; font-weight: bold; text-align: center; }
+  .moon-dot.big { width: 72px; height: 72px; line-height: 72px; }
+  .moon-dot.done { background: #c8e6c9; border-color: #2e7d32; }
+  .volcano { font-size: 70px; text-align: center; }
+  .lava { display: none; text-align: center; font-size: 22px; }
+  .lava.on { display: block; }
+</style>
+</head>
+<body>
+<h1>Maya's Space and Earth Adventure</h1>
+<p><b>Book Quiz 1, learn it back!</b> Your book was <b>My First Book of Questions and Answers</b>, chapters 1 and 2, Space and Planet Earth. This page has 15 stops, one for each question. Each stop shows the question, what you said, and the full answer, and a little game that teaches the idea. There is no timer here, take your time.</p>
+
+<div class="harry">
+  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+    <circle cx="36" cy="42" r="19" fill="#F5CBA7"/>
+    <path d="M16 32 Q12 10 36 8 Q60 10 56 32 L50 24 L46 30 L40 22 L36 29 L30 22 L24 30 L20 24 Z" fill="#222222"/>
+    <path d="M33 30 L37 30 L34 35 L38 35 L31 42 L33.5 36 L30 36 Z" fill="#FFD93D"/>
+    <circle cx="28" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <circle cx="44" cy="42" r="7" fill="#ffffff" fill-opacity="0.35" stroke="#222222" stroke-width="2"/>
+    <line x1="35" y1="42" x2="37" y2="42" stroke="#222222" stroke-width="2"/>
+    <line x1="21" y1="42" x2="17" y2="41" stroke="#222222" stroke-width="2"/>
+    <line x1="51" y1="42" x2="55" y2="41" stroke="#222222" stroke-width="2"/>
+    <circle cx="28" cy="42" r="2" fill="#6D4C41"/>
+    <circle cx="44" cy="42" r="2" fill="#6D4C41"/>
+    <ellipse cx="36" cy="49" rx="2.5" ry="3" fill="#D9A066"/>
+    <path d="M29 54 Q36 59 43 54" stroke="#8D5A2B" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <p id="harryMsg"><strong>Harry:</strong> Hi Maya! Harry here. Let's go back through your book quiz together. You did well, and now we will learn the tricky parts with games. Finish all 15 stops and you will light up all 15 stars!</p>
+</div>
+
+<div id="starRow"><span class="st" id="star1">☆</span><span class="st" id="star2">☆</span><span class="st" id="star3">☆</span><span class="st" id="star4">☆</span><span class="st" id="star5">☆</span><span class="st" id="star6">☆</span><span class="st" id="star7">☆</span><span class="st" id="star8">☆</span><span class="st" id="star9">☆</span><span class="st" id="star10">☆</span><span class="st" id="star11">☆</span><span class="st" id="star12">☆</span><span class="st" id="star13">☆</span><span class="st" id="star14">☆</span><span class="st" id="star15">☆</span><div style="font-size:16px;color:#555" id="starText">Stops finished: 0 of 15</div></div>
+<div class="chapter"><b>Chapter 1: Space</b></div>
+<div class="station" id="station1">
+  <h3>Stop 1</h3>
+  <p style="font-size:19px"><b>The book says the Sun is the star that keeps us warm. Explain in your own words how the Sun warms the Earth, and what would happen to us if the Sun stopped shining.</b></p>
+  <p><button type="button" class="speak" data-say="The book says the Sun is the star that keeps us warm. Explain in your own words how the Sun warms the Earth, and what would happen to us if the Sun stopped shining.">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">the sun is really hot and the closer the sun the hotter the planet if the sun stopped it would be too cold to live in</div>
+  <button type="button" class="gamebtn" data-reveal="ans1">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans1">The Sun gives out light and heat. Its rays travel across space to the Earth and warm it. If the Sun stopped shining, the Earth would go dark and freezing cold, plants could not grow, and nothing could live.<br><br><i>You had the ending right, too cold to live. The missing part is how the Sun warms us, its light and heat travel to Earth.</i><br><button type="button" class="speak" data-say="The Sun gives out light and heat. Its rays travel across space to the Earth and warm it. If the Sun stopped shining, the Earth would go dark and freezing cold, plants could not grow, and nothing could live.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: switch the Sun off!</h4>
+  <div class="scene" id="scene1"><span class="sun">☀️</span> <span class="earth">🌍</span><div id="scene1Text">The Sun is shining. The Earth is warm.</div></div><button type="button" class="gamebtn" data-toggle="scene1" data-station="1">Switch the Sun off</button>
+  <p style="font-size:15px;color:#555">Tap the button and watch what happens to the Earth. Then tap it again to switch the Sun back on.</p></div>
+</div>
+<div class="station" id="station2">
+  <h3>Stop 2</h3>
+  <p style="font-size:19px"><b>Mercury is the closest planet to the Sun, but Venus is the hottest planet. Explain why Venus is hotter than Mercury.</b></p>
+  <p><button type="button" class="speak" data-say="Mercury is the closest planet to the Sun, but Venus is the hottest planet. Explain why Venus is hotter than Mercury.">&#128266; Hear the question</button></p>
+  <span class="mark correct">You got it!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">the heat gets stuck in venuses gasses and can&#x27;t escape</div>
+  <button type="button" class="gamebtn" data-reveal="ans2">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans2">Venus is covered in thick clouds that trap the Sun&#x27;s heat like a blanket, so the heat cannot escape. Mercury has almost no air to trap heat, so it cannot stay hot the same way.<br><br><i>The trapped heat idea is exactly right. Well done!</i><br><button type="button" class="speak" data-say="Venus is covered in thick clouds that trap the Sun's heat like a blanket, so the heat cannot escape. Mercury has almost no air to trap heat, so it cannot stay hot the same way.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: wrap Venus in its cloud blanket!</h4>
+  <div class="scene" id="scene2"><div style="font-size:44px">🪐 Venus</div><div>Temperature: <b id="temp2">100 degrees</b></div><div class="tempbar"><div class="tempfill" id="tempfill2"></div></div><div id="cloud2" class="hidden">☁️☁️☁️ The thick clouds trap the heat like a blanket!</div><div style="margin-top:8px">Mercury has almost no air, so it has no blanket at all.</div></div><button type="button" class="gamebtn" data-toggle="scene2" data-station="2">Add the cloud blanket</button>
+  <p style="font-size:15px;color:#555">Tap the button to add the clouds, and watch the temperature climb.</p></div>
+</div>
+<div class="station" id="station3">
+  <h3>Stop 3</h3>
+  <p style="font-size:19px"><b>Does Pluto have a moon? Tell me its name, and explain what a moon is.</b></p>
+  <p><button type="button" class="speak" data-say="Does Pluto have a moon? Tell me its name, and explain what a moon is.">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">pluto has 5 moons pluto&#x27;s biggest moon is called charon</div>
+  <button type="button" class="gamebtn" data-reveal="ans3">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans3">Yes. Pluto has five moons, and the biggest is Charon. A moon is a round rock that travels around a planet.<br><br><i>Charon is right, and knowing Pluto has five moons is very good. The missing part is what a moon is.</i><br><button type="button" class="speak" data-say="Yes. Pluto has five moons, and the biggest is Charon. A moon is a round rock that travels around a planet.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: tap each of Pluto&#x27;s moons!</h4>
+  <div class="scene"><div style="font-size:44px">🪐 Pluto</div><div><button type="button" class="moon-dot big" data-hotspot="3" data-label="Charon, the biggest moon">?</button><button type="button" class="moon-dot" data-hotspot="3" data-label="Styx">?</button><button type="button" class="moon-dot" data-hotspot="3" data-label="Nix">?</button><button type="button" class="moon-dot" data-hotspot="3" data-label="Kerberos">?</button><button type="button" class="moon-dot" data-hotspot="3" data-label="Hydra">?</button></div><div class="hotlabel" id="hotlabel3">Tap a grey moon to see its name. A moon is a round rock that travels around a planet.</div></div>
+  <p style="font-size:15px;color:#555">Tap all five moons. Charon is the biggest one.</p></div>
+</div>
+<div class="station" id="station4">
+  <h3>Stop 4</h3>
+  <p style="font-size:19px"><b>The book says Earth is the only planet with life, as far as we know. What does Earth have that the other planets do not? Name two things and explain why each one matters for life.</b></p>
+  <p><button type="button" class="speak" data-say="The book says Earth is the only planet with life, as far as we know. What does Earth have that the other planets do not? Name two things and explain why each one matters for life.">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">earth has oxygen and our body needs oxygen too breathe and on earth theres gravity so we don&#x27;t always have to float</div>
+  <button type="button" class="gamebtn" data-reveal="ans4">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans4">Earth has water and air with oxygen, and the right temperature, not too hot and not too cold. Living things need water to live and oxygen to breathe.<br><br><i>Oxygen is right, with a good reason. Gravity is not a second answer here, because other planets have gravity too. Water and the right temperature were the other answers.</i><br><button type="button" class="speak" data-say="Earth has water and air with oxygen, and the right temperature, not too hot and not too cold. Living things need water to live and oxygen to breathe.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: sort what helps life on Earth!</h4>
+  <div data-sort="4"><div><button type="button" class="sort-item" data-box="a">💧 Water</button><button type="button" class="sort-item" data-box="a">💨 Air with oxygen</button><button type="button" class="sort-item" data-box="a">🌡️ Right temperature</button><button type="button" class="sort-item" data-box="b">🧲 Gravity</button></div><div class="sort-box" data-target="a"><b>Helps life on Earth:</b> tap a card, then tap here.</div><div class="sort-box" data-target="b"><b>Other planets have it too:</b> tap a card, then tap here.</div></div>
+  <p style="font-size:15px;color:#555">Tap a card, then tap the box it belongs in. Which one is the odd one out?</p></div>
+</div>
+<div class="station" id="station5">
+  <h3>Stop 5</h3>
+  <p style="font-size:19px"><b>What keeps all the planets moving around the Sun? Explain what would happen if it stopped.</b></p>
+  <p><button type="button" class="speak" data-say="What keeps all the planets moving around the Sun? Explain what would happen if it stopped.">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">the gravity makes the planets moving if the planets stop orbiting there would be no years</div>
+  <button type="button" class="gamebtn" data-reveal="ans5">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans5">The Sun&#x27;s gravity pulls the planets and keeps them going around it. If gravity stopped, the planets would drift off into space.<br><br><i>Gravity is right, and your point about no years is clever and true, a year is one trip around the Sun. The fuller answer is the planets would drift off into space.</i><br><button type="button" class="speak" data-say="The Sun's gravity pulls the planets and keeps them going around it. If gravity stopped, the planets would drift off into space.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: turn gravity off!</h4>
+  <div class="orbit" id="orbit5"><span class="sunC">☀️</span><span class="planet p1">🪐</span><span class="planet p2">🌍</span><span class="planet p3">🔴</span></div><div id="orbitText5" style="text-align:center;margin-top:8px">Gravity holds the planets in their orbits.</div><button type="button" class="gamebtn" data-toggle="orbit5" data-station="5">Turn gravity off</button>
+  <p style="font-size:15px;color:#555">Tap the button and watch the planets drift away. Tap it again to turn gravity back on.</p></div>
+</div>
+<div class="station" id="station6">
+  <h3>Stop 6</h3>
+  <p style="font-size:19px"><b>The book asks if there are robots in space. What jobs do robots do in space, and why are robots better than people for those jobs?</b></p>
+  <p><button type="button" class="speak" data-say="The book asks if there are robots in space. What jobs do robots do in space, and why are robots better than people for those jobs?">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">robots in space are called probes probe take pics and the people know all about the planet it&#x27;s safer for robots to go because ther isnt much oxygen</div>
+  <button type="button" class="gamebtn" data-reveal="ans6">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans6">Robots in space are called probes, and rovers explore planets. They take photos and send information back. Space is too far, too cold and too dangerous to send people everywhere, and robots do not need air, food or sleep.<br><br><i>Probes taking pictures is right, and safer is right. The real reasons are distance, danger and cost, and robots need no air, food or sleep.</i><br><button type="button" class="speak" data-say="Robots in space are called probes, and rovers explore planets. They take photos and send information back. Space is too far, too cold and too dangerous to send people everywhere, and robots do not need air, food or sleep.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: tap everything that is true about robots!</h4>
+  <div><button type="button" class="tickbtn" data-tick="6">📸 Probes take photos and send them back to Earth</button><button type="button" class="tickbtn" data-tick="6">🚀 Space is too far away to send people everywhere</button><button type="button" class="tickbtn" data-tick="6">🥶 Space is too cold and too dangerous for people</button><button type="button" class="tickbtn" data-tick="6">😴 Robots need no air, food or sleep</button></div>
+  <p style="font-size:15px;color:#555">Tap each true sentence. When all four are green, you are done.</p></div>
+</div>
+<div class="station" id="station7">
+  <h3>Stop 7</h3>
+  <p style="font-size:19px"><b>Astronauts sleep in space very differently from how you sleep at home. Describe how they sleep, and explain why they have to do it that way.</b></p>
+  <p><button type="button" class="speak" data-say="Astronauts sleep in space very differently from how you sleep at home. Describe how they sleep, and explain why they have to do it that way.">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">astronauts sleep in sleeping bags that float</div>
+  <button type="button" class="gamebtn" data-reveal="ans7">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans7">Astronauts sleep in sleeping bags tied to the wall of the spacecraft. There is no gravity in space, so they would float around and bump into things if they were not tied down. There is no up and no down.<br><br><i>Sleeping bags is right, but the key point is they are tied to the wall so they do not float around, because there is no gravity.</i><br><button type="button" class="speak" data-say="Astronauts sleep in sleeping bags tied to the wall of the spacecraft. There is no gravity in space, so they would float around and bump into things if they were not tied down. There is no up and no down.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: strap the astronaut in!</h4>
+  <div class="scene" id="scene7"><div id="bag7" style="font-size:52px">🧑‍🚀</div><div id="scene7Text">The astronaut is floating! Strap the sleeping bag to the wall.</div></div><button type="button" class="gamebtn" data-toggle="scene7" data-station="7">Strap it to the wall</button>
+  <p style="font-size:15px;color:#555">Tap the button to strap the sleeping bag to the wall. Tap it again to let go and watch the astronaut float.</p></div>
+</div>
+<div class="station" id="station8">
+  <h3>Stop 8</h3>
+  <p style="font-size:19px"><b>How does a rocket get into space? Describe what happens, and explain why it needs so much power.</b></p>
+  <p><button type="button" class="speak" data-say="How does a rocket get into space? Describe what happens, and explain why it needs so much power.">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">rocket have a really powerfull engine that pretty much blasts lots of fire to help it fly</div>
+  <button type="button" class="gamebtn" data-reveal="ans8">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans8">A rocket has huge engines that burn fuel and push hot gas down, which pushes the rocket up. It needs so much power because it must go very fast to escape the Earth&#x27;s gravity and stay in orbit, about 28,000 kilometres per hour.<br><br><i>A powerful engine and fire is right, but you did not say why so much power is needed, to escape the Earth&#x27;s gravity.</i><br><button type="button" class="speak" data-say="A rocket has huge engines that burn fuel and push hot gas down, which pushes the rocket up. It needs so much power because it must go very fast to escape the Earth's gravity and stay in orbit, about 28,000 kilometres per hour.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: blast off and compare the speeds!</h4>
+  <div><div class="bar-row">🚗 Car: 100 km per hour<div class="bar-track"><div class="bar-fill" id="barCar" style="width:2%"></div></div></div><div class="bar-row">✈️ Plane: 900 km per hour<div class="bar-track"><div class="bar-fill" id="barPlane" style="width:10%"></div></div></div><div class="bar-row">🚀 Rocket: 28,000 km per hour<div class="bar-track"><div class="bar-fill" id="barRocket" style="width:0%"></div></div></div></div><button type="button" class="gamebtn" data-bars="8" data-station="8">Blast off!</button>
+  <p style="font-size:15px;color:#555">Tap Blast off and watch how much faster the rocket goes than a car or a plane.</p></div>
+</div>
+<div class="chapter"><b>Chapter 2: Planet Earth</b></div>
+<div class="station" id="station9">
+  <h3>Stop 9</h3>
+  <p style="font-size:19px"><b>Describe what is inside the Earth, layer by layer, from the outside to the middle. Which layer is the hottest, and why?</b></p>
+  <p><button type="button" class="speak" data-say="Describe what is inside the Earth, layer by layer, from the outside to the middle. Which layer is the hottest, and why?">&#128266; Hear the question</button></p>
+  <span class="mark needs">Let&#x27;s learn this one!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">we live on the surface of the layersmolten is the hottest</div>
+  <button type="button" class="gamebtn" data-reveal="ans9">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans9">The Earth has four layers: the crust, the thin hard outside we live on; the mantle, hot rock below it; the outer core, liquid metal; and the inner core, a solid ball in the middle. The inner core is the hottest, thousands of degrees, because it is deep inside under huge pressure.<br><br><i>You did not name any of the layers. Tap each layer below and learn its name. The hottest is the inner core.</i><br><button type="button" class="speak" data-say="The Earth has four layers: the crust, the thin hard outside we live on; the mantle, hot rock below it; the outer core, liquid metal; and the inner core, a solid ball in the middle. The inner core is the hottest, thousands of degrees, because it is deep inside under huge pressure.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: tap each layer of the Earth!</h4>
+  <div><button type="button" class="band crust" data-hotspot="9" data-label="Crust: the thin hard outside. We live on it!">Crust: tap me!</button><button type="button" class="band mantle" data-hotspot="9" data-label="Mantle: hot rock below the crust.">Mantle: tap me!</button><button type="button" class="band outer" data-hotspot="9" data-label="Outer core: liquid metal, very hot.">Outer core: tap me!</button><button type="button" class="band inner" data-hotspot="9" data-label="Inner core: a solid ball in the middle, the hottest of all!">Inner core: tap me!</button></div><div class="hotlabel" id="hotlabel9">Tap a layer to learn its name.</div>
+  <p style="font-size:15px;color:#555">Tap all four layers, from the outside to the middle. Which one is the hottest?</p></div>
+</div>
+<div class="station" id="station10">
+  <h3>Stop 10</h3>
+  <p style="font-size:19px"><b>What is a volcano? Explain in your own words what happens when a volcano erupts, and where the hot rock comes from.</b></p>
+  <p><button type="button" class="speak" data-say="What is a volcano? Explain in your own words what happens when a volcano erupts, and where the hot rock comes from.">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">a volcano is a mountain that has fire inside it when a volcano erups fire come out of the top and can kill lots of people</div>
+  <button type="button" class="gamebtn" data-reveal="ans10">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans10">A volcano is an opening in the Earth&#x27;s crust. Hot melted rock from deep inside pushes up and bursts out as lava, with ash and gas. The lava cools and hardens into new rock.<br><br><i>A mountain with fire inside is close, but the book&#x27;s answer is hot melted rock called lava that comes from deep inside the Earth, not fire.</i><br><button type="button" class="speak" data-say="A volcano is an opening in the Earth's crust. Hot melted rock from deep inside pushes up and bursts out as lava, with ash and gas. The lava cools and hardens into new rock.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: make the volcano erupt!</h4>
+  <div class="scene"><div class="volcano">🌋</div><div class="lava" id="lava10">🔥 Lava! Hot melted rock, not fire!<br>💨 Ash and gas<br>⬇️ The melted rock comes from deep inside the Earth</div></div><button type="button" class="gamebtn" data-toggle="lava10" data-station="10">Erupt!</button>
+  <p style="font-size:15px;color:#555">Tap Erupt and watch what comes out of the top.</p></div>
+</div>
+<div class="station" id="station11">
+  <h3>Stop 11</h3>
+  <p style="font-size:19px"><b>How do mountains form? Explain the idea of the Earth&#x27;s plates pushing together, in your own words.</b></p>
+  <p><button type="button" class="speak" data-say="How do mountains form? Explain the idea of the Earth's plates pushing together, in your own words.">&#128266; Hear the question</button></p>
+  <span class="mark correct">You got it!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">when the earth plates push together it&#x27;s pushing the mountain out from under the ground</div>
+  <button type="button" class="gamebtn" data-reveal="ans11">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans11">The Earth&#x27;s crust is made of huge plates that move very slowly. When two plates push together, the land between them is squeezed and pushed upwards over millions of years, and that makes mountains.<br><br><i>Plates push together and the mountain is pushed up, that is the idea, in your own words. Well done!</i><br><button type="button" class="speak" data-say="The Earth's crust is made of huge plates that move very slowly. When two plates push together, the land between them is squeezed and pushed upwards over millions of years, and that makes mountains.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: push the plates together and grow a mountain!</h4>
+  <div style="text-align:center"><span class="plate" id="plateL">⬅️ 🟫</span><span class="mountain" id="mountain11" style="font-size:20px">⛰️</span><span class="plate" id="plateR">🟫 ➡️</span><div id="pushText11">The plates are far apart. No mountain yet!</div></div><button type="button" class="gamebtn" data-push="11" data-station="11" data-max="4">Push the plates together</button>
+  <p style="font-size:15px;color:#555">Tap the button four times. Each push squeezes the land up a little more. Very slowly, over millions of years, a mountain grows.</p></div>
+</div>
+<div class="station" id="station12">
+  <h3>Stop 12</h3>
+  <p style="font-size:19px"><b>What are fossils, and what can they tell us about animals and plants that lived long ago? Give one example of something we learned from fossils.</b></p>
+  <p><button type="button" class="speak" data-say="What are fossils, and what can they tell us about animals and plants that lived long ago? Give one example of something we learned from fossils.">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">fossils are like bones like dinosaur bones we found out the type of dinosaurs</div>
+  <button type="button" class="gamebtn" data-reveal="ans12">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans12">Fossils are the remains or marks of living things kept safe in rock. They tell us what lived long ago, what it looked like, how big it was and what it ate. For example, dinosaur fossils show us that dinosaurs lived on Earth long ago and what kinds there were.<br><br><i>Fossils as old bones is right, and dinosaur types is a good example. The missing part is that fossils are kept safe in rock, and what else they tell us.</i><br><button type="button" class="speak" data-say="Fossils are the remains or marks of living things kept safe in rock. They tell us what lived long ago, what it looked like, how big it was and what it ate. For example, dinosaur fossils show us that dinosaurs lived on Earth long ago and what kinds there were.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: dig for fossils!</h4>
+  <div><button type="button" class="rock" data-hotspot="12" data-label="🦴 A dinosaur bone! It tells us what the dinosaur looked like and how big it was.">🪨</button><button type="button" class="rock" data-hotspot="12" data-label="🍃 A leaf! It tells us what plants grew long ago.">🪨</button><button type="button" class="rock" data-hotspot="12" data-label="🐚 A shell! It tells us this place was once under the sea.">🪨</button></div><div class="hotlabel" id="hotlabel12">Tap a rock to dig out a fossil.</div>
+  <p style="font-size:15px;color:#555">Tap all three rocks. Each fossil tells us something about long ago.</p></div>
+</div>
+<div class="station" id="station13">
+  <h3>Stop 13</h3>
+  <p style="font-size:19px"><b>What is a glacier, and how is an iceberg different from a glacier? Explain both.</b></p>
+  <p><button type="button" class="speak" data-say="What is a glacier, and how is an iceberg different from a glacier? Explain both.">&#128266; Hear the question</button></p>
+  <span class="mark needs">Let&#x27;s learn this one!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">a glacier that is like an icecube but different</div>
+  <button type="button" class="gamebtn" data-reveal="ans13">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans13">A glacier is a huge slow-moving river of ice on land. An iceberg is a big chunk of ice that breaks off a glacier and floats in the sea.<br><br><i>&quot;Like an ice cube but different&quot; does not explain either one. A glacier is a slow river of ice on land, an iceberg is a chunk of it floating in the sea. Sort them below and you will see.</i><br><button type="button" class="speak" data-say="A glacier is a huge slow-moving river of ice on land. An iceberg is a big chunk of ice that breaks off a glacier and floats in the sea.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: sort the glacier and the iceberg!</h4>
+  <div data-sort="13"><div><button type="button" class="sort-item" data-box="a">🏔️ Glacier</button><button type="button" class="sort-item" data-box="b">🧊 Iceberg</button></div><div class="sort-box" data-target="a"><b>On land, a slow river of ice:</b> tap a card, then tap here.</div><div class="sort-box" data-target="b"><b>Floating in the sea:</b> tap a card, then tap here.</div></div>
+  <p style="font-size:15px;color:#555">Tap a card, then tap the box it belongs in.</p></div>
+</div>
+<div class="station" id="station14">
+  <h3>Stop 14</h3>
+  <p style="font-size:19px"><b>The book shows how people damage the Earth. Choose two ways people damage the Earth, and explain what harm each one does.</b></p>
+  <p><button type="button" class="speak" data-say="The book shows how people damage the Earth. Choose two ways people damage the Earth, and explain what harm each one does.">&#128266; Hear the question</button></p>
+  <span class="mark partly">Almost there!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">people damage the earth by littering and not recycling</div>
+  <button type="button" class="gamebtn" data-reveal="ans14">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans14">For example, litter and plastic in the sea harm sea animals, cutting down forests takes away animals&#x27; homes and makes the air less clean, and smoke from cars and factories makes the air dirty.<br><br><i>Two ways named, littering and not recycling, but you did not explain the harm each one does, which the question asked for. Match each one to its harm below.</i><br><button type="button" class="speak" data-say="For example, litter and plastic in the sea harm sea animals, cutting down forests takes away animals' homes and makes the air less clean, and smoke from cars and factories makes the air dirty.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: match each damage to its harm!</h4>
+  <div data-sort="14"><div><button type="button" class="sort-item" data-box="a">🗑️ Litter in the sea</button><button type="button" class="sort-item" data-box="b">🪓 Cutting down forests</button><button type="button" class="sort-item" data-box="c">💨 Smoke from cars</button></div><div class="sort-box" data-target="a"><b>Sea animals get hurt:</b> tap a card, then tap here.</div><div class="sort-box" data-target="b"><b>Animals lose their homes:</b> tap a card, then tap here.</div><div class="sort-box" data-target="c"><b>The air gets dirty:</b> tap a card, then tap here.</div></div>
+  <p style="font-size:15px;color:#555">Tap a damage, then tap the harm it causes.</p></div>
+</div>
+<div class="station" id="station15">
+  <h3>Stop 15</h3>
+  <p style="font-size:19px"><b>What is recycling? Explain how recycling helps the Earth, and name two things from your own home that can be recycled.</b></p>
+  <p><button type="button" class="speak" data-say="What is recycling? Explain how recycling helps the Earth, and name two things from your own home that can be recycled.">&#128266; Hear the question</button></p>
+  <span class="mark unfinished">Time ran out, let&#x27;s finish it!</span>
+  <div class="label" style="font-weight:bold;color:#555;font-size:15px;margin-top:10px">What Maya said:</div>
+  <div class="saidbox">recycling is where we put plastic things in a</div>
+  <button type="button" class="gamebtn" data-reveal="ans15">Show me the full answer</button>
+  <div class="answerbox hidden" id="ans15">Recycling means using old materials to make new things instead of throwing them away. It means less rubbish and saves trees and materials. Things from home: paper, cardboard, glass bottles, cans and plastic bottles.<br><br><i>Time ran out while you were writing. You started well, recycling is putting plastic things in a bin, but the sentence stops there. Finish it now, with the sorting game below.</i><br><button type="button" class="speak" data-say="Recycling means using old materials to make new things instead of throwing them away. It means less rubbish and saves trees and materials. Things from home: paper, cardboard, glass bottles, cans and plastic bottles.">&#128266; Hear the full answer</button></div>
+  <div class="game"><h4>🎮 Try it: sort the recycling!</h4>
+  <div data-sort="15"><div><button type="button" class="sort-item" data-box="a">📰 Newspaper</button><button type="button" class="sort-item" data-box="a">🍾 Glass bottle</button><button type="button" class="sort-item" data-box="a">🥫 Tin can</button><button type="button" class="sort-item" data-box="a">🧴 Plastic bottle</button><button type="button" class="sort-item" data-box="b">🍌 Banana peel</button></div><div class="sort-box" data-target="a"><b>Recycle:</b> tap a card, then tap here.</div><div class="sort-box" data-target="b"><b>Rubbish:</b> tap a card, then tap here.</div></div>
+  <p style="font-size:15px;color:#555">Tap a card, then tap the right bin. Recycling means less rubbish, and it saves trees and materials.</p></div>
+</div>
+
+<div id="doneBox">
+  <strong>🎉 Brilliant, Maya! You finished all 15 stops!</strong><br>
+  You know the layers of the Earth, the glacier and the iceberg, and all the space ideas too. Tell Daddy!
+</div>
+
+<p class="footer">Made for Maya. Good luck!</p>
+
+<script>
+var doneCount = 0;
+var doneStations = {};
+function harrySay(msg) {
+  document.getElementById("harryMsg").innerHTML = "<strong>Harry:</strong> " + msg;
+}
+function speak(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-GB"; u.rate = 0.8;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+document.querySelectorAll(".speak").forEach(function (b) {
+  b.addEventListener("click", function () { speak(b.getAttribute("data-say")); });
+});
+function markDone(n) {
+  if (doneStations[n]) return;
+  doneStations[n] = true;
+  doneCount++;
+  var star = document.getElementById("star" + n);
+  if (star) { star.classList.add("on"); star.textContent = "★"; }
+  document.getElementById("starText").textContent = "Stops finished: " + doneCount + " of 15";
+  var cheers = ["Brilliant!", "Well done!", "Great work!", "You did it!", "Super!"];
+  harrySay(cheers[doneCount % cheers.length] + " Stop " + n + " is done! " + (15 - doneCount) + " to go!");
+  if (doneCount === 15) {
+    document.getElementById("doneBox").style.display = "block";
+    harrySay("Brilliant, Maya! All 15 stars are lit! You learned it all!");
+    document.getElementById("doneBox").scrollIntoView({ behavior: "smooth" });
+  }
+}
+// Reveal the full answer.
+document.querySelectorAll("[data-reveal]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var el = document.getElementById(b.getAttribute("data-reveal"));
+    if (el) el.classList.remove("hidden");
+    b.style.display = "none";
+  });
+});
+// Toggle scenes: Sun on/off, gravity on/off, clouds, strap, erupt.
+document.querySelectorAll("[data-toggle]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var target = document.getElementById(b.getAttribute("data-toggle"));
+    var station = parseInt(b.getAttribute("data-station"), 10);
+    if (!target) return;
+    if (b.getAttribute("data-toggle") === "scene1") {
+      target.classList.toggle("dark");
+      var off = target.classList.contains("dark");
+      document.getElementById("scene1Text").textContent = off ? "The Sun is off. The Earth is dark and freezing cold. Too cold to live!" : "The Sun is shining. The Earth is warm.";
+      b.textContent = off ? "Switch the Sun back on" : "Switch the Sun off";
+    } else if (b.getAttribute("data-toggle") === "scene2") {
+      var fill = document.getElementById("tempfill2");
+      var hot = fill.classList.toggle("hot");
+      document.getElementById("temp2").textContent = hot ? "465 degrees, the hottest planet!" : "100 degrees";
+      document.getElementById("cloud2").classList.toggle("hidden", !hot);
+      b.textContent = hot ? "Take the cloud blanket away" : "Add the cloud blanket";
+    } else if (b.getAttribute("data-toggle") === "orbit5") {
+      var off2 = target.classList.toggle("off");
+      document.getElementById("orbitText5").textContent = off2 ? "Gravity is off! The planets are drifting away into space!" : "Gravity holds the planets in their orbits.";
+      b.textContent = off2 ? "Turn gravity back on" : "Turn gravity off";
+    } else if (b.getAttribute("data-toggle") === "scene7") {
+      var strapped = target.classList.toggle("strapped");
+      document.getElementById("scene7Text").textContent = strapped ? "Strapped to the wall. Safe! No floating, no bumping." : "The astronaut is floating! Strap the sleeping bag to the wall.";
+      b.textContent = strapped ? "Let it float" : "Strap it to the wall";
+    } else if (b.getAttribute("data-toggle") === "lava10") {
+      var on = document.getElementById("lava10").classList.toggle("on");
+      b.textContent = on ? "Stop the eruption" : "Erupt!";
+    }
+    markDone(station);
+  });
+});
+// Blast off speed bars.
+document.querySelectorAll("[data-bars]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    document.getElementById("barRocket").style.width = "100%";
+    b.disabled = true;
+    b.textContent = "Blast off! 28,000 km per hour!";
+    markDone(parseInt(b.getAttribute("data-station"), 10));
+  });
+});
+// Push the plates together to grow a mountain.
+document.querySelectorAll("[data-push]").forEach(function (b) {
+  var count = 0;
+  b.addEventListener("click", function () {
+    var max = parseInt(b.getAttribute("data-max"), 10);
+    var station = parseInt(b.getAttribute("data-station"), 10);
+    if (count >= max) return;
+    count++;
+    var m = document.getElementById("mountain11");
+    m.style.fontSize = (20 + count * 18) + "px";
+    document.getElementById("pushText11").textContent = count < max ? "Push again! The mountain is growing!" : "A mountain! Very slowly, over millions of years!";
+    if (count >= max) {
+      b.disabled = true;
+      b.textContent = "Mountain grown!";
+      markDone(station);
+    }
+  });
+});
+// Tap to tick every true sentence.
+document.querySelectorAll("[data-tick]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var station = parseInt(b.getAttribute("data-tick"), 10);
+    if (b.classList.contains("ticked")) return;
+    b.classList.add("ticked");
+    b.textContent = "✓ " + b.textContent;
+    var group = b.parentElement;
+    var all = group.querySelectorAll("[data-tick]");
+    var done = true;
+    all.forEach(function (x) { if (!x.classList.contains("ticked")) done = false; });
+    if (done) markDone(station);
+  });
+});
+// Tap hotspots to reveal labels (moons, Earth layers, fossils).
+document.querySelectorAll("[data-hotspot]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var station = parseInt(b.getAttribute("data-hotspot"), 10);
+    if (b.classList.contains("done")) return;
+    b.classList.add("done");
+    var label = b.getAttribute("data-label");
+    if (b.classList.contains("band") || b.classList.contains("rock")) {
+      b.textContent = label;
+    } else {
+      b.textContent = label.split(",")[0];
+    }
+    var lab = document.getElementById("hotlabel" + station);
+    if (lab) lab.textContent = label;
+    var scope = b.closest(".station");
+    var all = scope.querySelectorAll("[data-hotspot]");
+    var done = true;
+    all.forEach(function (x) { if (!x.classList.contains("done")) done = false; });
+    if (done) markDone(station);
+  });
+});
+// Sort game: tap a card, then tap the box it belongs in.
+var picked = null;
+document.querySelectorAll(".sort-item").forEach(function (item) {
+  item.addEventListener("click", function () {
+    if (item.classList.contains("placed")) return;
+    if (picked) picked.classList.remove("picked");
+    picked = item;
+    item.classList.add("picked");
+  });
+});
+document.querySelectorAll(".sort-box").forEach(function (box) {
+  box.addEventListener("click", function () {
+    if (!picked) { harrySay("Tap a card first, then tap the box it belongs in!"); return; }
+    var group = box.closest("[data-sort]");
+    var station = parseInt(group.getAttribute("data-sort"), 10);
+    if (picked.getAttribute("data-box") === box.getAttribute("data-target")) {
+      picked.classList.remove("picked");
+      picked.classList.add("placed");
+      box.appendChild(picked);
+      picked = null;
+      harrySay("Brilliant! That is the right box!");
+      var all = group.querySelectorAll(".sort-item");
+      var done = true;
+      all.forEach(function (x) { if (!x.classList.contains("placed")) done = false; });
+      if (done) markDone(station);
+    } else {
+      picked.classList.add("shake");
+      harrySay("Not quite, try again!");
+      setTimeout(function () { picked.classList.remove("shake"); }, 450);
+    }
+  });
+});
+</script>
+</body>
+</html>
