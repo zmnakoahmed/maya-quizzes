@@ -1,0 +1,148 @@
+{
+  "quiz": "maths15",
+  "date": "2026-11-23T19:30:33.227Z",
+  "score": 9,
+  "time": "Finished in 11 min 39 s",
+  "answers": [
+    {
+      "q": 1,
+      "sum": "56 ÷ 1000",
+      "correct": "0.056",
+      "said": "0.56",
+      "working": true
+    },
+    {
+      "q": 2,
+      "sum": "73 ÷ 1000",
+      "correct": "0.073",
+      "said": "0.073",
+      "working": true
+    },
+    {
+      "q": 3,
+      "sum": "8.4 ÷ 1000",
+      "correct": "0.0084",
+      "said": "0.084",
+      "working": true
+    },
+    {
+      "q": 4,
+      "sum": "5.6 ÷ 100",
+      "correct": "0.056",
+      "said": "0.56",
+      "working": true
+    },
+    {
+      "q": 5,
+      "sum": "2.4 ÷ 0.6",
+      "correct": "4",
+      "said": "0.04",
+      "working": true
+    },
+    {
+      "q": 6,
+      "sum": "8.61 ÷ 2.1",
+      "correct": "4.1",
+      "said": "0.041",
+      "working": true
+    },
+    {
+      "q": 7,
+      "sum": "6.72 ÷ 0.21",
+      "correct": "32",
+      "said": "0.0032",
+      "working": true
+    },
+    {
+      "q": 8,
+      "sum": "3.45 ÷ 1.5",
+      "correct": "2.3",
+      "said": "0.023",
+      "working": true
+    },
+    {
+      "q": 9,
+      "sum": "0.5 ÷ 4",
+      "correct": "0.125",
+      "said": "11.5",
+      "working": true
+    },
+    {
+      "q": 10,
+      "sum": "0.369 ÷ 3",
+      "correct": "0.123",
+      "said": "0.123",
+      "working": true
+    },
+    {
+      "q": 11,
+      "sum": "0.56 ÷ 8",
+      "correct": "0.07",
+      "said": "0.07",
+      "working": true
+    },
+    {
+      "q": 12,
+      "sum": "0.69 × 7",
+      "correct": "4.83",
+      "said": "4.83",
+      "working": true
+    },
+    {
+      "q": 13,
+      "sum": "0.76 × 0.8",
+      "correct": "0.608",
+      "said": "0.608",
+      "working": true
+    },
+    {
+      "q": 14,
+      "sum": "0.93 × 0.46",
+      "correct": "0.4278",
+      "said": "0.4278",
+      "working": true
+    },
+    {
+      "q": 15,
+      "sum": "0.58 × 0.9",
+      "correct": "0.522",
+      "said": "0.522",
+      "working": true
+    },
+    {
+      "q": 16,
+      "sum": "5.6 ÷ 40",
+      "correct": "0.14",
+      "said": "1.4",
+      "working": true
+    },
+    {
+      "q": 17,
+      "sum": "7.2 ÷ 200",
+      "correct": "0.036",
+      "said": "3.6",
+      "working": true
+    },
+    {
+      "q": 18,
+      "sum": "0.8 × 1000",
+      "correct": "800",
+      "said": "800.0",
+      "working": true
+    },
+    {
+      "q": 19,
+      "sum": "63 ÷ 1000",
+      "correct": "0.063",
+      "said": "0.63",
+      "working": true
+    },
+    {
+      "q": 20,
+      "sum": "4.7 × 100",
+      "correct": "470",
+      "said": "470.0",
+      "working": true
+    }
+  ]
+}
