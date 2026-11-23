@@ -578,7 +578,7 @@ function answeredCount() {
 }
 function updateProgress() {
   var n = answeredCount();
-  document.getElementById("progressFill").style.width = (n / 30 * 100) + "%";
+  document.getElementById("progressFill").style.width = (n / 20 * 100) + "%";
   document.getElementById("progressText").textContent = "Answered " + n + " of 20";
 }
 var HARRY_CHEER = [
@@ -845,7 +845,7 @@ function makeResultImage(score, fb, timeText, done) {
   x.fillText("Well done, Maya!", 540, 225);
   x.fillStyle = "#222222";
   x.font = "bold 170px -apple-system, Arial, sans-serif";
-  x.fillText(score + " / 30", 540, 455);
+  x.fillText(score + " / 20", 540, 455);
   x.fillStyle = "#4CAF50";
   x.font = "bold 56px -apple-system, Arial, sans-serif";
   x.fillText(score === 20 ? "All correct!" : score >= 17 ? "Nearly perfect!" : score >= 14 ? "Good effort!" : "Keep going, Maya!", 540, 585);
@@ -928,15 +928,15 @@ function doSubmit(auto) {
   if (slowestQ && slowestSecs >= 10) fb.push("Slowest: Q" + slowestQ + " (" + slowestSecs + " s)");
   fb = fb.slice(0, 3);
   var elapsed = startTime ? Math.round((Date.now() - startTime) / 1000) : TOTAL;
-  var timeText = auto ? "Time ran out! Finished in 40 min 0 s" : "Finished in " + fmtElapsed(elapsed);
+  var timeText = auto ? "Time ran out! Finished in 30 min 0 s" : "Finished in " + fmtElapsed(elapsed);
   document.getElementById("score").textContent = "You scored " + score + " out of 20! " + (auto ? "Time ran out!" : "Finished in " + fmtElapsed(elapsed) + ".");
-  var harryEnd = score === 30 ? "Brilliant, Maya! Full marks, thirty out of thirty!"
+  var harryEnd = score === 20 ? "Brilliant, Maya! Full marks, twenty out of twenty!"
     : score >= 17 ? "Well done, Maya! Great work under pressure!"
     : score >= 14 ? "Good effort, Maya! You are learning fast!"
     : "Don't worry, Maya. Every wizard has tough days. Try again!";
   var blankPads = 0;
   for (var p = 1; p <= 20; p++) if (!padDrawn["pad" + p]) blankPads++;
-  if (blankPads >= 7) harryEnd += " Next time, write your working in the boxes, so Daddy can see how you did each sum!";
+  if (blankPads >= 5) harryEnd += " Next time, write your working in the boxes, so Daddy can see how you did each sum!";
   harrySay(harryEnd);
   // Full answers record, for Daddy's follow-up teaching.
   var answersLines = [];
